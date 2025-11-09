@@ -36,15 +36,7 @@ const { items = [] } = Astro.props;
 <style>
   .docs-nav {
     position: sticky;
-    top: 6rem;
-    max-height: calc(100vh - 6rem);
     overflow-y: auto;
-    padding: 1.25rem 1rem 1.25rem 1.5rem;
-    border-radius: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    background: radial-gradient(circle at top, rgba(45, 212, 191, 0.14), transparent 55%),
-      rgba(10, 15, 20, 0.45);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
   }
 
   .docs-nav ul {
@@ -62,8 +54,8 @@ const { items = [] } = Astro.props;
 
   .docs-nav ul ul {
     margin-top: 0.35rem;
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
-    padding-left: 1rem;
+    border-left: 1px solid rgba(15, 23, 42, 0.12);
+    padding-left: 0.85rem;
     gap: 0.35rem;
   }
 
@@ -117,9 +109,7 @@ const { items = [] } = Astro.props;
     .docs-nav {
       position: static;
       max-height: none;
-      padding: 1rem;
-      border-radius: 1rem;
-      background: rgba(15, 22, 34, 0.7);
+      padding: 0.5rem 0;
     }
   }
 </style>

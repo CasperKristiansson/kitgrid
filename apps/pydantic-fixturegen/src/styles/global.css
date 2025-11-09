@@ -69,9 +69,7 @@
   .docs-nav {
     background: #ffffff;
     border: 1px solid rgba(15, 23, 42, 0.08);
-    box-shadow: 0 25px 45px rgba(15, 23, 42, 0.12);
   }
-
 
   .docs-nav ul ul {
     border-left-color: rgba(15, 23, 42, 0.1);

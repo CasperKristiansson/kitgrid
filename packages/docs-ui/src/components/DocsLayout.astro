@@ -64,18 +64,23 @@ const {
 <style>
   .docs-layout {
     display: grid;
-    grid-template-columns: 260px minmax(0, 1fr) 260px;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    max-width: 1220px;
+    margin-left: 320px;
+    padding: clamp(1rem, 3vw, 2.5rem) 0 4rem;
     gap: clamp(1.5rem, 3vw, 3rem);
-    max-width: 1320px;
-    margin: 0 auto;
-    padding: clamp(1rem, 3vw, 2.5rem) clamp(1rem, 4vw, 3rem) 4rem;
   }
 
   .docs-layout__sidebar {
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
-    padding-right: 1.25rem;
-    padding-left: 0.5rem;
-    min-height: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 320px;
+    height: 100vh;
+    padding: 5.5rem 0 2rem;
+    border-right: 1px solid rgba(15, 23, 42, 0.12);
+    background: var(--theme-bg);
+    overflow-y: auto;
   }
 
   .docs-layout__header {
@@ -115,7 +120,12 @@ const {
   }
 
   .docs-layout__toc {
-    font-size: 0.85rem;
+    position: sticky;
+    top: 5.5rem;
+    height: calc(100vh - 6rem);
+    padding-left: 1.5rem;
+    border-left: 1px solid rgba(15, 23, 42, 0.12);
+    overflow-y: auto;
   }
 
   .docs-layout__edit {
@@ -136,11 +146,16 @@ const {
   @media (max-width: 1024px) {
     .docs-layout {
       grid-template-columns: minmax(0, 1fr);
+      margin-left: 0;
+      padding-top: 6rem;
     }
 
     .docs-layout__sidebar {
+      position: static;
+      width: 100%;
+      height: auto;
       border-right: none;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.12);
       padding-bottom: 1rem;
       margin-bottom: 1rem;
     }

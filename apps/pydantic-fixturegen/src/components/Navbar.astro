@@ -32,16 +32,16 @@ const links = [
 
 <style>
   .pf-nav {
-    position: sticky;
+    position: fixed;
     top: 0;
     z-index: 30;
     background: rgba(255, 255, 255, 0.95);
     border-bottom: 1px solid rgba(15, 23, 42, 0.08);
     backdrop-filter: blur(8px);
+    width: 100%;
   }
 
   .pf-nav__inner {
-    max-width: 1320px;
     margin: 0 auto;
     padding: 1rem clamp(1rem, 4vw, 2.5rem);
     display: flex;
