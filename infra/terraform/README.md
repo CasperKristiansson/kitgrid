@@ -30,3 +30,9 @@ Provide a Cloudflare API token (DNS edit scope) by exporting `TF_VAR_cloudflare_
 2. Create/update the `kitgrid.dev` (flattened) and `*.kitgrid.dev` CNAMEs, pointing them to the CloudFront distribution.
 
 By default these records are DNS-only so AWS terminates TLS via ACM. If you need Cloudflare’s proxy, set `-var="cloudflare_proxy=true"` and ensure CloudFront only accepts Cloudflare IP ranges.
+
+## State & credentials
+
+- Terraform uses an S3 backend (`kitgrid-terraform-state`, key `kitgrid/prod/terraform.tfstate`) with a DynamoDB lock table `kitgrid-terraform-locks`. Create them once before running `terraform init`.
+- The AWS provider defaults to the `Personal` local profile. Override via `-var="aws_profile=<name>"` or by exporting `AWS_PROFILE`.
+- Store `TF_VAR_cloudflare_api_token`, `TF_VAR_cloudflare_zone_id`, and any AWS secrets in your `.env` (already gitignored) or shell environment.

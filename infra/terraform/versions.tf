@@ -10,4 +10,13 @@ terraform {
       version = "~> 4.30"
     }
   }
+
+  backend "s3" {
+    bucket         = "kitgrid-terraform-state"
+    key            = "kitgrid/prod/terraform.tfstate"
+    region         = "us-east-1"
+    profile        = "Personal"
+    dynamodb_table = "kitgrid-terraform-locks"
+    encrypt        = true
+  }
 }

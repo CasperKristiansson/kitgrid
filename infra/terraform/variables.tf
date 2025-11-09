@@ -16,6 +16,12 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "aws_profile" {
+  description = "Local AWS profile used for authentication."
+  type        = string
+  default     = "Personal"
+}
+
 variable "domain_name" {
   description = "Primary domain served by CloudFront."
   type        = string
