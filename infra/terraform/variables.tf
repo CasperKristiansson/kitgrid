@@ -40,12 +40,6 @@ variable "site_bucket_name" {
   default     = "kitgrid-sites"
 }
 
-variable "logs_bucket_name" {
-  description = "Name of the S3 bucket that stores CloudFront/S3 access logs."
-  type        = string
-  default     = "kitgrid-cdn-logs"
-}
-
 variable "cloudflare_zone_id" {
   description = "Cloudflare Zone ID for kitgrid.dev."
   type        = string

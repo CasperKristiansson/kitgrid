@@ -5,7 +5,6 @@ This Terraform configuration provisions the AWS resources required to serve `kit
 ## What it creates
 
 - Private S3 bucket (`kitgrid-sites`) that stores the built hub + project sites.
-- Log bucket (`kitgrid-cdn-logs`) with lifecycle rules for retention.
 - ACM certificate (us-east-1) spanning the apex + wildcard domain.
 - CloudFront distribution with an Origin Access Control protecting the site bucket.
 - CloudFront Function that rewrites requests:
@@ -36,3 +35,7 @@ By default these records are DNS-only so AWS terminates TLS via ACM. If you need
 - Terraform uses an S3 backend (`kitgrid-terraform-state`, key `kitgrid/prod/terraform.tfstate`) with a DynamoDB lock table `kitgrid-terraform-locks`. Create them once before running `terraform init`.
 - The AWS provider defaults to the `Personal` local profile. Override via `-var="aws_profile=<name>"` or by exporting `AWS_PROFILE`.
 - Store `TF_VAR_cloudflare_api_token`, `TF_VAR_cloudflare_zone_id`, and any AWS secrets in your `.env` (already gitignored) or shell environment.
+
+## Cost profile
+
+- Access logs, WAF, and CloudWatch alarms are intentionally omitted so the baseline infra stays inexpensive. Layer them on later if budgets allow.

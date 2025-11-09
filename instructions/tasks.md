@@ -61,15 +61,6 @@
   - Acceptance: Requests route to correct S3 prefixes; clean URLs and default indexes work; custom 404 per project.
   - Dependencies: 2.1.
 
-- [ ] **Observability and budgets**
-
-  - Summary: Enable access logs, minimal WAF, CloudWatch alarms for 5xx spikes and origin errors.
-  - Deliverables: Log buckets, retention policy, alarms; doc with runbooks.
-  - Acceptance: Logs visible; alarms fire on injected test errors; runbooks exist.
-  - Dependencies: 2.1.
-
----
-
 ## 3) Astro skeleton and theming
 
 - [ ] **Hub site IA**

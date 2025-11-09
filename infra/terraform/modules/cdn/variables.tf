@@ -24,11 +24,6 @@ variable "site_bucket_id" {
   type        = string
 }
 
-variable "logs_bucket_name" {
-  description = "Bucket domain name where CloudFront should write logs."
-  type        = string
-}
-
 variable "tags" {
   description = "Tags applied to CDN resources."
   type        = map(string)

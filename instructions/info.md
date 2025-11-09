@@ -145,6 +145,7 @@ Store in `/docs/kitgrid.yaml`. Purpose: instruct kitgrid how to fetch, theme, an
 
   - Map `kitgrid.dev/*` to `/hub/*` and `<project>.kitgrid.dev/*` to `/sites/<project>/current/*` before hitting S3.
   - Clean URLs, default `index.html`, 404 → project homepage.
+- To control costs, skip WAF, CloudWatch alarms, and access logging in the initial build. Add them later if needed.
 
 - Separate path `/hub/` for `kitgrid.dev` root.
 

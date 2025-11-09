@@ -11,12 +11,6 @@ module "site_storage" {
   tags        = local.merged_tags
 }
 
-module "logs" {
-  source      = "./modules/logs"
-  bucket_name = var.logs_bucket_name
-  tags        = local.merged_tags
-}
-
 module "cdn" {
   source                  = "./modules/cdn"
   domain_name             = var.domain_name
@@ -24,7 +18,6 @@ module "cdn" {
   site_bucket_domain_name = module.site_storage.bucket_regional_domain_name
   site_bucket_arn         = module.site_storage.bucket_arn
   site_bucket_id          = module.site_storage.bucket_id
-  logs_bucket_name        = module.logs.bucket_domain_name
   hub_host                = var.domain_name
   tags                    = local.merged_tags
 }

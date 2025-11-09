@@ -32,7 +32,7 @@ resource "aws_cloudfront_distribution" "this" {
   default_root_object = "index.html"
   tags                = var.tags
 
-  origins {
+  origin {
     domain_name = var.site_bucket_domain_name
     origin_id   = "kitgrid-sites"
 
@@ -55,7 +55,7 @@ resource "aws_cloudfront_distribution" "this" {
       }
     }
 
-    function_associations {
+    function_association {
       event_type   = "viewer-request"
       function_arn = aws_cloudfront_function.rewrite.arn
     }
@@ -75,12 +75,6 @@ resource "aws_cloudfront_distribution" "this" {
     ssl_support_method             = "sni-only"
     minimum_protocol_version       = "TLSv1.2_2021"
     cloudfront_default_certificate = false
-  }
-
-  logging_config {
-    include_cookies = false
-    bucket          = var.logs_bucket_name
-    prefix          = "cloudfront/"
   }
 
   depends_on = [aws_acm_certificate_validation.this]
