@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@kitgrid/tsconfig/node",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": ".kitgrid-cache/tsc",
+    "tsBuildInfoFile": ".kitgrid-cache/tsbuildinfo.json"
+  },
+  "include": ["scripts/**/*.ts"]
+}

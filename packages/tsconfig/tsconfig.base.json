@@ -15,7 +15,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "useDefineForClassFields": true,
-    "importsNotUsedAsValues": "error",
+    "verbatimModuleSyntax": true,
     "resolveJsonModule": true,
     "esModuleInterop": true
   },

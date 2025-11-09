@@ -8,6 +8,7 @@ dist/
 build/
 .pnpm-store/
 pnpm-debug.log*
+.kitgrid-cache/
 
 # Environment files
 .env
