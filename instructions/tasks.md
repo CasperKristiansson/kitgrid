@@ -116,7 +116,7 @@
   - Acceptance: Hub reads registry and renders project cards.
   - Dependencies: 3.1.
 
-- [ ] **Manifest spec and schema**
+- [x] **Manifest spec and schema**
 
   - Summary: Define `kitgrid.yaml` spec; provide JSON Schema for validation.
   - Deliverables: Spec doc; schema file; example manifest.

@@ -1,0 +1,41 @@
+id: pydantic-fixturegen
+name: Pydantic Fixturegen
+repo: CasperKristiansson/pydantic-fixturegen
+ref_strategy: branch
+refs:
+  default: main
+  include:
+    - release
+    - docs-preview
+docs_path: docs
+homepage: docs/index.md
+nav:
+  - title: Getting started
+    path: docs/quickstart.md
+  - title: CLI
+    path: docs/cli.md
+    children:
+      - title: doctor
+        path: docs/doctor.md
+      - title: explain
+        path: docs/explain.md
+  - title: Concepts
+    path: docs/concepts.md
+theme:
+  primary: '#14B8A6'
+  secondary: '#67E8F9'
+  bg: '#0A0F14'
+  surface: '#0F1722'
+  text: '#E5F4F1'
+  muted: '#9AC7C0'
+  link: '#2DD4BF'
+  code_theme: ayu-dark
+  motion: subtle
+features:
+  edit_link: true
+  search: true
+  versions: false
+analytics:
+  provider: plausible
+  site_id: kitgrid.dev
+  script_url: https://analytics.example.com/js/script.js

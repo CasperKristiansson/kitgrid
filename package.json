@@ -9,6 +9,7 @@
     "dev:hub": "pnpm --filter @kitgrid/hub dev",
     "dev:project-stub": "pnpm --filter @kitgrid/project-stub dev",
     "docs:fetch": "tsx scripts/fetch-docs.ts",
+    "manifest:check": "tsx scripts/validate-manifest.ts",
     "lint": "pnpm --filter @kitgrid/hub lint",
     "format": "pnpm --filter @kitgrid/hub format:write",
     "format:check": "pnpm --filter @kitgrid/hub format:check",
@@ -38,6 +39,8 @@
     "lint-staged": "^15.2.9",
     "prettier": "^3.3.3",
     "tsx": "^4.19.1",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "ajv": "^8.17.1",
+    "yaml": "^2.6.0"
   }
 }

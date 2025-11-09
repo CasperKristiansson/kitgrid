@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kitgrid.dev/schemas/kitgrid-manifest.schema.json",
+  "title": "Kitgrid Manifest",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "repo",
+    "ref_strategy",
+    "refs",
+    "docs_path",
+    "homepage",
+    "theme"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]{3,40}$",
+      "description": "Project identifier used for subdomains and cache folders."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable project title."
+    },
+    "repo": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$",
+      "description": "GitHub repo in org/name format."
+    },
+    "ref_strategy": {
+      "type": "string",
+      "enum": ["branch", "tags", "manual"],
+      "description": "How kitgrid selects refs for builds."
+    },
+    "refs": {
+      "type": "object",
+      "required": ["default"],
+      "additionalProperties": false,
+      "properties": {
+        "default": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Primary ref served at /current (branch or tag)."
+        },
+        "include": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Additional refs to build (versions, tags)."
+        }
+      }
+    },
+    "docs_path": {
+      "type": "string",
+      "default": "docs",
+      "pattern": "^([^\\0]+)$",
+      "description": "Relative path containing documentation sources."
+    },
+    "homepage": {
+      "type": "string",
+      "description": "Entry document relative to docs_path (e.g., docs/index.md)."
+    },
+    "nav": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/navItem"
+      },
+      "description": "Optional explicit sidebar tree overriding auto-generated nav."
+    },
+    "theme": {
+      "type": "object",
+      "required": [
+        "primary",
+        "secondary",
+        "bg",
+        "surface",
+        "text",
+        "muted",
+        "link",
+        "code_theme",
+        "motion"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "primary": { "$ref": "#/definitions/hexColor" },
+        "secondary": { "$ref": "#/definitions/hexColor" },
+        "bg": { "$ref": "#/definitions/hexColor" },
+        "surface": { "$ref": "#/definitions/hexColor" },
+        "text": { "$ref": "#/definitions/hexColor" },
+        "muted": { "$ref": "#/definitions/hexColor" },
+        "link": { "$ref": "#/definitions/hexColor" },
+        "code_theme": {
+          "type": "string",
+          "description": "Code highlighting theme slug or token."
+        },
+        "motion": {
+          "type": "string",
+          "enum": ["none", "subtle", "lively"],
+          "description": "Relative animation intensity for the project."
+        }
+      }
+    },
+    "features": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "edit_link": { "type": "boolean" },
+        "search": { "type": "boolean" },
+        "versions": { "type": "boolean" },
+        "last_updated": { "type": "boolean" }
+      }
+    },
+    "analytics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "provider": { "type": "string" },
+        "site_id": { "type": "string" },
+        "script_url": { "type": "string" }
+      }
+    }
+  },
+  "definitions": {
+    "navItem": {
+      "type": "object",
+      "required": ["title", "path"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string" },
+        "path": { "type": "string" },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/navItem" }
+        }
+      }
+    },
+    "hexColor": {
+      "type": "string",
+      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+    }
+  }
+}

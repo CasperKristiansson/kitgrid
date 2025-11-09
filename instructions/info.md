@@ -35,6 +35,9 @@ Use one repo (**kitgrid**) to host all sites. Each project keeps docs in its own
 # Manifest (project-side)
 
 Store in `/docs/kitgrid.yaml`. Purpose: instruct kitgrid how to fetch, theme, and render.
+See `docs/manifest-spec.md` for the formal field reference. The JSON Schema lives at
+`schemas/kitgrid-manifest.schema.json`, and you can validate manifests via
+`pnpm manifest:check -- --file docs/kitgrid.yaml`.
 
 **Fields**
 
