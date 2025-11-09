@@ -137,7 +137,7 @@
   - Acceptance: Malicious MDX is neutralized or build fails clearly; CSP policy documented.
   - Dependencies: 3.2, 4.3.
 
-- [ ] **Sidebar builder**
+- [x] **Sidebar builder**
 
   - Summary: Build navigation from manifest `nav` or inferred from file tree + frontmatter `order` and `title`.
   - Deliverables: Deterministic nav generation with draft support and redirect map.
