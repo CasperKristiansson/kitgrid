@@ -15,6 +15,9 @@ function parseArgs(argv: string[]): CliArgs {
 
   for (let i = 0; i < argv.length; i += 1) {
     const token = argv[i];
+    if (token === '--') {
+      continue;
+    }
     switch (token) {
       case '--project':
       case '-p':

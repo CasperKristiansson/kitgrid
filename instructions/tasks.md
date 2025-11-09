@@ -102,7 +102,7 @@
 
 ## 4) Ingestion pipeline (docs live in project repos)
 
-- [ ] **Docs cache workspace**
+- [x] **Docs cache workspace**
 
   - Summary: Provide a CLI workflow to fetch project docs into `.kitgrid-cache/docs/<project>/<ref>` for local/dev builds without committing upstream content.
   - Deliverables: TypeScript fetch script wired to `pnpm docs:fetch`, cache ignored via `.gitignore`, docs available during build steps.

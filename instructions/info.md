@@ -64,6 +64,58 @@ Store in `/docs/kitgrid.yaml`. Purpose: instruct kitgrid how to fetch, theme, an
 - Never commit another project’s docs into the `kitgrid` repo. Instead, fetch them into `.kitgrid-cache/docs/<project>/<ref>` using a TypeScript CLI (`pnpm docs:fetch -- --project foo --source ../foo/docs`).
 - Builds (CI and local) read from the cache path. Wipe it freely; it’s re-generated on demand.
 
+**Local workflow**
+
+1. Clone the upstream repo under `.kitgrid-cache/sources/<project>` for fast iteration. Example:
+
+   ```bash
+   git clone https://github.com/CasperKristiansson/pydantic-fixturegen.git \
+     .kitgrid-cache/sources/pydantic-fixturegen
+   ```
+
+2. Pull docs into the cache without touching git state:
+
+   ```bash
+   pnpm docs:fetch -- \
+     --project pydantic-fixturegen \
+     --source .kitgrid-cache/sources/pydantic-fixturegen/docs \
+     --ref main
+   ```
+
+   This hydrates `.kitgrid-cache/docs/pydantic-fixturegen/main` and `git status` stays clean because the cache directory is ignored.
+
+3. Point Astro apps (e.g., the `project-stub`) at the cache path when you need real docs content.
+
+**Upstream requirements (e.g., `pydantic-fixturegen`)**
+
+- Add `/docs/kitgrid.yaml` so the fetcher can read metadata without heuristics. Example scaffold:
+
+  ```yaml
+  id: pydantic-fixturegen
+  name: Pydantic Fixturegen
+  repo: CasperKristiansson/pydantic-fixturegen
+  default_ref: main
+  docs_path: docs
+  homepage: docs/index.md
+  theme:
+    primary: '#14B8A6'
+    secondary: '#67E8F9'
+    bg: '#0A0F14'
+    surface: '#0F1722'
+    text: '#E5F4F1'
+    muted: '#9AC7C0'
+    link: '#2DD4BF'
+    code_theme: 'ayu-dark'
+    motion: subtle
+  features:
+    edit_link: true
+    search: true
+    versions: false
+  ```
+
+- Keep docs under `/docs` so the cache CLI (`--source …/docs`) picks them up.
+- Future additions: surface navigation hints (`nav:`) and redirects once the manifest schema lands.
+
 **Safety**
 
 - Treat MDX as untrusted. Sanitize HTML, restrict allowed components, no remote scripts.
