@@ -12,7 +12,8 @@
     "lint": "pnpm --filter @kitgrid/hub lint",
     "format": "pnpm --filter @kitgrid/hub format:write",
     "format:check": "pnpm --filter @kitgrid/hub format:check",
-    "typecheck": "tsc --noEmit && pnpm --filter @kitgrid/hub typecheck"
+    "typecheck": "tsc --noEmit && pnpm --filter @kitgrid/hub typecheck",
+    "lint:staged": "lint-staged"
   },
   "engines": {
     "node": ">=20.11.1",
@@ -23,6 +24,19 @@
     "@changesets/cli": "^2.29.7",
     "@kitgrid/tsconfig": "workspace:*",
     "@types/node": "^22.10.1",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.57.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-astro": "^0.34.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-mdx": "^2.3.4",
+    "eslint-plugin-security": "^1.7.1",
+    "eslint-plugin-unicorn": "^50.0.1",
+    "eslint-plugin-unused-imports": "^3.2.0",
+    "lint-staged": "^15.2.9",
+    "prettier": "^3.3.3",
     "tsx": "^4.19.1",
     "typescript": "^5.6.3"
   }
