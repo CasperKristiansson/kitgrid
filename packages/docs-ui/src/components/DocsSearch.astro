@@ -7,8 +7,8 @@ import docsSearchScript from '../scripts/docs-search.ts?url';
     <span class="sr-only">Search docs</span>
     <svg
       aria-hidden="true"
-      width="16"
-      height="16"
+      width="18"
+      height="18"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -26,6 +26,9 @@ import docsSearchScript from '../scripts/docs-search.ts?url';
       data-docs-search-input
       autocomplete="off"
     />
+    <span class="docs-search__shortcut" data-docs-search-shortcut aria-hidden="true">
+      ⌘ K
+    </span>
   </label>
   <p class="docs-search__status" data-docs-search-status hidden></p>
   <div class="docs-search__results" data-docs-search-results hidden>
@@ -37,19 +40,22 @@ import docsSearchScript from '../scripts/docs-search.ts?url';
   .docs-search {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    width: 100%;
+    gap: 0.65rem;
+    width: min(640px, 100%);
   }
 
   .docs-search__field {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    gap: 0.65rem;
     border-radius: 999px;
-    padding: 0.35rem 0.9rem;
-    font-size: 0.85rem;
+    padding: 0.65rem 1.1rem;
+    font-size: 0.9rem;
     color: var(--theme-muted);
+    background: rgba(5, 10, 18, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02), 0 18px 40px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(18px);
   }
 
   .docs-search__field input {
@@ -65,6 +71,15 @@ import docsSearchScript from '../scripts/docs-search.ts?url';
     color: var(--theme-text);
   }
 
+  .docs-search__shortcut {
+    font-size: 0.8rem;
+    color: var(--theme-muted);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
   .docs-search__status {
     font-size: 0.8rem;
     color: var(--theme-muted);
@@ -73,9 +88,9 @@ import docsSearchScript from '../scripts/docs-search.ts?url';
   .docs-search__results {
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 1rem;
-    background: rgba(4, 7, 16, 0.8);
+    background: rgba(4, 7, 16, 0.9);
     padding: 0.75rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
   }
 
   .docs-search__results ul {

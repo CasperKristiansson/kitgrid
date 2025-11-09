@@ -30,6 +30,11 @@ const {
 ---
 
 <section class="docs-layout">
+  <div class="docs-layout__search" role="search">
+    <slot name="search">
+      <DocsSearch />
+    </slot>
+  </div>
   <aside class="docs-layout__sidebar">
     <DocsSidebarNav items={navItems} />
   </aside>
@@ -45,9 +50,6 @@ const {
           <span class="badge badge-outline text-xs tracking-[0.3em] uppercase">
             {versionLabel}
           </span>
-        </slot>
-        <slot name="search">
-          <DocsSearch />
         </slot>
       </div>
     </header>
@@ -68,13 +70,25 @@ const {
 <style>
   .docs-layout {
     display: grid;
-    grid-template-columns: 240px minmax(0, 1fr) 220px;
-    gap: 2rem;
+    grid-template-columns: 260px minmax(0, 1fr) 260px;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 4vw, 3rem) 4rem;
+  }
+
+  .docs-layout__search {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    padding-top: clamp(2rem, 4vw, 4rem);
   }
 
   .docs-layout__sidebar {
     border-right: 1px solid rgba(255, 255, 255, 0.08);
-    padding-right: 1rem;
+    padding-right: 1.25rem;
+    padding-left: 0.5rem;
+    min-height: 0;
   }
 
   .docs-layout__header {
@@ -90,6 +104,7 @@ const {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    min-height: 2.5rem;
   }
 
   .docs-layout__content {
@@ -134,6 +149,11 @@ const {
   @media (max-width: 1024px) {
     .docs-layout {
       grid-template-columns: minmax(0, 1fr);
+    }
+
+    .docs-layout__search {
+      padding-top: 1.5rem;
+      margin-bottom: 0.5rem;
     }
 
     .docs-layout__sidebar {

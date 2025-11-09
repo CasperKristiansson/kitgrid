@@ -3,7 +3,13 @@ async function initSearch(block: HTMLElement) {
   const resultsContainer = block.querySelector<HTMLElement>('[data-docs-search-results]');
   const resultsList = resultsContainer?.querySelector('ul');
   const status = block.querySelector<HTMLElement>('[data-docs-search-status]');
+  const shortcut = block.querySelector<HTMLElement>('[data-docs-search-shortcut]');
   if (!input || !resultsContainer || !resultsList || !status) return;
+
+  const isMac = navigator.userAgent.includes('Mac');
+  if (shortcut) {
+    shortcut.textContent = isMac ? '⌘ K' : 'Ctrl K';
+  }
 
   const scriptId = 'kitgrid-pagefind-script';
   let pagefindPromise: Promise<any> | null = null;
@@ -99,8 +105,17 @@ async function initSearch(block: HTMLElement) {
     }
   }
 
+  function handleShortcut(event: KeyboardEvent) {
+    if ((isMac ? event.metaKey : event.ctrlKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      input.focus();
+      input.select();
+    }
+  }
+
   input.addEventListener('focus', () => void ensurePagefind(), { once: true });
   input.addEventListener('input', handleSearch);
+  window.addEventListener('keydown', handleShortcut);
 }
 
 function bootstrapSearch() {

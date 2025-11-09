@@ -12,9 +12,11 @@ function setupCodeBlocks() {
         const original = button.textContent ?? 'Copy';
         button.textContent = 'Copied';
         button.setAttribute('aria-live', 'polite');
+        button.dataset.copyState = 'copied';
         setTimeout(() => {
           button.textContent = original;
           button.removeAttribute('aria-live');
+          button.dataset.copyState = 'idle';
         }, 1400);
       } catch (error) {
         console.warn('Copy failed', error);

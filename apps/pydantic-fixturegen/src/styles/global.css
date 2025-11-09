@@ -35,6 +35,19 @@
     transition:
       background-color var(--anim-duration) ease,
       color var(--anim-duration) ease;
+    background-image: radial-gradient(circle at 20% 20%, rgba(20, 184, 166, 0.12), transparent 40%),
+      radial-gradient(circle at 80% 0%, rgba(103, 232, 249, 0.06), transparent 45%),
+      linear-gradient(180deg, rgba(3, 7, 10, 0.95), rgba(5, 10, 17, 0.85));
+  }
+
+  main {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  main > * {
+    width: 100%;
   }
 
   ::selection {
