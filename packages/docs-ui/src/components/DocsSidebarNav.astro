@@ -9,28 +9,48 @@ const { items = [] } = Astro.props;
 ---
 
 <nav class="docs-nav" aria-label="Docs sections">
-  <ul>
+  <div class="nav-groups">
     {
       items.map((item) => (
-        <li>
-          <a href={item.href} class="nav-link">
-            {item.title}
-          </a>
-          {item.children?.length ? (
-            <ul>
+        item.children?.length ? (
+          <details class="nav-group" open>
+            <summary>
+              <a href={item.href} class="nav-link">
+                {item.title}
+              </a>
+              <svg
+                class="nav-group__chevron"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </summary>
+            <div class="nav-children">
               {item.children.map((child) => (
-                <li>
-                  <a href={child.href} class="nav-link nav-link-child">
-                    {child.title}
-                  </a>
-                </li>
+                <a href={child.href} class="nav-link nav-link-child">
+                  {child.title}
+                </a>
               ))}
-            </ul>
-          ) : null}
-        </li>
+            </div>
+          </details>
+        ) : (
+          <div class="nav-group nav-group--single">
+            <a href={item.href} class="nav-link">
+              {item.title}
+            </a>
+          </div>
+        )
       ))
     }
-  </ul>
+  </div>
 </nav>
 
 <style>
@@ -39,24 +59,56 @@ const { items = [] } = Astro.props;
     overflow-y: auto;
   }
 
-  .docs-nav ul {
+  .nav-groups {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  .nav-group {
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    padding-bottom: 0.6rem;
+  }
+
+  .nav-group:last-child {
+    border-bottom: none;
+  }
+
+  .nav-group > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    cursor: pointer;
     list-style: none;
-    padding: 0;
-    margin: 0;
+    padding-right: 0.5rem;
   }
 
-  .docs-nav > ul > li {
-    padding: 0.15rem 0;
+  .nav-group > summary::-webkit-details-marker {
+    display: none;
   }
 
-  .docs-nav ul ul {
-    margin-top: 0.35rem;
-    border-left: 1px solid rgba(15, 23, 42, 0.12);
-    padding-left: 0.85rem;
+  .nav-group__chevron {
+    font-size: 0.65rem;
+    color: rgba(15, 23, 42, 0.4);
+    transition: transform 150ms ease;
+  }
+
+  .nav-group[open] .nav-group__chevron {
+    transform: rotate(180deg);
+  }
+
+  .nav-group--single {
+    border-bottom: none;
+  }
+
+  .nav-children {
+    display: flex;
+    flex-direction: column;
     gap: 0.35rem;
+    border-left: 1px solid rgba(15, 23, 42, 0.12);
+    margin-top: 0.4rem;
+    padding-left: 0.85rem;
   }
 
   .nav-link {
@@ -68,10 +120,12 @@ const { items = [] } = Astro.props;
     font-weight: 600;
     letter-spacing: 0.01em;
     text-decoration: none;
-    padding: 0.15rem 0;
+    padding: 0.2rem 0.3rem;
+    border-radius: 0.75rem;
     transition:
       color 140ms ease,
-      transform 140ms ease;
+      transform 140ms ease,
+      background 140ms ease;
     position: relative;
   }
 
@@ -79,6 +133,11 @@ const { items = [] } = Astro.props;
   .nav-link:focus-visible {
     color: var(--theme-link);
     transform: translateX(2px);
+  }
+
+  .nav-link[aria-current='page'] {
+    background: rgba(29, 78, 216, 0.12);
+    color: var(--theme-link);
   }
 
   .nav-link-child {
