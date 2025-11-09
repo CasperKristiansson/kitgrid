@@ -180,31 +180,16 @@
   - Acceptance: CSP enabled; site functional; violations observable in reports.
   - Dependencies: 3.*, 4.4.
 
-- [ ] **Link checker and broken anchors**
+- [x] **Link checker and broken anchors**
 
   - Summary: Build step that fails on broken internal links and anchors.
   - Deliverables: Reporter integrated in CI; ignore-list for intentional external timeouts.
   - Acceptance: Intentional broken link causes CI failure; fixes pass.
   - Dependencies: 5.2.
 
-- [ ] **Lighthouse budgets**
-
-  - Summary: Define budgets for performance, a11y, JS/CSS weight; enforce in CI for hub and one project.
-  - Deliverables: Budget file; CI job.
-  - Acceptance: Over-budget build fails; regressions prevented.
-  - Dependencies: 3.*, 5.2.
-
-- [ ] **Docs: contribution and exception policy**
-
-  - Summary: Author “Add your project,” “Code style,” and “Exception policy” pages on hub.
-  - Deliverables: Three pages with steps and screenshots where relevant.
-  - Acceptance: A new maintainer can onboard a project without external help.
-  - Dependencies: 3.1, 4.1–4.2.
-
-
 ## 8) Onboard first external project: `pydantic-fixturegen`
 
-- [ ] **Define project theme**
+- [x] **Define project theme**
 
   - Summary: Set tokens for `pydantic-fixturegen`:
 
@@ -214,14 +199,14 @@
   - Acceptance: Subdomain renders with project colors; contrast AA met.
   - Dependencies: 3.3.
 
-- [ ] **Create `kitgrid.yaml` in the project repo**
+- [x] **Create `kitgrid.yaml` in the project repo**
 
   - Summary: Add manifest fields: `id`, `name`, `repo`, `ref_strategy`, `refs/default_ref`, `docs_path`, `homepage`, `nav` (optional), `features`, `analytics`.
   - Deliverables: Validated manifest committed in project repo.
   - Acceptance: Schema validation passes; CI in kitgrid recognizes and builds.
   - Dependencies: 4.2, 5.3.
 
-- [ ] **Landing experience**
+- [x] **Landing experience**
 
   - Summary: Use docs’ main page as the project home, with left navigation visible (Astro-docs style).
   - Deliverables: Project home using `DocsLayout`; first-screen value prop, install snippet, three CTAs (Quickstart, CLI, Configuration).
