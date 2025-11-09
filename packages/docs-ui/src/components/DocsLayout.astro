@@ -2,7 +2,6 @@
 import DocsSidebarNav from './DocsSidebarNav.astro';
 import DocsToc from './DocsToc.astro';
 import type { DocsNavItem } from '../types';
-import codeBlockScript from '../scripts/code-block.ts?url';
 
 interface Heading {
   depth: number;
@@ -175,5 +174,3 @@ const {
 }
 }
 </style>
-
-<script type="module" src={codeBlockScript} />

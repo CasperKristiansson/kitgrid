@@ -1,3 +1,5 @@
+@source '../**/*.{astro,md,mdx,ts,tsx}';
+@source '../../../../packages/docs-ui/src/**/*.{astro,md,mdx,ts,tsx}';
 @import 'tailwindcss';
 @plugin 'daisyui';
 
