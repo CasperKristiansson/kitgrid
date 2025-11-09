@@ -144,18 +144,11 @@
   - Acceptance: Sidebar matches manifest when provided; otherwise sorts predictably; broken links reported.
   - Dependencies: 3.2, 4.3.
 
-- [ ] **Versioning support**
-
-  - Summary: Optional per-project versions via `refs` or `/docs/versions/<version>/…`.
-  - Deliverables: Version switcher UI; routing to versioned trees; “latest” pointer.
-  - Acceptance: Switching versions swaps content and URL paths without cache confusion.
-  - Dependencies: 3.2, 4.3, 4.5.
-
 ---
 
 ## 5) CI/CD flow
 
-- [ ] **GitHub OIDC → AWS**
+- [x] **GitHub OIDC → AWS**
 
   - Summary: Configure least-privileged deploy role; no static keys.
   - Deliverables: IAM role with trust for GitHub, policy for S3 put/list, CloudFront invalidation, logs read.

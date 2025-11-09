@@ -36,6 +36,39 @@ By default these records are DNS-only so AWS terminates TLS via ACM. If you need
 - The AWS provider defaults to the `Personal` local profile. Override via `-var="aws_profile=<name>"` or by exporting `AWS_PROFILE`.
 - Store `TF_VAR_cloudflare_api_token`, `TF_VAR_cloudflare_zone_id`, and any AWS secrets in your `.env` (already gitignored) or shell environment.
 
+## GitHub OIDC deploy role
+
+The stack now provisions an IAM role (`deploy_role_name`, default `kitgrid-ci-deploy`) that
+GitHub Actions can assume via OIDC—no long-lived AWS keys required.
+
+- Update `github_trusted_subjects` if you need to allow additional branches or
+  environments. The default trusts `repo:CasperKristiansson/kitgrid` on `main` and pull
+  requests. Example override:
+
+  ```bash
+  terraform plan \
+    -var='github_trusted_subjects=["repo:CasperKristiansson/kitgrid:ref:refs/heads/main","repo:CasperKristiansson/kitgrid:ref:refs/tags/*"]'
+  ```
+
+- The resulting role ARN is printed via the `deploy_role_arn` output. Reference it inside
+  your GitHub workflow:
+
+  ```yaml
+  permissions:
+    id-token: write
+    contents: read
+
+  - name: Configure AWS creds
+    uses: aws-actions/configure-aws-credentials@v4
+    with:
+      role-to-assume: ${{ secrets.KITGRID_DEPLOY_ROLE_ARN }}
+      aws-region: us-east-1
+  ```
+
+The attached policy grants access to the site bucket (list + put/delete objects) and the
+ability to call `cloudfront:CreateInvalidation` for the distribution that Terraform
+provisions.
+
 ## Cost profile
 
 - Access logs, WAF, and CloudWatch alarms are intentionally omitted so the baseline infra stays inexpensive. Layer them on later if budgets allow.
