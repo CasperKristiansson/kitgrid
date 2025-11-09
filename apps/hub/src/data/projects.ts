@@ -1,4 +1,20 @@
+import rawRegistry from '../../../../registry.json' assert { type: 'json' };
+
 export type ProjectStatus = 'live' | 'in-progress' | 'design';
+
+type RegistryEntry = {
+  id: string;
+  name: string;
+  description: string;
+  repo: string;
+  status: ProjectStatus;
+  tag: string;
+  subdomain: string;
+  default_ref: string;
+  last_built_ref?: string | null;
+  docs_path?: string;
+  docs_url?: string | null;
+};
 
 export type ProjectMeta = {
   id: string;
@@ -7,35 +23,25 @@ export type ProjectMeta = {
   repo: string;
   status: ProjectStatus;
   tag: string;
+  subdomain: string;
+  defaultRef: string;
+  lastBuiltRef?: string;
+  docsPath?: string;
   docsUrl?: string;
 };
 
-export const featuredProjects: ProjectMeta[] = [
-  {
-    id: 'pydantic-fixturegen',
-    name: 'pydantic-fixturegen',
-    description:
-      'Deterministic test data factories for Pydantic v2. Ships CLI, providers, and seeds.',
-    repo: 'CasperKristiansson/pydantic-fixturegen',
-    status: 'in-progress',
-    tag: 'python',
-  },
-  {
-    id: 'kitgrid-hub',
-    name: 'Kitgrid Hub',
-    description:
-      'Marketing + multi-project index that orchestrates every docs deployment.',
-    repo: 'kitgrid/hub',
-    status: 'design',
-    tag: 'astro',
-  },
-  {
-    id: 'docs-playground',
-    name: 'Docs Playground',
-    description:
-      'Reference implementation used to validate theming, navigation, and ingestion.',
-    repo: 'kitgrid/docs-playground',
-    status: 'in-progress',
-    tag: 'playground',
-  },
-];
+const registry = rawRegistry as RegistryEntry[];
+
+export const featuredProjects: ProjectMeta[] = registry.map((entry) => ({
+  id: entry.id,
+  name: entry.name,
+  description: entry.description,
+  repo: entry.repo,
+  status: entry.status,
+  tag: entry.tag,
+  subdomain: entry.subdomain,
+  defaultRef: entry.default_ref,
+  lastBuiltRef: entry.last_built_ref ?? undefined,
+  docsPath: entry.docs_path,
+  docsUrl: entry.docs_url ?? undefined,
+}));

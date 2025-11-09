@@ -109,7 +109,7 @@
   - Acceptance: Running `pnpm docs:fetch -- --project foo --source ../foo/docs` hydrates a local cache and leaves `git status` clean.
   - Dependencies: 0.1, 1.1.
 
-- [ ] **Project registry**
+- [x] **Project registry**
 
   - Summary: Maintain `registry.json` listing projects (`id`, `subdomain`, `repo`, `default_ref`, `status`).
   - Deliverables: File in repo root; governance note for additions.

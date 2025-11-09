@@ -6,8 +6,10 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const subdomain = `https://${project.id}.kitgrid.dev`;
+const docsHref = project.docsUrl ?? `https://${project.subdomain}.kitgrid.dev`;
 const isLive = project.status === 'live';
+const linkDisabled = !isLive && !project.docsUrl;
+const targetHref = linkDisabled ? '#' : docsHref;
 ---
 
 <article
@@ -33,11 +35,11 @@ const isLive = project.status === 'live';
 
     <footer class="mt-2">
       <a
-        class={`link link-hover font-semibold ${!isLive ? 'opacity-50 pointer-events-none' : ''}`}
-        href={isLive ? subdomain : (project.docsUrl ?? '#')}
-        aria-disabled={!isLive ? 'true' : undefined}
-        target="_blank"
-        rel="noreferrer"
+        class={`link link-hover font-semibold ${linkDisabled ? 'opacity-50 pointer-events-none' : ''}`}
+        href={targetHref}
+        aria-disabled={linkDisabled ? 'true' : undefined}
+        target={linkDisabled ? undefined : '_blank'}
+        rel={linkDisabled ? undefined : 'noreferrer'}
       >
         Visit docs ↗
       </a>

@@ -1,0 +1,41 @@
+[
+  {
+    "id": "pydantic-fixturegen",
+    "name": "pydantic-fixturegen",
+    "description": "Deterministic test data factories for Pydantic v2 with CLI, providers, and seeds.",
+    "repo": "CasperKristiansson/pydantic-fixturegen",
+    "status": "in-progress",
+    "tag": "python",
+    "subdomain": "pydantic-fixturegen",
+    "default_ref": "main",
+    "last_built_ref": "main",
+    "docs_path": "docs",
+    "docs_url": null
+  },
+  {
+    "id": "kitgrid-hub",
+    "name": "Kitgrid Hub",
+    "description": "Marketing site + control plane that orchestrates every docs deployment.",
+    "repo": "CasperKristiansson/kitgrid",
+    "status": "live",
+    "tag": "astro",
+    "subdomain": "kitgrid",
+    "default_ref": "main",
+    "last_built_ref": "main",
+    "docs_path": "apps/hub",
+    "docs_url": "https://kitgrid.dev"
+  },
+  {
+    "id": "docs-playground",
+    "name": "Docs Playground",
+    "description": "Reference implementation used to validate theming, ingestion, and navigation.",
+    "repo": "CasperKristiansson/kitgrid",
+    "status": "in-progress",
+    "tag": "playground",
+    "subdomain": "project-stub",
+    "default_ref": "main",
+    "last_built_ref": "main",
+    "docs_path": "apps/project-stub",
+    "docs_url": "https://project-stub.kitgrid.dev"
+  }
+]
