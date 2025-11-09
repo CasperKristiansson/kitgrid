@@ -10,18 +10,95 @@
 @layer base {
   :root {
     color-scheme: dark;
+    --theme-primary: #60a5fa;
+    --theme-secondary: #6ee7f9;
+    --theme-bg: #0b0f16;
+    --theme-surface: #101627;
+    --theme-text: #e6ebf2;
+    --theme-muted: #8ea2c1;
+    --theme-link: #6ee7f9;
+    --theme-code: #1e293b;
+    --motion-scale: 1;
   }
 
   body {
-    @apply bg-base-100 text-base-content min-h-screen font-sans antialiased;
+    background-color: var(--theme-bg);
+    color: var(--theme-text);
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    letter-spacing: -0.01em;
   }
 
   ::selection {
-    @apply bg-primary text-primary-content;
+    background-color: var(--theme-primary);
+    color: #030712;
   }
-}
 
-@layer components {
+  [data-theme='kitgrid'] {
+    --theme-primary: #60a5fa;
+    --theme-secondary: #6ee7f9;
+    --theme-bg: #0b0f16;
+    --theme-surface: #101627;
+    --theme-text: #e6ebf2;
+    --theme-muted: #8ea2c1;
+    --theme-link: #6ee7f9;
+    --theme-code: #1e293b;
+    --motion-scale: 1;
+    --p: var(--theme-primary);
+    --pc: #030712;
+    --s: var(--theme-secondary);
+    --sc: #04121f;
+    --b1: var(--theme-bg);
+    --b2: var(--theme-surface);
+    --bc: var(--theme-text);
+  }
+
+  [data-theme='pydantic-fixturegen'] {
+    --theme-primary: #14b8a6;
+    --theme-secondary: #67e8f9;
+    --theme-bg: #0a0f14;
+    --theme-surface: #0f1722;
+    --theme-text: #e5f4f1;
+    --theme-muted: #9ac7c0;
+    --theme-link: #2dd4bf;
+    --theme-code: #042f2e;
+    --motion-scale: 0.9;
+    --p: var(--theme-primary);
+    --pc: #031915;
+    --s: var(--theme-secondary);
+    --sc: #05121f;
+    --b1: var(--theme-bg);
+    --b2: var(--theme-surface);
+    --bc: var(--theme-text);
+  }
+
+  [data-theme='docs-playground'] {
+    --theme-primary: #f472b6;
+    --theme-secondary: #a78bfa;
+    --theme-bg: #0f0c1f;
+    --theme-surface: #17112e;
+    --theme-text: #f4f2ff;
+    --theme-muted: #bbb1e8;
+    --theme-link: #c084fc;
+    --theme-code: #1c1330;
+    --motion-scale: 1.1;
+    --p: var(--theme-primary);
+    --pc: #2a091c;
+    --s: var(--theme-secondary);
+    --sc: #120f2b;
+    --b1: var(--theme-bg);
+    --b2: var(--theme-surface);
+    --bc: var(--theme-text);
+  }
+
+  pre,
+  code {
+    background-color: var(--theme-code);
+    color: var(--theme-text);
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.5rem;
+  }
+
   .pill {
     @apply badge badge-outline badge-lg text-secondary text-xs tracking-[0.3em] uppercase;
   }

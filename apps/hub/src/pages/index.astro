@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import ThemePicker from '../components/ThemePicker.astro';
 import { featuredProjects } from '../data/projects';
 import { SITE } from '../config/site';
 
@@ -70,6 +71,9 @@ const flowSteps = [
           <div class="flex flex-wrap gap-3">
             <a class="btn btn-primary" href="#projects">Browse projects</a>
             <a class="btn btn-secondary" href="#docs">Docs quick links</a>
+          </div>
+          <div class="flex flex-wrap gap-6">
+            <ThemePicker />
           </div>
         </div>
 

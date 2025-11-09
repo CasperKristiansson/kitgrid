@@ -1,0 +1,47 @@
+---
+import { themes } from '../data/themes';
+const serializedThemes = JSON.stringify(themes);
+---
+
+<div class="space-y-2">
+  <label class="text-base-content/70 text-sm font-medium" for="theme-picker"
+    >Preview theme</label
+  >
+  <select id="theme-picker" class="select select-bordered select-sm w-full max-w-xs">
+    {themes.map((theme) => <option value={theme.id}>{theme.label}</option>)}
+  </select>
+</div>
+
+<script is:inline data-themes={serializedThemes}>
+  const scriptEl = document.currentScript;
+  const themes = JSON.parse(scriptEl?.dataset.themes || '[]');
+  if (typeof window !== 'undefined') {
+    const THEME_KEY = 'kitgrid-theme';
+    const select = document.getElementById('theme-picker');
+    const docEl = document.documentElement;
+
+    const applyTheme = (id) => {
+      const theme = themes.find((theme) => theme.id === id) || themes[0];
+      docEl.dataset.theme = theme.id;
+      docEl.style.setProperty('--theme-primary', theme.primary);
+      docEl.style.setProperty('--theme-secondary', theme.secondary);
+      docEl.style.setProperty('--theme-bg', theme.bg);
+      docEl.style.setProperty('--theme-surface', theme.surface);
+      docEl.style.setProperty('--theme-text', theme.text);
+      docEl.style.setProperty('--theme-muted', theme.muted);
+      docEl.style.setProperty('--theme-link', theme.link);
+      docEl.style.setProperty('--theme-code', theme.code);
+      docEl.style.setProperty('--motion-scale', theme.motion);
+      localStorage.setItem(THEME_KEY, theme.id);
+    };
+
+    const stored = localStorage.getItem(THEME_KEY) || '${themes[0].id}';
+    if (select) {
+      select.value = stored;
+      applyTheme(stored);
+      select.addEventListener('change', (event) => {
+        applyTheme(event.target.value);
+      });
+    }
+  }
+</script>
