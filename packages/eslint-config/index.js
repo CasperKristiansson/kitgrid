@@ -124,6 +124,10 @@ module.exports = {
     {
       files: ["**/*.config.{js,cjs,mjs,ts}", "**/*rc.cjs", "**/*rc.js"],
       env: { node: true },
+      parserOptions: {
+        ...tsParserOptions,
+        project: null
+      },
       rules: {
         "unicorn/prefer-module": "off"
       }
