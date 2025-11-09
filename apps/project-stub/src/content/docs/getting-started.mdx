@@ -1,0 +1,68 @@
+---
+title: 'Docs layout demo'
+description: 'Reusable navigation, TOC, and MDX components.'
+editUrl: 'https://github.com/kitgrid/kitgrid'
+versionLabel: 'alpha'
+---
+
+## Overview
+
+Kitgrid keeps each project's docs in its own repo, then hydrates a cache when building the
+hub. That means no downstream content gets committed here.
+
+<Callout variant="info" title="Cache-only fetch">
+  Run `pnpm docs:fetch -- --project foo --source ../foo/docs` to sync docs during local
+  development without polluting git history.
+</Callout>
+
+## Manifest
+
+### Metadata
+
+Each repo ships a `kitgrid.yaml` describing the docs source path, nav hints, and repo URL.
+
+### Theme tokens
+
+Tokens align with daisyUI palettes, so swapping colors does not require touching layout
+code.
+
+### Manifest refs
+
+Declare which refs to build (latest tag, release branch, etc.). Viewer-request logic swaps
+`current` to point at the desired ref.
+
+## Build pipeline
+
+### Ingestion
+
+```
+pnpm docs:fetch -- --project stub --source ./docs
+```
+
+<Tabs
+  tabs={[
+    {
+      label: 'pnpm',
+      content: <code>pnpm docs:fetch -- --project foo --source ../foo/docs</code>,
+    },
+    {
+      label: 'npm',
+      content: <code>npm run docs:fetch -- --project foo -- --source ../foo/docs</code>,
+    },
+  ]}
+/>
+
+### Security
+
+<Callout variant="warning" title="Immutable deploys">
+  Artifacts land in `/sites/<project>/<ref>` with read-only ACLs. CloudFront viewer
+  functions map subdomains to those prefixes.
+</Callout>
+
+## Deploy
+
+```
+pnpm --filter @kitgrid/project-stub build
+```
+
+Preview locally with `pnpm dev` and point the subdomain to CloudFront once satisfied.

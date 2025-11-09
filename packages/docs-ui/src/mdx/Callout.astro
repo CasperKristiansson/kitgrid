@@ -1,0 +1,21 @@
+---
+interface Props {
+  variant?: 'info' | 'success' | 'warning' | 'error';
+  title?: string;
+}
+
+const { variant = 'info', title } = Astro.props;
+const variantClass = {
+  info: 'alert-info',
+  success: 'alert-success',
+  warning: 'alert-warning',
+  error: 'alert-error',
+}[variant];
+---
+
+<div class={`alert ${variantClass} text-sm`}>
+  <div class="flex flex-col gap-1">
+    {title && <p class="font-semibold">{title}</p>}
+    <slot />
+  </div>
+</div>

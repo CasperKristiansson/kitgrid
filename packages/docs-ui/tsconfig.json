@@ -1,0 +1,7 @@
+{
+  "extends": "@kitgrid/tsconfig/astro",
+  "compilerOptions": {
+    "baseUrl": "."
+  },
+  "include": ["src"]
+}

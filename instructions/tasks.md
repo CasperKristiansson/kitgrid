@@ -70,7 +70,7 @@
   - Acceptance: Lighthouse ≥95 perf/a11y on desktop; sitemap and robots accessible.
   - Dependencies: 0.1, 1._, 2._.
 
-- [ ] **Docs layout**
+- [x] **Docs layout**
 
   - Summary: Create a reusable `DocsLayout` with left nav, content, right TOC, search slot, “Edit this page”, version switcher placeholder.
   - Deliverables: Layout components, MDX component map (admonitions, tabs, code copy), anchor links.

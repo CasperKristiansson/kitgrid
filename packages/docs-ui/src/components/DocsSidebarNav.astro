@@ -1,0 +1,70 @@
+---
+import type { DocsNavItem } from '../types';
+
+interface Props {
+  items: DocsNavItem[];
+}
+
+const { items = [] } = Astro.props;
+---
+
+<nav class="docs-nav" aria-label="Docs sections">
+  <ul>
+    {
+      items.map((item) => (
+        <li>
+          <a href={item.href} class="nav-link">
+            {item.title}
+          </a>
+          {item.children?.length ? (
+            <ul>
+              {item.children.map((child) => (
+                <li>
+                  <a href={child.href} class="nav-link nav-link-child">
+                    {child.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .docs-nav {
+    position: sticky;
+    top: 5rem;
+    max-height: calc(100vh - 5rem);
+    overflow-y: auto;
+    padding-right: 0.5rem;
+  }
+
+  .docs-nav ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav-link {
+    color: var(--theme-muted);
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    color: var(--theme-text);
+  }
+
+  .nav-link-child {
+    font-size: 0.85rem;
+    padding-left: 1rem;
+  }
+</style>

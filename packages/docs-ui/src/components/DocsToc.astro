@@ -1,0 +1,64 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings?: Heading[];
+}
+
+const { headings = [] } = Astro.props;
+const toc = headings.filter((heading) => heading.depth <= 3);
+---
+
+<aside class="docs-toc">
+  <p class="text-base-content/60 text-sm font-semibold">On this page</p>
+  <ul>
+    {
+      toc.map((heading) => (
+        <li style={`margin-left: ${(heading.depth - 2) * 1}rem`}>
+          <a href={`#${heading.slug}`}>{heading.text}</a>
+        </li>
+      ))
+    }
+  </ul>
+</aside>
+
+<style>
+  .docs-toc {
+    position: sticky;
+    top: 5rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    padding-left: 1.5rem;
+    max-height: calc(100vh - 5rem);
+    overflow-y: auto;
+  }
+
+  .docs-toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .docs-toc a {
+    color: var(--theme-muted);
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+
+  .docs-toc a:hover,
+  .docs-toc a:focus-visible {
+    color: var(--theme-link);
+  }
+
+  @media (max-width: 1024px) {
+    .docs-toc {
+      display: none;
+    }
+  }
+</style>

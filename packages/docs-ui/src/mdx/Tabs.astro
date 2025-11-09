@@ -1,0 +1,118 @@
+---
+interface TabItem {
+  label: string;
+  content: unknown;
+}
+
+interface Props {
+  tabs: TabItem[];
+}
+
+const { tabs = [] } = Astro.props as { tabs: TabItem[] };
+const uid = `tabs-${Math.random().toString(36).slice(2, 7)}`;
+---
+
+<div class="tabs-boxed tabs" role="tablist" aria-label="Code examples">
+  {
+    tabs.map((tab, index) => {
+      const buttonId = `${uid}-tab-${index}`;
+      const panelId = `${uid}-panel-${index}`;
+      return (
+        <button
+          id={buttonId}
+          type="button"
+          class={`tab ${index === 0 ? 'tab-active' : ''}`}
+          data-tabs-id={uid}
+          data-tab-index={index}
+          role="tab"
+          aria-selected={index === 0 ? 'true' : 'false'}
+          aria-controls={panelId}
+          tabindex={index === 0 ? 0 : -1}
+        >
+          {tab.label}
+        </button>
+      );
+    })
+  }
+</div>
+<div class="tabs-panels" id={uid}>
+  {
+    tabs.map((tab, index) => {
+      const panelId = `${uid}-panel-${index}`;
+      const buttonId = `${uid}-tab-${index}`;
+      return (
+        <div
+          id={panelId}
+          class={`tabs-panel ${index === 0 ? 'is-active' : ''}`}
+          role="tabpanel"
+          aria-labelledby={buttonId}
+          tabindex={0}
+          hidden={index !== 0}
+        >
+          {tab.content}
+        </div>
+      );
+    })
+  }
+</div>
+
+<script is:inline>
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-tabs-id]');
+    if (!button) return;
+    const id = button.dataset.tabsId;
+    const index = button.dataset.tabIndex;
+    if (!id || index === undefined) return;
+    const panels = document.getElementById(id)?.querySelectorAll('.tabs-panel');
+    const buttons = document.querySelectorAll(`[data-tabs-id="${id}"]`);
+    buttons.forEach((btn) => {
+      btn.classList.remove('tab-active');
+      btn.setAttribute('aria-selected', 'false');
+      btn.setAttribute('tabindex', '-1');
+    });
+    button.classList.add('tab-active');
+    button.setAttribute('aria-selected', 'true');
+    button.setAttribute('tabindex', '0');
+    panels?.forEach((panel, panelIndex) => {
+      const isActive = panelIndex.toString() === index;
+      panel.classList.toggle('is-active', isActive);
+      panel.toggleAttribute('hidden', !isActive);
+    });
+    button.focus();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    const button = event.target.closest('[data-tabs-id]');
+    if (!button) return;
+    if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+    event.preventDefault();
+    const id = button.dataset.tabsId;
+    if (!id) return;
+    const buttons = [...document.querySelectorAll(`[data-tabs-id="${id}"]`)];
+    const currentIndex = buttons.indexOf(button);
+    if (currentIndex < 0) return;
+    const nextIndex =
+      event.key === 'ArrowRight'
+        ? (currentIndex + 1) % buttons.length
+        : (currentIndex - 1 + buttons.length) % buttons.length;
+    buttons[nextIndex].click();
+  });
+</script>
+
+<style>
+  .tabs-panels {
+    margin-top: 1rem;
+  }
+
+  .tabs-panel {
+    display: none;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .tabs-panel.is-active {
+    display: block;
+  }
+</style>
