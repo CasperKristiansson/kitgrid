@@ -6,46 +6,65 @@ import { SITE } from '../config/site';
 
 const docsLinks = [
   {
-    title: 'Add your project',
-    description: 'kitgrid.yaml fields, repo dispatch, and ingestion rules.',
-    href: 'https://kitgrid.dev/docs/add-your-project',
+    title: 'Manifest contract',
+    description: 'How I describe each repo (metadata, theme tokens, versions).',
+    href: 'https://kitgrid.dev/docs/manifest',
   },
   {
-    title: 'Code style kits',
-    description: 'Shared ESLint, Prettier, and tsconfig packages for every repo.',
-    href: 'https://kitgrid.dev/docs/code-style',
+    title: 'Dispatch + CI',
+    description: 'When a project ships, GitHub dispatch kicks off an Astro build.',
+    href: 'https://kitgrid.dev/docs/ci-contract',
   },
   {
-    title: 'Exception policy',
-    description: 'Ask for temporary rule overrides and track expirations.',
-    href: 'https://kitgrid.dev/docs/exception-policy',
+    title: 'Content guardrails',
+    description: 'MDX linting, security sanitizers, and when I block raw HTML.',
+    href: 'https://kitgrid.dev/docs/content-safety',
   },
 ];
 
 const highlights = [
-  { label: 'Single repo', value: 'kitgrid', helper: 'apps · packages · infra' },
-  { label: 'Docs online in', value: '<10 min', helper: 'per project deploy' },
-  { label: 'Search ready', value: 'Pagefind', helper: 'local + federated' },
+  { label: 'Owned projects', value: 'All mine', helper: 'no external tenants' },
+  { label: 'Docs online in', value: '<10 min', helper: 'tag → subdomain' },
+  { label: 'Ingress', value: 'Pull-only', helper: 'never pushes to repos' },
+];
+
+const flowSteps = [
+  {
+    title: '01 · Track repo health',
+    detail:
+      'A lightweight manifest in each repo lists docs source, theme, and ref strategy.',
+  },
+  {
+    title: '02 · Fetch + build',
+    detail:
+      'Kitgrid pulls docs tarballs, runs Astro + daisyUI layouts, and runs link checks.',
+  },
+  {
+    title: '03 · Publish + pin',
+    detail:
+      'Artifacts land in /sites/<project>/<ref> with “current” pointers for CloudFront.',
+  },
 ];
 ---
 
 <BaseLayout>
   <div class="mx-auto flex w-full max-w-6xl flex-col gap-16 px-4 py-12">
     <section
-      class="hero border-base-200 bg-base-200/20 min-h-[480px] rounded-[30px] border"
+      class="hero border-base-200 from-base-200/40 via-base-200/10 min-h-[480px] rounded-[30px] border bg-gradient-to-br to-transparent"
     >
       <div class="hero-content flex-col items-start gap-10 text-left">
         <div class="space-y-6">
-          <span class="pill">Astro · Tailwind · daisyUI · Terraform</span>
+          <span class="pill">Private docs network</span>
           <div class="space-y-4">
             <h1 class="text-4xl leading-tight font-bold md:text-5xl">
-              One hub for every project’s docs.
+              My documentation hub.<br />Every project, one home.
             </h1>
             <p class="text-base-content/70 text-lg">
-              <strong>kitgrid.dev</strong> hosts the landing page and triggers
-              <strong>&lt;project&gt;.kitgrid.dev</strong> deploys. We fetch docs from each
-              repo, render shared layouts via Astro + MDX, and ship to CloudFront without one-off
-              DNS.
+              Kitgrid isn’t a public SaaS—it’s the private infrastructure I use to ship
+              docs for the software I build. Each repo keeps its own source; this site
+              orchestrates the pulls, builds, and deploys so <strong
+                >&lt;project&gt;.kitgrid.dev</strong
+              > is always the canonical destination.
             </p>
           </div>
           <div class="flex flex-wrap gap-3">
@@ -69,6 +88,85 @@ const highlights = [
             ))
           }
         </div>
+      </div>
+    </section>
+
+    <section class="grid gap-6 md:grid-cols-2">
+      <div class="space-y-3">
+        <p class="pill">Looks right everywhere</p>
+        <h2 class="text-3xl font-semibold">Responsive shells + device previews.</h2>
+        <p class="text-base-content/70 leading-relaxed">
+          All layouts rely on daisyUI primitives (hero, cards, mockups) so they respond
+          cleanly from phone to desktop. Each docs deploy inherits the same grid +
+          typography system, making upgrades dead simple.
+        </p>
+        <ul class="text-base-content/70 space-y-2">
+          <li class="flex items-center gap-2">
+            <span class="badge badge-primary badge-sm"></span> Mobile-first navigation &amp;
+            sticky TOCs.
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="badge badge-primary badge-sm"></span> Dark-first color tokens with
+            high contrast.
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="badge badge-primary badge-sm"></span> Mock device frames for marketing
+            previews.
+          </li>
+        </ul>
+      </div>
+      <div class="mockup-window border-base-200 bg-base-100 border">
+        <div class="bg-base-300 px-8 py-6">
+          <div class="space-y-2">
+            <p class="text-base-content/60 text-sm">kitgrid.dev → mobile</p>
+            <div class="border-base-200 bg-base-100 rounded-2xl border p-4">
+              <p class="text-base-content/60 text-xs tracking-[0.5em] uppercase">Hero</p>
+              <p class="text-lg font-semibold">
+                Docs deploys trigger automatically when I tag a release.
+              </p>
+              <p class="text-base-content/70 text-sm">
+                Tailwind + daisyUI handles the typography and spacing, so I focus on
+                content instead of CSS resets.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="border-base-200 bg-base-200/20 rounded-[28px] border p-8">
+      <div class="flex flex-col gap-6 md:flex-row md:gap-10">
+        <div class="space-y-3 md:w-1/3">
+          <p class="pill">How Kitgrid operates</p>
+          <h2 class="text-3xl font-semibold">Pull-only, immutable deploys.</h2>
+          <p class="text-base-content/70">
+            Every project repo stays the source of truth. Kitgrid only pulls tarballs,
+            builds locally, and publishes to CloudFront with a predictable folder
+            strategy—no webhooks pushing into your git history.
+          </p>
+        </div>
+        <ul class="timeline timeline-vertical timeline-snap-icon w-full md:w-2/3">
+          {
+            flowSteps.map((step, index) => (
+              <li>
+                <div class="timeline-middle">
+                  <div class="bg-primary text-primary-content h-3 w-3 rounded-full" />
+                </div>
+                <div class="timeline-end mb-8">
+                  <div class="border-base-200 bg-base-100 rounded-2xl border p-4 shadow-sm">
+                    <p class="text-base-content/60 text-sm tracking-[0.3em] uppercase">
+                      {step.title}
+                    </p>
+                    <p class="text-base-content/80 text-sm leading-relaxed">
+                      {step.detail}
+                    </p>
+                  </div>
+                </div>
+                {index < flowSteps.length - 1 && <hr class="bg-base-200" />}
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </section>
 
