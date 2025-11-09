@@ -40,6 +40,23 @@ variable "logs_bucket_name" {
   default     = "kitgrid-cdn-logs"
 }
 
+variable "cloudflare_zone_id" {
+  description = "Cloudflare Zone ID for kitgrid.dev."
+  type        = string
+}
+
+variable "cloudflare_api_token" {
+  description = "Cloudflare API token with DNS edit permissions for the zone."
+  type        = string
+  sensitive   = true
+}
+
+variable "cloudflare_proxy" {
+  description = "Whether Cloudflare should proxy CNAME records (orange cloud)."
+  type        = bool
+  default     = false
+}
+
 variable "tags" {
   description = "Additional tags to merge onto every resource."
   type        = map(string)

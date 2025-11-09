@@ -47,7 +47,7 @@
   - Acceptance: Distribution issues TLS for apex and wildcard; bucket is private; OAC works; static test file served via CDN.
   - Dependencies: 0.1.
 
-- [ ] **Cloudflare DNS (one-time)**
+- [x] **Cloudflare DNS (one-time)**
 
   - Summary: Point `kitgrid.dev` and `*.kitgrid.dev` to CloudFront via CNAME (flatten apex).
   - Deliverables: Cloudflare records documented in Terraform (if managed) or manual change record.

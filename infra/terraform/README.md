@@ -17,9 +17,13 @@ cd infra/terraform
 terraform init
 terraform plan \
   -var="domain_name=kitgrid.dev" \
-  -var='additional_aliases=["*.kitgrid.dev"]'
+  -var='additional_aliases=["*.kitgrid.dev"]' \
+  -var="cloudflare_zone_id=<zone-id>"
 ```
 
-Before running `terraform apply`, create the ACM validation CNAMEs listed under the `acm_validation_records` output inside Cloudflare (or let the upcoming Cloudflare module manage them automatically). The CloudFront distribution depends on the certificate being validated, so the apply will pause until those DNS records exist.
+Provide a Cloudflare API token (DNS edit scope) by exporting `TF_VAR_cloudflare_api_token`. Terraform will:
 
-After apply completes, point the Cloudflare DNS records for `kitgrid.dev` and `*.kitgrid.dev` to the value of the `cdn_domain` output. Remember to disable the proxy (DNS-only) so AWS terminates TLS using the ACM cert.
+1. Publish the ACM validation CNAMEs so certificate issuance becomes hands-free.
+2. Create/update the `kitgrid.dev` (flattened) and `*.kitgrid.dev` CNAMEs, pointing them to the CloudFront distribution.
+
+By default these records are DNS-only so AWS terminates TLS via ACM. If you need Cloudflare’s proxy, set `-var="cloudflare_proxy=true"` and ensure CloudFront only accepts Cloudflare IP ranges.

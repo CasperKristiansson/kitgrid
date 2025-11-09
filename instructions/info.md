@@ -119,10 +119,9 @@ Store in `/docs/kitgrid.yaml`. Purpose: instruct kitgrid how to fetch, theme, an
 **Cloudflare**
 
 - Keep the domain hosted in Cloudflare but delegate traffic to AWS:
-  - Add a CNAME-flattened record for `kitgrid.dev` pointing to the CloudFront distribution domain.
-  - Add `*.kitgrid.dev` as a CNAME to the same distribution.
-- Leave these records in “DNS only” mode so TLS terminates on the AWS ACM certificate. If you need Cloudflare proxying, add the Cloudflare IP ranges to CloudFront as allowed origins.
-- All ACM DNS validation CNAMEs are also added in Cloudflare, preferably via Terraform.
+  - Terraform creates a CNAME-flattened record for `kitgrid.dev` and a wildcard CNAME for `*.kitgrid.dev`, both pointing at the CloudFront distribution domain.
+  - ACM validation CNAMEs are also provisioned automatically so certificates renew without manual work.
+- Leave these records in “DNS only” mode so TLS terminates on the AWS ACM certificate. If you need Cloudflare proxying, add the Cloudflare IP ranges to CloudFront as allowed origins and set `cloudflare_proxy=true` in Terraform.
 
 **ACM**
 
