@@ -16,7 +16,7 @@ This Terraform configuration provisions the AWS resources required to serve `kit
 
 ```bash
 cd infra/terraform
-terraform init   # Requires Terraform >= 1.14
+terraform init   # Requires Terraform >= 1.13.5
 terraform plan \
   -var="domain_name=kitgrid.dev" \
   -var='additional_aliases=["*.kitgrid.dev"]' \

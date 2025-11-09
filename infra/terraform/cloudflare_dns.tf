@@ -23,7 +23,6 @@ resource "cloudflare_dns_record" "apex" {
   content         = local.apex_record.value
   ttl             = 1
   proxied         = var.cloudflare_proxy
-  allow_overwrite = true
 }
 
 resource "cloudflare_dns_record" "wildcard" {
@@ -33,7 +32,6 @@ resource "cloudflare_dns_record" "wildcard" {
   content         = local.wildcard_record.value
   ttl             = 1
   proxied         = var.cloudflare_proxy
-  allow_overwrite = true
 }
 
 resource "cloudflare_dns_record" "acm_validation" {
@@ -45,5 +43,4 @@ resource "cloudflare_dns_record" "acm_validation" {
   content         = trimsuffix(each.value.value, ".")
   ttl             = 3600
   proxied         = false
-  allow_overwrite = true
 }
