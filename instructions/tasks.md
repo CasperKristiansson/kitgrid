@@ -162,7 +162,7 @@
   - Acceptance: New content visible at `<project>.kitgrid.dev` within minutes; invalidations scoped to project.
   - Dependencies: 4.\*, 5.1.
 
-- [ ] **Project → kitgrid dispatch**
+- [x] **Project → kitgrid dispatch**
 
   - Summary: Define `repository_dispatch` contract `{ project, ref }`; document how projects trigger builds on release/docs change.
   - Deliverables: Contract doc; example call; minimal project-side workflow snippet in docs (no code in this file).

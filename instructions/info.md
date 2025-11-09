@@ -90,6 +90,13 @@ See `docs/manifest-spec.md` for the formal field reference. The JSON Schema live
 
 3. Point Astro apps (e.g., the `project-stub`) at the cache path when you need real docs content.
 
+**Remote dispatches**
+
+- External repos trigger builds via `repository_dispatch` with `event_type: build-docs`.
+  Payload format and curl example live in `docs/dispatch.md`.
+- When the payload includes `project`/`ref`, the deploy workflow fetches that project’s
+  docs (`pnpm docs:fetch -- --project <id> --ref <ref>`) before rebuilding and syncing to S3.
+
 **Upstream requirements (e.g., `pydantic-fixturegen`)**
 
 - Add `/docs/kitgrid.yaml` so the fetcher can read metadata without heuristics. Example scaffold:

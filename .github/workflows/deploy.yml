@@ -4,11 +4,15 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  repository_dispatch:
+    types: [build-docs]
 
 env:
   PNPM_VERSION: 8.15.4
   NODE_VERSION: 20.11.1
   KITGRID_SITE_BUCKET: kitgrid-sites
+  PROJECT_ID: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.project || '' }}
+  PROJECT_REF: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.ref || 'main' }}
 
 jobs:
   deploy:
@@ -30,6 +34,10 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Fetch project docs
+        if: ${{ env.PROJECT_ID != '' }}
+        run: pnpm docs:fetch -- --project "${PROJECT_ID}" --ref "${PROJECT_REF}"
 
       - name: Build sites
         run: pnpm build:sites
