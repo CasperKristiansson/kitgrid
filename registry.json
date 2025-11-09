@@ -4,13 +4,15 @@
     "name": "pydantic-fixturegen",
     "description": "Deterministic test data factories for Pydantic v2 with CLI, providers, and seeds.",
     "repo": "CasperKristiansson/pydantic-fixturegen",
-    "status": "in-progress",
+    "status": "live",
     "tag": "python",
     "subdomain": "pydantic-fixturegen",
     "default_ref": "main",
     "last_built_ref": "main",
     "docs_path": "docs",
-    "docs_url": null
+    "docs_url": "https://pydantic-fixturegen.kitgrid.dev",
+    "workspace": "@kitgrid/pydantic-fixturegen",
+    "sync_docs": true
   },
   {
     "id": "kitgrid-hub",

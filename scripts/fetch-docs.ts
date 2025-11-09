@@ -42,6 +42,29 @@ const CACHE_ROOT = resolve('.kitgrid-cache/docs');
 const TAR_ROOT = resolve('.kitgrid-cache/tarballs');
 const EXTRACT_ROOT = resolve('.kitgrid-cache/tmp');
 
+function workspaceDirFromEntry(entry?: RegistryEntry) {
+  if (!entry?.workspace || !entry.sync_docs) return null;
+  const parts = entry.workspace.split('/');
+  const name = parts.at(-1);
+  if (!name) return null;
+  return resolve('apps', name);
+}
+
+function touchGitkeep(targetDir: string) {
+  writeFileSync(join(targetDir, '.gitkeep'), '', { flag: 'w' });
+}
+
+function syncWorkspaceDocs(entry: RegistryEntry | undefined, cacheDir: string, ref: string) {
+  if (!entry?.sync_docs) return;
+  const workspaceDir = workspaceDirFromEntry(entry);
+  if (!workspaceDir) return;
+  const docsTarget = join(workspaceDir, 'src', 'content', 'docs');
+  rmSync(docsTarget, { recursive: true, force: true });
+  copySource(cacheDir, docsTarget);
+  touchGitkeep(docsTarget);
+  console.log(`Synced docs for ${entry.id}@${ref} into ${docsTarget}`);
+}
+
 function parseArgs(argv: string[]): CliArgs {
   const args: CliArgs = { project: '' };
 
@@ -139,8 +162,7 @@ function loadRegistryEntries(customPath?: string): RegistryEntry[] {
   return JSON.parse(contents) as RegistryEntry[];
 }
 
-function resolveProjectConfig(args: CliArgs, entries: RegistryEntry[]) {
-  const entry = entries.find((item) => item.id === args.project);
+function resolveProjectConfig(args: CliArgs, entry?: RegistryEntry) {
   const repo = args.repo ?? entry?.repo;
   if (!repo) {
     throw new Error(`Unknown repo for project ${args.project}. Pass --repo or update registry.`);
@@ -215,11 +237,12 @@ async function main() {
   try {
     const args = parseArgs(process.argv.slice(2));
     const registryEntries = loadRegistryEntries(args.registryPath);
-    const targetDir = resolve(CACHE_ROOT, args.project, args.ref ?? 'local');
-    ensureParentDirs(targetDir);
-    cleanDir(targetDir);
+    const entry = registryEntries.find((item) => item.id === args.project);
 
     if (args.source) {
+      const ref = args.ref ?? entry?.last_built_ref ?? entry?.default_ref ?? 'local';
+      const targetDir = resolve(CACHE_ROOT, args.project, ref);
+      cleanDir(targetDir);
       const resolvedSource = resolve(args.source);
       if (!existsSync(resolvedSource)) {
         throw new Error(`Source path not found: ${resolvedSource}`);
@@ -231,17 +254,20 @@ async function main() {
       copySource(resolvedSource, targetDir);
       recordMetadata(targetDir, {
         project: args.project,
-        ref: args.ref ?? 'local',
+        ref,
         source: resolvedSource,
         sourceType: 'local',
         docsPath: resolvedSource,
         cachedAt: new Date().toISOString(),
       });
-      console.log(`Cached docs for ${args.project}@${args.ref ?? 'local'} from ${resolvedSource}`);
+      syncWorkspaceDocs(entry, targetDir, ref);
+      console.log(`Cached docs for ${args.project}@${ref} from ${resolvedSource}`);
       return;
     }
 
-    const { repo, docsPath, ref } = resolveProjectConfig(args, registryEntries);
+    const { repo, docsPath, ref } = resolveProjectConfig(args, entry);
+    const targetDir = resolve(CACHE_ROOT, args.project, ref);
+    cleanDir(targetDir);
     const token = process.env.KITGRID_GITHUB_TOKEN ?? process.env.GITHUB_TOKEN;
     const { docsDir, archive, extracted } = await fetchDocsFromRemote(
       args.project,
@@ -260,6 +286,7 @@ async function main() {
       docsPath,
       cachedAt: new Date().toISOString(),
     });
+    syncWorkspaceDocs(entry, targetDir, ref);
     console.log(`Cached docs for ${args.project}@${ref} from ${repo}`);
     rmSync(extracted, { recursive: true, force: true });
   } catch (error) {

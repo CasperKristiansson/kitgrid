@@ -15,6 +15,11 @@ Each workspace exposes `pnpm search:index` (Pagefind) which `build:sites` runs
 automatically so the static search index (`/pagefind/**`) ships alongside the build.
 ```
 
+Projects that set `"sync_docs": true` in `registry.json` have their cached docs
+(`.kitgrid-cache/docs/<id>/<ref>`) mirrored into `apps/<name>/src/content/docs` whenever
+`pnpm docs:fetch -- --project <id>` runs. The mirrored files stay untracked in git — only
+the `.gitkeep` placeholder lives in the repo.
+
 ## GitHub Actions
 
 Secrets required:

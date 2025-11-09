@@ -213,7 +213,7 @@
   - Acceptance: Page loads < 2s on typical broadband; nav reflects docs structure.
   - Dependencies: 3.2, 4.5.
 
-- [ ] **Dispatch and deploy**
+- [x] **Dispatch and deploy**
 
   - Summary: Trigger a build for a tagged release or main.
   - Deliverables: Live site at `pydantic-fixturegen.kitgrid.dev`.

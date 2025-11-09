@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 import { existsSync, readFileSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
+import { resolve, dirname, join, relative, sep } from 'node:path';
 import { globSync } from 'glob';
 import { load } from 'cheerio';
 
@@ -19,6 +19,23 @@ function isExternal(href: string) {
   return href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:');
 }
 
+function resolveCandidate(href: string, absRoot: string, fullPath: string) {
+  const [pathPart] = href.split('#');
+  const normalized = pathPart.replace(/^\/+/, '');
+  if (href.startsWith('/')) {
+    if (absRoot.endsWith(`${sep}sites`)) {
+      const rel = relative(absRoot, fullPath);
+      const segments = rel.split(sep);
+      if (segments.length >= 2) {
+        const siteRoot = join(absRoot, segments[0], segments[1]);
+        return join(siteRoot, normalized);
+      }
+    }
+    return join(absRoot, normalized);
+  }
+  return resolve(dirname(fullPath), normalized);
+}
+
 let failures = 0;
 
 for (const target of targets) {
@@ -31,8 +48,7 @@ for (const target of targets) {
     $('a[href]').each((_, el) => {
       const href = $(el).attr('href') ?? '';
       if (!href || isExternal(href)) return;
-      const normalized = href.replace(/^\//, '');
-      const candidate = resolve(dirname(fullPath), normalized);
+      const candidate = resolveCandidate(href, absRoot, fullPath);
       if (!candidate.startsWith(absRoot)) return;
       if (!existsSync(candidate)) {
         failures += 1;

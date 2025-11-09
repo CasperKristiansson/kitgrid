@@ -1,4 +1,5 @@
 import { allowedComponents } from './allowed-components.js';
+export { remarkRewriteDocLinks } from './rewrite-doc-links.js';
 
 function isRemoteUrl(value) {
   return typeof value === 'string' && /^https?:\/\//i.test(value);

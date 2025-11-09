@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DocsLayout from '@kitgrid/docs-ui/components/DocsLayout.astro';
+import { landingNav } from '../data/landingNav';
+import { project } from '../data/project';
+
+const headings = [
+  { depth: 2, slug: 'overview', text: 'Overview' },
+  { depth: 2, slug: 'first-pass', text: 'First pass' },
+  { depth: 2, slug: 'daily-workflows', text: 'Daily workflows' },
+  { depth: 2, slug: 'quality-systems', text: 'Quality systems' },
+  { depth: 2, slug: 'reference', text: 'Reference + appendix' },
+];
+---
+
+<BaseLayout title="Pydantic Fixturegen docs" description="Deterministic test data factories for Pydantic v2">
+  <DocsLayout
+    title="Pydantic Fixturegen"
+    description="Deterministic fixture generation, emitters, and diagnostics for Pydantic v2."
+    navItems={landingNav}
+    headings={headings}
+    editHref={`https://github.com/${project.repo}/blob/${project.buildRef}/${project.docsPath}/index.md`}
+  >
+    <section id="overview" class="space-y-4">
+      <p class="pill">Deterministic fixtures</p>
+      <h2 class="text-3xl font-semibold">Build coverage-grade fixtures for any Pydantic model.</h2>
+      <p class="text-base-content/80 leading-relaxed">
+        These docs walk you through discovery, emitter configuration, Pluggy providers,
+        seeds, diagnostics, and CLI guardrails. Start with the first-pass guides to get the
+        CLI running, then drill down into workflows, quality levers, and appendix material.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a class="btn btn-primary" href="/docs/quickstart">Run the quickstart</a>
+        <a class="btn btn-outline" href="/docs/features">Explore features</a>
+      </div>
+    </section>
+
+    <section id="first-pass" class="space-y-4">
+      <h2 class="text-2xl font-semibold">First pass: get oriented</h2>
+      <p class="text-base-content/70">
+        Jump into the CLI, pick your install strategy, and skim the feature tour before
+        automating discovery or emitters.
+      </p>
+      <div class="grid gap-4 md:grid-cols-3">
+        <article class="card bg-base-200/40 border border-base-200">
+          <div class="card-body">
+            <h3 class="card-title text-lg">Quickstart</h3>
+            <p class="text-base-content/70 text-sm">Generate JSON + fixtures end to end.</p>
+            <a class="link link-primary" href="/docs/quickstart">Open guide ↗</a>
+          </div>
+        </article>
+        <article class="card bg-base-200/40 border border-base-200">
+          <div class="card-body">
+            <h3 class="card-title text-lg">Install</h3>
+            <p class="text-base-content/70 text-sm">pip, Poetry, Hatch, extras, watch mode.</p>
+            <a class="link link-primary" href="/docs/install">Install instructions ↗</a>
+          </div>
+        </article>
+        <article class="card bg-base-200/40 border border-base-200">
+          <div class="card-body">
+            <h3 class="card-title text-lg">Feature tour</h3>
+            <p class="text-base-content/70 text-sm">Discovery, emitters, diagnostics overview.</p>
+            <a class="link link-primary" href="/docs/features">See tour ↗</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="daily-workflows" class="space-y-4">
+      <h2 class="text-2xl font-semibold">Daily workflows</h2>
+      <p class="text-base-content/70">
+        Reference the CLI, centralized configuration, and cookbook recipes whenever you
+        extend discovery or add emitters.
+      </p>
+      <ul class="space-y-2 text-base-content/80">
+        <li><a class="link" href="/docs/cli">CLI reference</a> — commands, flags, and watch mode.</li>
+        <li><a class="link" href="/docs/configuration">Configuration reference</a> — precedence, defaults, environment overrides.</li>
+        <li><a class="link" href="/docs/cookbook">Cookbook</a> — repeatable recipes for emitters, providers, seeds.</li>
+        <li><a class="link" href="/docs/discovery">Discovery guide</a> — AST vs safe import, sandboxing, policies.</li>
+      </ul>
+    </section>
+
+    <section id="quality-systems" class="space-y-4">
+      <h2 class="text-2xl font-semibold">Quality systems</h2>
+      <p class="text-base-content/70">
+        Use doctor, testing helpers, and seed/preset policies to keep fixtures deterministic
+        and auditable.
+      </p>
+      <div class="grid gap-4 md:grid-cols-3">
+        <article class="card bg-base-200/30 border border-base-200">
+          <div class="card-body">
+            <h3 class="card-title text-lg">Doctor & diagnostics</h3>
+            <p class="text-sm text-base-content/70">Coverage diff, CLI guardrails, snapshots.</p>
+            <a class="link link-primary" href="/docs/doctor">Open doctor ↗</a>
+          </div>
+        </article>
+        <article class="card bg-base-200/30 border border-base-200">
+          <div class="card-body">
+            <h3 class="card-title text-lg">Testing helpers</h3>
+            <p class="text-sm text-base-content/70">pytest snapshot plugin + CLI hooks.</p>
+            <a class="link link-primary" href="/docs/testing">See helpers ↗</a>
+          </div>
+        </article>
+        <article class="card bg-base-200/30 border border-base-200">
+          <div class="card-body">
+            <h3 class="card-title text-lg">Seeds & presets</h3>
+            <p class="text-sm text-base-content/70">Freeze seeds, manage probability policies.</p>
+            <a class="link link-primary" href="/docs/seeds">Manage seeds ↗</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="reference" class="space-y-4">
+      <h2 class="text-2xl font-semibold">Reference + appendix</h2>
+      <p class="text-base-content/70">
+        Keep these close for API signatures, templated paths, and troubleshooting.
+      </p>
+      <div class="grid gap-4 md:grid-cols-2">
+        <article class="card bg-base-200/20 border border-base-200">
+          <div class="card-body">
+            <h3 class="card-title text-lg">API reference</h3>
+            <p class="text-sm text-base-content/70">`generate_json`, `generate_fixtures`, schema emitters.</p>
+            <a class="link link-primary" href="/docs/api">View API ↗</a>
+          </div>
+        </article>
+        <article class="card bg-base-200/20 border border-base-200">
+          <div class="card-body">
+            <h3 class="card-title text-lg">Output paths + security</h3>
+            <p class="text-sm text-base-content/70">Templated destinations, sandbox policies, troubleshooting.</p>
+            <div class="flex gap-4 text-sm">
+              <a class="link link-primary" href="/docs/output-paths">Output paths ↗</a>
+              <a class="link link-primary" href="/docs/security">Security ↗</a>
+              <a class="link link-primary" href="/docs/troubleshooting">Troubleshooting ↗</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </DocsLayout>
+</BaseLayout>

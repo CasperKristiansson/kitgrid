@@ -1,0 +1,8 @@
+---
+import { firstDocsHref } from '../../data/docsNav';
+
+const normalized = firstDocsHref?.replace(/^\/docs/, '').replace(/\/+$/, '') ?? '';
+const redirectTarget = normalized ? `/docs/${normalized}` : '/docs/index';
+
+Astro.redirect(redirectTarget);
+---

@@ -10,8 +10,19 @@
     },
     "./allowed-components": "./src/allowed-components.js"
   },
-  "files": ["src"],
+  "files": [
+    "src"
+  ],
   "types": "./src/index.d.ts",
   "license": "MIT",
-  "keywords": ["mdx", "remark", "astro", "kitgrid", "security"]
+  "keywords": [
+    "mdx",
+    "remark",
+    "astro",
+    "kitgrid",
+    "security"
+  ],
+  "dependencies": {
+    "unist-util-visit": "^5.0.0"
+  }
 }

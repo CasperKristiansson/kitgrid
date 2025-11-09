@@ -14,7 +14,11 @@ type RegistryEntry = {
 const DIST_MAP: Record<string, string> = {
   '@kitgrid/hub': 'apps/hub/dist',
   '@kitgrid/project-stub': 'apps/project-stub/dist',
+  '@kitgrid/pydantic-fixturegen': 'apps/pydantic-fixturegen/dist',
 };
+
+const DISPATCH_PROJECT = process.env.PROJECT_ID;
+const DISPATCH_REF = process.env.PROJECT_REF;
 
 const STAGING_ROOT = resolve('.kitgrid-cache/deploy');
 
@@ -46,7 +50,8 @@ function stageProjects(entries: RegistryEntry[]) {
       console.warn(`Skipping ${entry.id}; no dist map for workspace ${entry.workspace}`);
       continue;
     }
-    const ref = entry.last_built_ref ?? entry.default_ref ?? 'main';
+    const fallbackRef = entry.last_built_ref ?? entry.default_ref ?? 'main';
+    const ref = entry.id === DISPATCH_PROJECT ? DISPATCH_REF ?? fallbackRef : fallbackRef;
     const versionPath = join(STAGING_ROOT, 'sites', entry.id, ref);
     const currentPath = join(STAGING_ROOT, 'sites', entry.id, 'current');
     copyDir(dist, versionPath);
