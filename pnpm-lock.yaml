@@ -56,6 +56,9 @@ importers:
       eslint-plugin-unused-imports:
         specifier: ^3.2.0
         version: 3.2.0(@typescript-eslint/eslint-plugin@6.21.0)(eslint@8.57.1)
+      execa:
+        specifier: ^8.0.1
+        version: 8.0.1
       gray-matter:
         specifier: ^4.0.3
         version: 4.0.3

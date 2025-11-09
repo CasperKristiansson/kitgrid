@@ -23,7 +23,8 @@
     "default_ref": "main",
     "last_built_ref": "main",
     "docs_path": "apps/hub",
-    "docs_url": "https://kitgrid.dev"
+    "docs_url": "https://kitgrid.dev",
+    "workspace": "@kitgrid/hub"
   },
   {
     "id": "docs-playground",
@@ -36,6 +37,7 @@
     "default_ref": "main",
     "last_built_ref": "main",
     "docs_path": "apps/project-stub",
-    "docs_url": "https://project-stub.kitgrid.dev"
+    "docs_url": "https://project-stub.kitgrid.dev",
+    "workspace": "@kitgrid/project-stub"
   }
 ]

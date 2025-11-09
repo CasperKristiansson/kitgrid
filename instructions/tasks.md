@@ -155,7 +155,7 @@
   - Acceptance: CI assumes role and uploads to S3; non-GitHub principals denied.
   - Dependencies: 2.\*.
 
-- [ ] **Build and deploy**
+- [x] **Build and deploy**
 
   - Summary: On dispatch or schedule: fetch project docs, build Astro for project and hub, upload to S3 prefixes, update `/sites/<project>/current/`, invalidate CDN.
   - Deliverables: CI workflow with cache; per-project prefix invalidations; artifact retention.

@@ -5,6 +5,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { DocsLayout, mdxComponents } from '@kitgrid/docs-ui';
 import { docsNav } from '../../data/docsNav';
 
+export async function getStaticPaths() {
+  const entries = await getCollection('docs');
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+  }));
+}
+
 const entries = await getCollection('docs');
 if (!entries.length) {
   throw new Error('Add entries under src/content/docs');

@@ -14,6 +14,7 @@ type RegistryEntry = {
   last_built_ref?: string | null;
   docs_path?: string;
   docs_url?: string | null;
+  workspace?: string;
 };
 
 export type ProjectMeta = {
