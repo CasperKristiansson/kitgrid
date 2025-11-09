@@ -1,0 +1,1 @@
+kitgrid CDN healthcheck

@@ -37,6 +37,12 @@ coverage/
 # Logs
 *.log
 logs/
+!infra/terraform/modules/logs/
 
 # Misc
 *.local
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
