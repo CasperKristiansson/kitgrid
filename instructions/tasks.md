@@ -84,14 +84,14 @@
   - Acceptance: Switching project theme changes colors without layout regressions.
   - Dependencies: 3.1, 3.2.
 
-- [ ] **Fonts**
+- [x] **Fonts**
 
   - Summary: Set UI font and code font.
   - Deliverables: Locally hosted fonts: Inter or Instrument Sans (UI), JetBrains Mono (code); fallbacks documented.
   - Acceptance: No third-party font requests; CLS stable; readable at 14–16px base.
   - Dependencies: 3.1.
 
-- [ ] **Micro-interactions**
+- [x] **Micro-interactions**
 
   - Summary: Subtle animations only; 200–250ms; reduced motion honored.
   - Deliverables: Reveal on section enter, link underline animation, CTA shimmer; prefers-reduced-motion support.

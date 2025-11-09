@@ -51,7 +51,7 @@ const flowSteps = [
 <BaseLayout>
   <div class="mx-auto flex w-full max-w-6xl flex-col gap-16 px-4 py-12">
     <section
-      class="hero border-base-200 from-base-200/40 via-base-200/10 min-h-[480px] rounded-[30px] border bg-gradient-to-br to-transparent"
+      class="hero reveal border-base-200 from-base-200/40 via-base-200/10 min-h-[480px] rounded-[30px] border bg-gradient-to-br to-transparent"
     >
       <div class="hero-content flex-col items-start gap-10 text-left">
         <div class="space-y-6">
@@ -69,7 +69,7 @@ const flowSteps = [
             </p>
           </div>
           <div class="flex flex-wrap gap-3">
-            <a class="btn btn-primary" href="#projects">Browse projects</a>
+            <a class="btn btn-primary cta-shimmer" href="#projects">Browse projects</a>
             <a class="btn btn-secondary" href="#docs">Docs quick links</a>
           </div>
           <div class="flex flex-wrap gap-6">
@@ -95,7 +95,7 @@ const flowSteps = [
       </div>
     </section>
 
-    <section class="grid gap-6 md:grid-cols-2">
+    <section class="reveal-delay grid gap-6 md:grid-cols-2">
       <div class="space-y-3">
         <p class="pill">Looks right everywhere</p>
         <h2 class="text-3xl font-semibold">Responsive shells + device previews.</h2>
@@ -138,7 +138,7 @@ const flowSteps = [
       </div>
     </section>
 
-    <section class="border-base-200 bg-base-200/20 rounded-[28px] border p-8">
+    <section class="reveal border-base-200 bg-base-200/20 rounded-[28px] border p-8">
       <div class="flex flex-col gap-6 lg:flex-row lg:gap-10">
         <div class="space-y-3 lg:w-1/2">
           <p class="pill">How Kitgrid operates</p>
@@ -172,7 +172,7 @@ const flowSteps = [
       </div>
     </section>
 
-    <section id="projects" class="space-y-6">
+    <section id="projects" class="reveal space-y-6">
       <div class="flex flex-col gap-3">
         <p class="pill">Project catalog</p>
         <h2 class="text-3xl font-semibold">
@@ -189,7 +189,7 @@ const flowSteps = [
       </div>
     </section>
 
-    <section id="docs" class="space-y-6">
+    <section id="docs" class="reveal-delay space-y-6">
       <div class="flex flex-col gap-3">
         <p class="pill">Docs shortcuts</p>
         <h2 class="text-3xl font-semibold">Start with the essentials.</h2>
@@ -209,7 +209,7 @@ const flowSteps = [
                 </p>
                 <div class="card-actions">
                   <a
-                    class="btn btn-link text-primary px-0"
+                    class="btn btn-link text-primary link-underline px-0"
                     href={doc.href}
                     target="_blank"
                     rel="noreferrer"
@@ -224,7 +224,7 @@ const flowSteps = [
       </div>
     </section>
 
-    <section class="border-base-200 bg-base-200/20 rounded-[24px] border p-8">
+    <section class="reveal border-base-200 bg-base-200/20 rounded-[24px] border p-8">
       <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div class="space-y-3">
           <p class="pill">Need something custom?</p>
@@ -237,7 +237,7 @@ const flowSteps = [
         </div>
         <div class="flex flex-col gap-3 md:items-end">
           <a
-            class="btn btn-primary w-full md:w-auto md:whitespace-nowrap"
+            class="btn btn-primary cta-shimmer w-full md:w-auto md:whitespace-nowrap"
             href="https://github.com/CasperKristiansson/kitgrid"
             target="_blank"
             rel="noreferrer"
