@@ -18,6 +18,7 @@
     "format": "pnpm --filter @kitgrid/hub format:write",
     "format:check": "pnpm --filter @kitgrid/hub format:check",
     "typecheck": "tsc --noEmit && pnpm --filter @kitgrid/hub typecheck",
+    "lint:links": "tsx scripts/check-links.ts",
     "lint:staged": "lint-staged"
   },
   "engines": {
@@ -28,11 +29,13 @@
   "devDependencies": {
     "@changesets/cli": "^2.29.7",
     "@kitgrid/tsconfig": "workspace:*",
+    "@types/cheerio": "^1.0.0",
     "@types/node": "^22.10.1",
     "@types/tar": "^6.1.13",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "ajv": "^8.17.1",
+    "cheerio": "^1.1.2",
     "eslint": "^8.57.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-astro": "^0.34.0",
@@ -43,9 +46,10 @@
     "eslint-plugin-unicorn": "^50.0.1",
     "eslint-plugin-unused-imports": "^3.2.0",
     "execa": "^8.0.1",
+    "glob": "^11.0.3",
     "gray-matter": "^4.0.3",
-    "pagefind": "^1.1.0",
     "lint-staged": "^15.2.9",
+    "pagefind": "^1.1.0",
     "prettier": "^3.3.3",
     "tar": "^6.2.1",
     "tsx": "^4.19.1",

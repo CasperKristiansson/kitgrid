@@ -9,6 +9,7 @@ CI runs `build:sites` → `package:sites` to prepare artifacts, then syncs them 
 pnpm build:sites       # Builds hub + any registry workspaces
 pnpm package:sites     # Copies dist outputs into .kitgrid-cache/deploy
 pnpm deploy:paths      # Prints invalidation paths for CloudFront
+pnpm lint:links        # Fails if any internal links break
 
 Each workspace exposes `pnpm search:index` (Pagefind) which `build:sites` runs
 automatically so the static search index (`/pagefind/**`) ships alongside the build.

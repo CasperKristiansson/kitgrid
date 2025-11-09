@@ -12,7 +12,7 @@
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "typecheck": "astro check",
-    "search:index": "pagefind --source dist"
+    "search:index": "pagefind --site dist"
   },
   "dependencies": {
     "@kitgrid/docs-ui": "workspace:*",
