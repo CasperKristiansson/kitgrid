@@ -122,7 +122,7 @@ See `docs/manifest-spec.md` for the formal field reference. The JSON Schema live
 
 **Safety**
 
-- Treat MDX as untrusted. Sanitize HTML, restrict allowed components, no remote scripts.
+- Treat MDX as untrusted. `@kitgrid/mdx-pipeline` (documented in `docs/sanitization.md`) blocks raw HTML, limits MDX components to the approved list, and errors on remote embeds.
 - Validate manifest against a JSON Schema before build.
 
 **Versioning**

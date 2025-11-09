@@ -21,6 +21,7 @@
     "@astrojs/mdx": "^4.3.10",
     "@kitgrid/eslint-config": "workspace:*",
     "@kitgrid/prettier-config": "workspace:*",
+    "@kitgrid/mdx-pipeline": "workspace:*",
     "@kitgrid/tsconfig": "workspace:*",
     "@tailwindcss/postcss": "^4.0.0-alpha.20",
     "@typescript-eslint/eslint-plugin": "^6.21.0",

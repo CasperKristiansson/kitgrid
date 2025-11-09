@@ -130,7 +130,7 @@
   - Acceptance: A large docs set downloads within acceptable time; network hiccups recovered.
   - Dependencies: 4.2.
 
-- [ ] **Sanitization**
+- [x] **Sanitization**
 
   - Summary: Treat MDX as untrusted; restrict components; block raw HTML and remote scripts by default.
   - Deliverables: Allowed components list; sanitization step; error messages for disallowed constructs.

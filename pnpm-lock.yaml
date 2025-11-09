@@ -157,6 +157,9 @@ importers:
       '@kitgrid/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
+      '@kitgrid/mdx-pipeline':
+        specifier: workspace:*
+        version: link:../../packages/mdx-pipeline
       '@kitgrid/prettier-config':
         specifier: workspace:*
         version: link:../../packages/prettier-config
@@ -253,6 +256,8 @@ importers:
       typescript:
         specifier: ^5.6.3
         version: 5.9.3
+
+  packages/mdx-pipeline: {}
 
   packages/prettier-config:
     dependencies:

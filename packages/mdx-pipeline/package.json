@@ -1,0 +1,17 @@
+{
+  "name": "@kitgrid/mdx-pipeline",
+  "version": "0.0.1",
+  "description": "Shared remark/rehype utilities for sanitizing kitgrid MDX content.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./allowed-components": "./src/allowed-components.js"
+  },
+  "files": ["src"],
+  "types": "./src/index.d.ts",
+  "license": "MIT",
+  "keywords": ["mdx", "remark", "astro", "kitgrid", "security"]
+}
