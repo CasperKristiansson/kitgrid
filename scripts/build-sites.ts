@@ -20,6 +20,11 @@ async function main() {
   for (const workspace of workspaces) {
     console.log(`Building ${workspace}`);
     await execa('pnpm', ['--filter', workspace, 'build'], { stdio: 'inherit' });
+    try {
+      await execa('pnpm', ['--filter', workspace, 'search:index'], { stdio: 'inherit' });
+    } catch (error) {
+      console.warn(`Skipping search index for ${workspace}:`, error instanceof Error ? error.message : error);
+    }
   }
 }
 

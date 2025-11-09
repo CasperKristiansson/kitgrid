@@ -44,6 +44,7 @@
     "eslint-plugin-unused-imports": "^3.2.0",
     "execa": "^8.0.1",
     "gray-matter": "^4.0.3",
+    "pagefind": "^1.1.0",
     "lint-staged": "^15.2.9",
     "prettier": "^3.3.3",
     "tar": "^6.2.1",

@@ -11,7 +11,8 @@
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.astro,.mdx",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
-    "typecheck": "astro check"
+    "typecheck": "astro check",
+    "search:index": "pagefind --source dist"
   },
   "dependencies": {
     "@kitgrid/docs-ui": "workspace:*",

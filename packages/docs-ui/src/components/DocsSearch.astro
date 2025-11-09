@@ -1,0 +1,227 @@
+---
+---
+
+<div class="docs-search" data-docs-search>
+  <label class="docs-search__field">
+    <span class="sr-only">Search docs</span>
+    <svg
+      aria-hidden="true"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.35-4.35"></path>
+    </svg>
+    <input
+      type="search"
+      placeholder="Search docs"
+      aria-label="Search docs"
+      data-docs-search-input
+      autocomplete="off"
+    />
+  </label>
+  <p class="docs-search__status" data-docs-search-status hidden></p>
+  <div class="docs-search__results" data-docs-search-results hidden>
+    <ul></ul>
+  </div>
+</div>
+
+<style>
+  .docs-search {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .docs-search__field {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.85rem;
+    color: var(--theme-muted);
+  }
+
+  .docs-search__field input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font: inherit;
+  }
+
+  .docs-search__field input:focus {
+    outline: none;
+    color: var(--theme-text);
+  }
+
+  .docs-search__status {
+    font-size: 0.8rem;
+    color: var(--theme-muted);
+  }
+
+  .docs-search__results {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    background: rgba(4, 7, 16, 0.8);
+    padding: 0.75rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  }
+
+  .docs-search__results ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .docs-search__results a {
+    color: var(--theme-text);
+    text-decoration: none;
+  }
+
+  .docs-search__results a:hover,
+  .docs-search__results a:focus-visible {
+    color: var(--theme-link);
+    text-decoration: underline;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+
+<script is:inline>
+  const searchRoot = document.querySelector('[data-docs-search]');
+  const input = searchRoot?.querySelector('[data-docs-search-input]');
+  const resultsContainer = searchRoot?.querySelector('[data-docs-search-results]');
+  const resultsList = resultsContainer?.querySelector('ul');
+  const status = searchRoot?.querySelector('[data-docs-search-status]');
+  const scriptId = 'kitgrid-pagefind-script';
+  let pagefindInstance;
+  let pagefindPromise;
+
+  function setStatus(message) {
+    if (!status) return;
+    status.textContent = message;
+    status.hidden = !message;
+  }
+
+  function clearResults() {
+    if (resultsList) resultsList.innerHTML = '';
+    if (resultsContainer) resultsContainer.hidden = true;
+  }
+
+  async function ensurePagefind() {
+    if (typeof window === 'undefined') return null;
+    if (pagefindInstance) return pagefindInstance;
+    if (pagefindPromise) return pagefindPromise;
+
+    pagefindPromise = new Promise((resolve) => {
+      const finish = async () => {
+        if (window.pagefindInit) {
+          try {
+            pagefindInstance = await window.pagefindInit();
+            resolve(pagefindInstance);
+          } catch (error) {
+            console.warn('pagefind init failed', error);
+            resolve(null);
+          }
+        } else {
+          resolve(null);
+        }
+      };
+
+      if (window.pagefindInit) {
+        finish();
+        return;
+      }
+
+      if (!document.getElementById(scriptId)) {
+        const script = document.createElement('script');
+        script.id = scriptId;
+        script.src = '/pagefind/pagefind.js';
+        script.defer = true;
+        script.onload = finish;
+        script.onerror = () => resolve(null);
+        document.head.appendChild(script);
+      } else {
+        const existing = document.getElementById(scriptId);
+        existing?.addEventListener('load', finish, { once: true });
+        existing?.addEventListener('error', () => resolve(null), { once: true });
+      }
+    });
+
+    return pagefindPromise;
+  }
+
+  async function handleSearch(event) {
+    const query = event.target.value.trim();
+    if (!query) {
+      clearResults();
+      setStatus('');
+      return;
+    }
+
+    setStatus('Searching…');
+    const pagefind = await ensurePagefind();
+    if (!pagefind) {
+      setStatus('Search is unavailable in this preview build.');
+      clearResults();
+      return;
+    }
+
+    try {
+      const search = await pagefind.search(query);
+      const items = await Promise.all(
+        search.results.slice(0, 5).map((result) => result.data())
+      );
+      if (!items.length) {
+        clearResults();
+        setStatus('No matches yet.');
+        return;
+      }
+
+      if (resultsList) {
+        resultsList.innerHTML = items
+          .map((item) => {
+            const title = item?.meta?.title ?? item?.url ?? 'Untitled';
+            const url = item?.url ?? '#';
+            return `<li><a href="${url}">${title}</a></li>`;
+          })
+          .join('');
+      }
+
+      if (resultsContainer) resultsContainer.hidden = false;
+      setStatus('');
+    } catch (error) {
+      console.warn('pagefind search failed', error);
+      setStatus('Search failed. Try again later.');
+      clearResults();
+    }
+  }
+
+  if (input) {
+    input.addEventListener('focus', ensurePagefind, { once: true });
+    input.addEventListener('input', handleSearch);
+  }
+</script>

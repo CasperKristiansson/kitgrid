@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.astro,.mdx",
+    "search:index": "pagefind --source dist",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "typecheck": "astro check"

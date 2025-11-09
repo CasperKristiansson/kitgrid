@@ -7,7 +7,7 @@ import { docsNav } from '../../data/docsNav';
 
 export async function getStaticPaths() {
   const entries = await getCollection('docs');
-  return entries.map((entry) => ({
+  return entries.map((entry: CollectionEntry<'docs'>) => ({
     params: { slug: entry.slug },
   }));
 }
@@ -19,7 +19,8 @@ if (!entries.length) {
 
 type DocsEntry = CollectionEntry<'docs'>;
 
-const slugParam = Astro.params.slug;
+const routeParams = Astro.params as { slug?: string | string[] };
+const slugParam = routeParams.slug;
 const slug = Array.isArray(slugParam) ? slugParam.join('/') : (slugParam ?? '');
 const entry = entries.find((doc: DocsEntry) => doc.slug === slug) ?? entries[0];
 const { Content, headings } = await entry.render();

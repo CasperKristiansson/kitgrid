@@ -1,6 +1,7 @@
 ---
 import DocsSidebarNav from './DocsSidebarNav.astro';
 import DocsToc from './DocsToc.astro';
+import DocsSearch from './DocsSearch.astro';
 import type { DocsNavItem } from '../types';
 
 interface Heading {
@@ -46,23 +47,7 @@ const {
           </span>
         </slot>
         <slot name="search">
-          <label class="docs-layout__search" role="search">
-            <svg
-              aria-hidden="true"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.35-4.35"></path>
-            </svg>
-            <input type="search" placeholder="Search docs" aria-label="Search docs" />
-          </label>
+          <DocsSearch />
         </slot>
       </div>
     </header>
@@ -105,30 +90,6 @@ const {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-  }
-
-  .docs-layout__search {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 999px;
-    padding: 0.25rem 0.9rem;
-    font-size: 0.85rem;
-    color: var(--theme-muted);
-  }
-
-  .docs-layout__search input {
-    background: transparent;
-    border: none;
-    color: inherit;
-    width: 10rem;
-    font: inherit;
-  }
-
-  .docs-layout__search input:focus {
-    outline: none;
-    color: var(--theme-text);
   }
 
   .docs-layout__content {

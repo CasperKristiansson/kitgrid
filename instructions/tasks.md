@@ -173,7 +173,7 @@
 
 ## 6) Search and analytics
 
-- [ ] **Per-subdomain search**
+- [x] **Per-subdomain search**
 
   - Summary: Generate a static search index for each project site.
   - Deliverables: Build step producing a JSON index per subdomain; search UI wired in `DocsLayout`.
