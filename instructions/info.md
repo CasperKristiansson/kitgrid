@@ -81,11 +81,12 @@ See `docs/manifest-spec.md` for the formal field reference. The JSON Schema live
    ```bash
    pnpm docs:fetch -- \
      --project pydantic-fixturegen \
-     --source .kitgrid-cache/sources/pydantic-fixturegen/docs \
      --ref main
    ```
 
-   This hydrates `.kitgrid-cache/docs/pydantic-fixturegen/main` and `git status` stays clean because the cache directory is ignored.
+   By default this downloads the repo tarball defined in `registry.json` (or you can pass
+   `--source <local path>` to bypass the network). The cache lives under
+   `.kitgrid-cache/docs/<project>/<ref>` and stays ignored by git.
 
 3. Point Astro apps (e.g., the `project-stub`) at the cache path when you need real docs content.
 

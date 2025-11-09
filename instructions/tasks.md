@@ -123,7 +123,7 @@
   - Acceptance: Invalid manifests fail the build with actionable errors; valid manifests pass.
   - Dependencies: 4.1.
 
-- [ ] **Fetcher**
+- [x] **Fetcher**
 
   - Summary: Download repo tarball at a specified `ref` and extract `/docs` + manifest; support sparse checkout fallback; enable local path override for dev.
   - Deliverables: Fetch routine with caching; rate-limit handling; retries with backoff.

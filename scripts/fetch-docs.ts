@@ -1,27 +1,57 @@
 #!/usr/bin/env node
-import { cpSync, existsSync, mkdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  createWriteStream,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
+import { randomUUID } from 'node:crypto';
+import { request as httpsRequest } from 'node:https';
+
+import tar from 'tar';
+
+import registry from '../registry.json' with { type: 'json' };
 
 interface CliArgs {
   project: string;
-  source: string;
+  source?: string;
+  ref?: string;
+  docsPath?: string;
+  repo?: string;
+  registryPath?: string;
+}
+
+type RegistryEntry = (typeof registry)[number];
+
+interface CacheMetadata {
+  project: string;
   ref: string;
+  source: string;
+  sourceType: 'local' | 'tarball';
+  repo?: string;
+  docsPath: string;
+  cachedAt: string;
 }
 
 const CACHE_ROOT = resolve('.kitgrid-cache/docs');
+const TAR_ROOT = resolve('.kitgrid-cache/tarballs');
+const EXTRACT_ROOT = resolve('.kitgrid-cache/tmp');
 
 function parseArgs(argv: string[]): CliArgs {
-  const args: Partial<CliArgs> = {};
+  const args: CliArgs = { project: '' };
 
   for (let i = 0; i < argv.length; i += 1) {
     const token = argv[i];
-    if (token === '--') {
-      continue;
-    }
+    if (token === '--') continue;
     switch (token) {
       case '--project':
       case '-p':
-        args.project = argv[i + 1];
+        args.project = argv[i + 1] ?? '';
         i += 1;
         break;
       case '--source':
@@ -32,6 +62,18 @@ function parseArgs(argv: string[]): CliArgs {
       case '--ref':
       case '-r':
         args.ref = argv[i + 1];
+        i += 1;
+        break;
+      case '--docs-path':
+        args.docsPath = argv[i + 1];
+        i += 1;
+        break;
+      case '--repo':
+        args.repo = argv[i + 1];
+        i += 1;
+        break;
+      case '--registry':
+        args.registryPath = argv[i + 1];
         i += 1;
         break;
       case '--help':
@@ -53,23 +95,16 @@ function parseArgs(argv: string[]): CliArgs {
     throw new Error('Missing required --project <id> argument.');
   }
 
-  if (!args.source) {
-    throw new Error('Missing required --source <path> argument.');
-  }
-
-  return {
-    project: args.project,
-    source: args.source,
-    ref: args.ref ?? 'local'
-  };
+  return args;
 }
 
 function printUsage() {
-  console.log(`Usage: pnpm docs:fetch -- --project <id> --source <path> [--ref <ref>]
+  console.log(`Usage: pnpm docs:fetch -- --project <id> [--ref <ref>] [--source <path>]
+               [--docs-path <dir>] [--repo org/name]
 
 Examples:
-  pnpm docs:fetch -- --project pydantic-fixturegen --source ../pydantic-fixturegen/docs --ref main
-  pnpm docs:fetch -- --project demo --source ./tmp/docs
+  pnpm docs:fetch -- --project pydantic-fixturegen --ref main
+  pnpm docs:fetch -- --project demo --source ../demo/docs
 `);
 }
 
@@ -90,37 +125,143 @@ function copySource(sourceDir: string, destDir: string) {
   cpSync(sourceDir, destDir, { recursive: true, errorOnExist: false });
 }
 
-function recordMetadata(destDir: string, info: CliArgs, sourceRealPath: string) {
-  const metadata = {
-    project: info.project,
-    ref: info.ref,
-    source: sourceRealPath,
-    cachedAt: new Date().toISOString()
-  } satisfies Record<string, string>;
+function recordMetadata(destDir: string, metadata: CacheMetadata) {
   writeFileSync(join(destDir, '.kitgrid-docs.json'), JSON.stringify(metadata, null, 2));
 }
 
-function main() {
+function loadRegistryEntries(customPath?: string): RegistryEntry[] {
+  if (!customPath) return registry as RegistryEntry[];
+  const resolved = resolve(customPath);
+  if (!existsSync(resolved)) {
+    throw new Error(`Registry file not found: ${resolved}`);
+  }
+  const contents = readFileSync(resolved, 'utf8');
+  return JSON.parse(contents) as RegistryEntry[];
+}
+
+function resolveProjectConfig(args: CliArgs, entries: RegistryEntry[]) {
+  const entry = entries.find((item) => item.id === args.project);
+  const repo = args.repo ?? entry?.repo;
+  if (!repo) {
+    throw new Error(`Unknown repo for project ${args.project}. Pass --repo or update registry.`);
+  }
+  const docsPath = args.docsPath ?? entry?.docs_path ?? 'docs';
+  const ref = args.ref ?? entry?.last_built_ref ?? entry?.default_ref ?? 'main';
+  return { repo, docsPath, ref };
+}
+
+async function downloadTarball(repo: string, ref: string, token?: string) {
+  ensureDir(TAR_ROOT);
+  const safeName = repo.replace('/', '_');
+  const tarPath = join(TAR_ROOT, `${safeName}-${ref}-${Date.now()}.tgz`);
+  const url = `https://codeload.github.com/${repo}/tar.gz/${ref}`;
+
+  const headers: Record<string, string> = {
+    'User-Agent': 'kitgrid-docs-fetcher',
+    Accept: 'application/octet-stream',
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  await new Promise<void>((resolvePromise, rejectPromise) => {
+    const req = httpsRequest(url, { headers }, (res) => {
+      if (!res || (res.statusCode && res.statusCode >= 400)) {
+        rejectPromise(
+          new Error(`Download failed (${res?.statusCode ?? 'unknown'}) for ${url}`)
+        );
+        return;
+      }
+      const fileStream = createWriteStream(tarPath);
+      res.pipe(fileStream);
+      fileStream.on('finish', () => {
+        fileStream.close();
+        resolvePromise();
+      });
+      fileStream.on('error', rejectPromise);
+    });
+    req.on('error', rejectPromise);
+    req.end();
+  });
+
+  return tarPath;
+}
+
+async function extractTarball(archivePath: string) {
+  const target = join(EXTRACT_ROOT, randomUUID());
+  ensureDir(target);
+  await tar.x({ file: archivePath, cwd: target, strip: 1 });
+  return target;
+}
+
+async function fetchDocsFromRemote(
+  project: string,
+  repo: string,
+  ref: string,
+  docsPath: string,
+  token?: string
+) {
+  const archive = await downloadTarball(repo, ref, token);
+  const extracted = await extractTarball(archive);
+  const docsDir = resolve(extracted, docsPath);
+  if (!existsSync(docsDir)) {
+    throw new Error(`Docs path ${docsPath} not found in repo ${repo}@${ref}`);
+  }
+  return { docsDir, archive, extracted };
+}
+
+async function main() {
   try {
     const args = parseArgs(process.argv.slice(2));
-    const resolvedSource = resolve(args.source);
-
-    if (!existsSync(resolvedSource)) {
-      throw new Error(`Source path not found: ${resolvedSource}`);
-    }
-
-    const sourceStat = statSync(resolvedSource);
-    if (!sourceStat.isDirectory()) {
-      throw new Error('Source path must point to a directory that contains docs.');
-    }
-
-    const targetDir = resolve(CACHE_ROOT, args.project, args.ref);
+    const registryEntries = loadRegistryEntries(args.registryPath);
+    const targetDir = resolve(CACHE_ROOT, args.project, args.ref ?? 'local');
     ensureParentDirs(targetDir);
     cleanDir(targetDir);
-    copySource(resolvedSource, targetDir);
-    recordMetadata(targetDir, args, resolvedSource);
 
-    console.log(`Cached docs for ${args.project}@${args.ref} → ${targetDir}`);
+    if (args.source) {
+      const resolvedSource = resolve(args.source);
+      if (!existsSync(resolvedSource)) {
+        throw new Error(`Source path not found: ${resolvedSource}`);
+      }
+      const stats = statSync(resolvedSource);
+      if (!stats.isDirectory()) {
+        throw new Error('Source path must point to a directory with docs.');
+      }
+      copySource(resolvedSource, targetDir);
+      recordMetadata(targetDir, {
+        project: args.project,
+        ref: args.ref ?? 'local',
+        source: resolvedSource,
+        sourceType: 'local',
+        docsPath: resolvedSource,
+        cachedAt: new Date().toISOString(),
+      });
+      console.log(`Cached docs for ${args.project}@${args.ref ?? 'local'} from ${resolvedSource}`);
+      return;
+    }
+
+    const { repo, docsPath, ref } = resolveProjectConfig(args, registryEntries);
+    const token = process.env.KITGRID_GITHUB_TOKEN ?? process.env.GITHUB_TOKEN;
+    const { docsDir, archive, extracted } = await fetchDocsFromRemote(
+      args.project,
+      repo,
+      ref,
+      docsPath,
+      token
+    );
+    copySource(docsDir, targetDir);
+    recordMetadata(targetDir, {
+      project: args.project,
+      ref,
+      source: archive,
+      sourceType: 'tarball',
+      repo,
+      docsPath,
+      cachedAt: new Date().toISOString(),
+    });
+    console.log(`Cached docs for ${args.project}@${ref} from ${repo}`);
+    rmSync(extracted, { recursive: true, force: true });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error(`docs:fetch failed — ${message}`);
@@ -129,4 +270,6 @@ function main() {
   }
 }
 
-main();
+void (async () => {
+  await main();
+})();

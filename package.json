@@ -25,8 +25,10 @@
     "@changesets/cli": "^2.29.7",
     "@kitgrid/tsconfig": "workspace:*",
     "@types/node": "^22.10.1",
+    "@types/tar": "^6.1.13",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "ajv": "^8.17.1",
     "eslint": "^8.57.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-astro": "^0.34.0",
@@ -38,9 +40,9 @@
     "eslint-plugin-unused-imports": "^3.2.0",
     "lint-staged": "^15.2.9",
     "prettier": "^3.3.3",
+    "tar": "^6.2.1",
     "tsx": "^4.19.1",
     "typescript": "^5.6.3",
-    "ajv": "^8.17.1",
     "yaml": "^2.6.0"
   }
 }
