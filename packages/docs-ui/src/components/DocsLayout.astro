@@ -1,6 +1,7 @@
 ---
 import DocsSidebarNav from './DocsSidebarNav.astro';
 import DocsToc from './DocsToc.astro';
+import codeCopyScript from '../scripts/code-copy.ts?url';
 import type { DocsNavItem } from '../types';
 
 interface Heading {
@@ -167,10 +168,67 @@ const {
       width: 100%;
       justify-content: flex-start;
       flex-wrap: wrap;
+    }
   }
 
-:global(.mockup-code) {
-  width: 100%;
-}
-}
+  :global(.code-block) {
+    position: relative;
+    margin: 2rem 0;
+    padding: 2.5rem 1.5rem 1.5rem;
+    border-radius: 18px;
+    width: 100%;
+  }
+
+  :global(.code-block pre) {
+    margin: 0;
+  }
+
+  :global(.code-block [data-code-copy]) {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+    border: 1px solid rgba(15, 23, 42, 0.14);
+    background: rgba(255, 255, 255, 0.9);
+    color: rgba(15, 23, 42, 0.55);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition:
+      color 160ms ease,
+      border-color 160ms ease,
+      background 160ms ease,
+      transform 160ms ease;
+  }
+
+  :global(.code-block [data-code-copy]:hover),
+  :global(.code-block [data-code-copy]:focus-visible) {
+    color: var(--theme-text);
+    border-color: rgba(15, 23, 42, 0.3);
+    transform: translateY(-1px);
+  }
+
+  :global(.code-block [data-code-copy][data-copy-state='copied']) {
+    color: var(--theme-primary);
+    border-color: rgba(29, 78, 216, 0.4);
+  }
+
+  :global(.docs-list) {
+    margin: 1.25rem 0;
+    padding-left: 1.5rem;
+    list-style: disc;
+  }
+
+  :global(.docs-list li) {
+    line-height: 1.6;
+  }
+
+  :global(.docs-list li + li) {
+    margin-top: 0.35rem;
+  }
 </style>
+
+<script type="module" src={codeCopyScript} />

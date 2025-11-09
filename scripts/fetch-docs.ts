@@ -156,17 +156,84 @@ function escapeHtml(value: string) {
     .replace(/>/g, '&gt;');
 }
 
+const CLI_LANGUAGES = new Set(['bash', 'sh', 'shell', 'zsh', 'console']);
+
+function normalizeLanguage(info?: string) {
+  if (!info) return '';
+  const first = info.trim().split(/\s+/)[0];
+  return first?.toLowerCase() ?? '';
+}
+
+function formatInlineMarkdown(text: string) {
+  const escaped = escapeHtml(text.trim());
+  const withLinks = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+  return withLinks.replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+
+function renderCustomList(items: string[], indent: string) {
+  const inner = items
+    .map((item) => `${indent}  <li>${formatInlineMarkdown(item)}</li>`)
+    .join('\n');
+  return `${indent}<ul class="docs-list">\n${inner}\n${indent}</ul>`;
+}
+
+function wrapCustomLists(markdown: string) {
+  const lines = markdown.split('\n');
+  const result: string[] = [];
+  let buffer: string[] = [];
+  let currentIndent = '';
+
+  const flush = () => {
+    if (!buffer.length) return;
+    result.push(renderCustomList(buffer, currentIndent));
+    buffer = [];
+    currentIndent = '';
+  };
+
+  for (const line of lines) {
+    const match = line.match(/^(\s*)-\s+(.*)$/);
+    if (match) {
+      if (!buffer.length) {
+        currentIndent = match[1] ?? '';
+      }
+      buffer.push(match[2] ?? '');
+      continue;
+    }
+    flush();
+    result.push(line);
+  }
+  flush();
+
+  return result.join('\n');
+}
+
 function wrapCodeBlocks(markdown: string) {
-  const fence = /```([\w-]+)?\n([\s\S]*?)```/g;
-  return markdown.replace(fence, (_, __, body = '') => {
-    const content = escapeHtml(body.replace(/\s+$/, ''));
-    return (
-      '<div class="mockup-code w-full">\n' +
-      '  <pre data-prefix="$"><code>' +
-      content +
-      '</code></pre>\n' +
-      '</div>'
-    );
+  const fence = /(^|\n)([ \t]*)```([\w-]+)?\n([\s\S]*?)```/g;
+  return markdown.replace(fence, (_, leading = '', indent = '', info = '', body = '') => {
+    const language = normalizeLanguage(info);
+    const trimmed = body.replace(/\s+$/, '');
+    const lines = trimmed.length ? trimmed.split('\n') : [''];
+    const prefix = CLI_LANGUAGES.has(language) ? '$' : '';
+    const langClass = language ? ` class="language-${language}"` : '';
+    const preBlocks = lines
+      .map((line) => {
+        const linePrefix = prefix ? ` data-prefix="${prefix}"` : '';
+        return `${indent}  <pre${linePrefix}><code${langClass}>${escapeHtml(line)}</code></pre>`;
+      })
+      .join('\n');
+    const copyButton =
+      `${indent}  <button class="code-block__copy" type="button" data-code-copy aria-label="Copy code" title="Copy code">\n` +
+      `${indent}    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">\n` +
+      `${indent}      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>\n` +
+      `${indent}      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>\n` +
+      `${indent}    </svg>\n` +
+      `${indent}  </button>`;
+    const block =
+      `${indent}<div class="mockup-code code-block w-full" data-code-block>\n` +
+      `${copyButton}\n` +
+      `${preBlocks}\n` +
+      `${indent}</div>`;
+    return `${leading}${block}`;
   });
 }
 
@@ -185,7 +252,7 @@ function transformDocs(dir: string) {
       if (!/\.(md|mdx)$/i.test(entry.name)) continue;
       const original = readFileSync(fullPath, 'utf8');
       if (!original.includes('```')) continue;
-      const transformed = wrapCodeBlocks(original);
+      const transformed = wrapCustomLists(wrapCodeBlocks(original));
       if (transformed !== original) {
         writeFileSync(fullPath, transformed);
       }
