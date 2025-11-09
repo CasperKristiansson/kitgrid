@@ -8,6 +8,9 @@ This Terraform configuration provisions the AWS resources required to serve `kit
 - Log bucket (`kitgrid-cdn-logs`) with lifecycle rules for retention.
 - ACM certificate (us-east-1) spanning the apex + wildcard domain.
 - CloudFront distribution with an Origin Access Control protecting the site bucket.
+- CloudFront Function that rewrites requests:
+  - `kitgrid.dev/*` → `/hub/*`
+  - `<project>.kitgrid.dev/*` → `/sites/<project>/current/*`
 - A small healthcheck object uploaded to S3 so the distribution always has content.
 
 ## Usage

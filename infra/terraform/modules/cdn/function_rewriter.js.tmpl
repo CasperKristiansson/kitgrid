@@ -1,0 +1,34 @@
+function handler(event) {
+  var request = event.request;
+  var headers = request.headers || {};
+  var hostHeader = headers.host || headers.Host;
+  var host = (hostHeader && hostHeader.value) || '';
+  var uri = request.uri || '/';
+
+  var hubHost = "${hub_host}";
+  var hubPrefix = "${hub_prefix}";
+  var sitesPrefix = "${sites_prefix}";
+
+  function buildPath(basePath, originalPath) {
+    var base = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
+    var suffix = originalPath && originalPath.length > 0 ? originalPath : '/';
+    if (!suffix.startsWith('/')) {
+      suffix = '/' + suffix;
+    }
+    var resolved = base + suffix;
+    if (resolved.endsWith('/')) {
+      resolved += 'index.html';
+    }
+    return resolved;
+  }
+
+  if (host === hubHost || host === '') {
+    request.uri = buildPath(hubPrefix, uri);
+    return request;
+  }
+
+  var projectId = host.split('.')[0];
+  var projectBase = sitesPrefix + '/' + projectId + '/current';
+  request.uri = buildPath(projectBase, uri);
+  return request;
+}

@@ -54,6 +54,11 @@ resource "aws_cloudfront_distribution" "this" {
         forward = "none"
       }
     }
+
+    function_associations {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.rewrite.arn
+    }
   }
 
   price_class = "PriceClass_100"
@@ -102,5 +107,16 @@ resource "aws_s3_bucket_policy" "site" {
         }
       }
     ]
+  })
+}
+
+resource "aws_cloudfront_function" "rewrite" {
+  name    = "${replace(var.domain_name, ".", "-")}-rewrite"
+  runtime = "cloudfront-js-1.0"
+  publish = true
+  code    = templatefile("${path.module}/function_rewriter.js.tmpl", {
+    hub_host     = var.hub_host
+    hub_prefix   = var.hub_prefix
+    sites_prefix = var.sites_prefix
   })
 }

@@ -25,6 +25,7 @@ module "cdn" {
   site_bucket_arn         = module.site_storage.bucket_arn
   site_bucket_id          = module.site_storage.bucket_id
   logs_bucket_name        = module.logs.bucket_domain_name
+  hub_host                = var.domain_name
   tags                    = local.merged_tags
 }
 

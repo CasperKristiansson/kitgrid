@@ -40,3 +40,20 @@ variable "comment" {
   type        = string
   default     = "kitgrid docs distribution"
 }
+
+variable "hub_host" {
+  description = "Hostname that should resolve to the hub (e.g., kitgrid.dev)."
+  type        = string
+}
+
+variable "hub_prefix" {
+  description = "Prefix inside the S3 bucket where the hub site is deployed."
+  type        = string
+  default     = "/hub"
+}
+
+variable "sites_prefix" {
+  description = "Prefix inside the S3 bucket where per-project sites live."
+  type        = string
+  default     = "/sites"
+}

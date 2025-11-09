@@ -143,7 +143,7 @@ Store in `/docs/kitgrid.yaml`. Purpose: instruct kitgrid how to fetch, theme, an
 - Origin Access Control to S3.
 - Function at viewer-request:
 
-  - Map host `<project>.kitgrid.dev` to prefix `/sites/<project>/current/`.
+  - Map `kitgrid.dev/*` to `/hub/*` and `<project>.kitgrid.dev/*` to `/sites/<project>/current/*` before hitting S3.
   - Clean URLs, default `index.html`, 404 → project homepage.
 
 - Separate path `/hub/` for `kitgrid.dev` root.

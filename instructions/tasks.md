@@ -54,7 +54,7 @@
   - Acceptance: DNS resolves; TLS valid end-to-end; HSTS honored.
   - Dependencies: 2.1.
 
-- [ ] **Viewer-request mapping**
+- [x] **Viewer-request mapping**
 
   - Summary: CloudFront Function maps `<project>.kitgrid.dev` → `/sites/<project>/current/…`; `kitgrid.dev` → `/hub/…`.
   - Deliverables: Function attached to distribution; rules documented.
