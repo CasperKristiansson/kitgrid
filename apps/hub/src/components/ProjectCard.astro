@@ -6,11 +6,6 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const statusLabel: Record<ProjectMeta['status'], string> = {
-  live: 'Live',
-  'in-progress': 'In progress',
-  design: 'Design',
-};
 const subdomain = `https://${project.id}.kitgrid.dev`;
 const isLive = project.status === 'live';
 ---
@@ -22,9 +17,9 @@ const isLive = project.status === 'live';
   <div class="card-body gap-4">
     <header class="flex items-center justify-between gap-3">
       <span
-        class={`badge badge-outline uppercase tracking-widest text-xs status--${project.status}`}
+        class="badge badge-outline badge-sm text-[0.55rem] tracking-[0.4em] uppercase"
       >
-        {statusLabel[project.status]}
+        {project.tag}
       </span>
       <p class="text-base-content/60 text-sm">{project.repo}</p>
     </header>

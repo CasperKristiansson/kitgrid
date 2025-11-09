@@ -6,6 +6,7 @@ export type ProjectMeta = {
   description: string;
   repo: string;
   status: ProjectStatus;
+  tag: string;
   docsUrl?: string;
 };
 
@@ -17,6 +18,7 @@ export const featuredProjects: ProjectMeta[] = [
       'Deterministic test data factories for Pydantic v2. Ships CLI, providers, and seeds.',
     repo: 'CasperKristiansson/pydantic-fixturegen',
     status: 'in-progress',
+    tag: 'python',
   },
   {
     id: 'kitgrid-hub',
@@ -25,6 +27,7 @@ export const featuredProjects: ProjectMeta[] = [
       'Marketing + multi-project index that orchestrates every docs deployment.',
     repo: 'kitgrid/hub',
     status: 'design',
+    tag: 'astro',
   },
   {
     id: 'docs-playground',
@@ -33,5 +36,6 @@ export const featuredProjects: ProjectMeta[] = [
       'Reference implementation used to validate theming, navigation, and ingestion.',
     repo: 'kitgrid/docs-playground',
     status: 'in-progress',
+    tag: 'playground',
   },
 ];
