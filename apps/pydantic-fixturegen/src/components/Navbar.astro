@@ -1,0 +1,124 @@
+---
+import DocsSearch from '@kitgrid/docs-ui/components/DocsSearch.astro';
+
+const links = [
+  { label: 'Quickstart', href: '/docs/quickstart/' },
+  { label: 'CLI', href: '/docs/cli/' },
+  { label: 'API', href: '/docs/api/' },
+  { label: 'Install', href: '/docs/install/' },
+];
+---
+
+<header class="pf-nav" role="banner">
+  <div class="pf-nav__inner">
+    <a class="pf-nav__brand" href="/">
+      <span class="pf-nav__logo" aria-hidden="true"></span>
+      <span class="pf-nav__title">pydantic-fixturegen</span>
+    </a>
+
+    <nav aria-label="Primary" class="pf-nav__links">
+      {links.map((link) => (
+        <a class="pf-nav__link" href={link.href}>
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="pf-nav__search">
+      <DocsSearch />
+    </div>
+  </div>
+</header>
+
+<style>
+  .pf-nav {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(8px);
+  }
+
+  .pf-nav__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 1rem clamp(1rem, 4vw, 2.5rem);
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .pf-nav__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none;
+    color: inherit;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .pf-nav__logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    border: 1px dashed rgba(15, 23, 42, 0.25);
+    background: rgba(15, 23, 42, 0.04);
+  }
+
+  .pf-nav__title {
+    font-size: 1rem;
+  }
+
+  .pf-nav__links {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: 1rem;
+  }
+
+  .pf-nav__link {
+    font-size: 0.9rem;
+    color: rgba(15, 23, 42, 0.8);
+    text-decoration: none;
+    padding: 0.35rem 0.5rem;
+    border-radius: 0.65rem;
+    transition: color 150ms ease, background 150ms ease;
+  }
+
+  .pf-nav__link:hover,
+  .pf-nav__link:focus-visible {
+    color: #1d4ed8;
+    background: rgba(29, 78, 216, 0.08);
+  }
+
+  .pf-nav__search {
+    margin-left: auto;
+    flex: 0 0 320px;
+  }
+
+  .pf-nav__search :global(.docs-search) {
+    width: 100%;
+  }
+
+  @media (max-width: 960px) {
+    .pf-nav__inner {
+      flex-wrap: wrap;
+      gap: 0.75rem 1rem;
+    }
+
+    .pf-nav__links {
+      width: 100%;
+      order: 3;
+      margin-left: 0;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .pf-nav__search {
+      order: 2;
+      flex: 1 1 100%;
+    }
+  }
+</style>

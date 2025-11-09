@@ -1,7 +1,6 @@
 ---
 import DocsSidebarNav from './DocsSidebarNav.astro';
 import DocsToc from './DocsToc.astro';
-import DocsSearch from './DocsSearch.astro';
 import type { DocsNavItem } from '../types';
 
 interface Heading {
@@ -30,11 +29,6 @@ const {
 ---
 
 <section class="docs-layout">
-  <div class="docs-layout__search" role="search">
-    <slot name="search">
-      <DocsSearch />
-    </slot>
-  </div>
   <aside class="docs-layout__sidebar">
     <DocsSidebarNav items={navItems} />
   </aside>
@@ -74,14 +68,7 @@ const {
     gap: clamp(1.5rem, 3vw, 3rem);
     max-width: 1320px;
     margin: 0 auto;
-    padding: 0 clamp(1rem, 4vw, 3rem) 4rem;
-  }
-
-  .docs-layout__search {
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: center;
-    padding-top: clamp(2rem, 4vw, 4rem);
+    padding: clamp(1rem, 3vw, 2.5rem) clamp(1rem, 4vw, 3rem) 4rem;
   }
 
   .docs-layout__sidebar {
@@ -149,11 +136,6 @@ const {
   @media (max-width: 1024px) {
     .docs-layout {
       grid-template-columns: minmax(0, 1fr);
-    }
-
-    .docs-layout__search {
-      padding-top: 1.5rem;
-      margin-bottom: 0.5rem;
     }
 
     .docs-layout__sidebar {

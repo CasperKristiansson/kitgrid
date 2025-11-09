@@ -13,15 +13,15 @@
 
 @layer base {
   :root {
-    color-scheme: dark;
-    --theme-primary: #14b8a6;
-    --theme-secondary: #67e8f9;
-    --theme-bg: #0a0f14;
-    --theme-surface: #0f1722;
-    --theme-text: #e5f4f1;
-    --theme-muted: #9ac7c0;
-    --theme-link: #2dd4bf;
-    --theme-code: #0b1723;
+    color-scheme: light;
+    --theme-primary: #1d4ed8;
+    --theme-secondary: #1d4ed8;
+    --theme-bg: #ffffff;
+    --theme-surface: #f5f7fb;
+    --theme-text: #0b0f14;
+    --theme-muted: #6b7280;
+    --theme-link: #1d4ed8;
+    --theme-code: #0f172a;
     --motion-scale: 0.85;
     --anim-duration: calc(220ms * var(--motion-scale));
   }
@@ -35,9 +35,6 @@
     transition:
       background-color var(--anim-duration) ease,
       color var(--anim-duration) ease;
-    background-image: radial-gradient(circle at 20% 20%, rgba(20, 184, 166, 0.12), transparent 40%),
-      radial-gradient(circle at 80% 0%, rgba(103, 232, 249, 0.06), transparent 45%),
-      linear-gradient(180deg, rgba(3, 7, 10, 0.95), rgba(5, 10, 17, 0.85));
   }
 
   main {
@@ -51,15 +48,15 @@
   }
 
   ::selection {
-    background-color: color-mix(in srgb, var(--theme-primary) 65%, black);
-    color: #01110c;
+    background-color: rgba(29, 78, 216, 0.12);
+    color: inherit;
   }
 
   [data-theme='pydantic-fixturegen'] {
     --p: var(--theme-primary);
-    --pc: #020617;
+    --pc: #f0fdfa;
     --s: var(--theme-secondary);
-    --sc: #0b0617;
+    --sc: #f8fafc;
     --b1: var(--theme-bg);
     --b2: var(--theme-surface);
     --bc: var(--theme-text);
@@ -67,5 +64,79 @@
 
   .pill {
     @apply badge badge-outline badge-lg text-secondary text-xs tracking-[0.3em] uppercase;
+  }
+
+  .docs-nav {
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 25px 45px rgba(15, 23, 42, 0.12);
+  }
+
+
+  .docs-nav ul ul {
+    border-left-color: rgba(15, 23, 42, 0.1);
+  }
+
+  .docs-nav .nav-link::before {
+    background: var(--theme-primary);
+  }
+
+  .docs-layout__sidebar {
+    border-right: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  .docs-layout__content {
+    background: transparent;
+    border-radius: 0;
+    padding: 1.5rem 0 3rem;
+    box-shadow: none;
+  }
+
+  .docs-layout__header {
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  .docs-search__field {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+  }
+
+  .docs-search__results {
+    background: #ffffff;
+    border-color: rgba(15, 23, 42, 0.08);
+    box-shadow: 0 30px 70px rgba(15, 23, 42, 0.12);
+  }
+
+  .docs-search__shortcut {
+    border-color: rgba(15, 23, 42, 0.12);
+    color: rgba(15, 23, 42, 0.8);
+  }
+
+  .code-block {
+    background: #fcfdff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 25px 45px rgba(15, 23, 42, 0.08);
+  }
+
+  .code-block__header {
+    background: rgba(247, 249, 252, 0.9);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  .code-block__copy {
+    border-color: rgba(15, 23, 42, 0.15);
+    background: rgba(15, 23, 42, 0.04);
+    color: var(--theme-text);
+  }
+
+  .code-block__copy[data-copy-state='copied'] {
+    border-color: rgba(29, 78, 216, 0.4);
+    color: var(--theme-primary);
+  }
+
+  pre {
+    color: #0f172a;
   }
 }
