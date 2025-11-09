@@ -77,7 +77,7 @@
   - Acceptance: Content renders from sample MD files with headings and TOC; keyboard navigation works.
   - Dependencies: 3.1.
 
-- [ ] **Theme tokens**
+- [x] **Theme tokens**
 
   - Summary: Implement global dark tokens for kitgrid and per-project tokens.
   - Deliverables: Token system with `primary`, `secondary`, `bg`, `surface`, `text`, `muted`, `link`, `code_theme`, `motion`.
