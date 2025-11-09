@@ -63,7 +63,7 @@
 
 ## 3) Astro skeleton and theming
 
-- [ ] **Hub site IA**
+- [x] **Hub site IA**
 
   - Summary: Build `apps/hub` with a one-page landing, project catalog grid, and global docs links.
   - Deliverables: High-contrast dark UI, hero, project cards, footer, sitemap, robots, favicons, OG image strategy.
