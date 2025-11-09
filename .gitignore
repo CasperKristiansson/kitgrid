@@ -1,0 +1,41 @@
+# Local instructions not meant for commit
+instructions
+
+# Node / pnpm artifacts
+node_modules/
+dist/
+.astro/
+build/
+.pnpm-store/
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Tooling
+.vercel/
+.netlify/
+parcel-cache/
+.svelte-kit/
+.next/
+
+# Tests & coverage
+coverage/
+.jest-cache/
+.jest-test-results.json
+
+# Logs
+*.log
+logs/
+
+# Misc
+*.local

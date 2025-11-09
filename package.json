@@ -1,0 +1,16 @@
+{
+  "name": "kitgrid",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Monorepo hosting the kitgrid hub and project doc sites.",
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev:hub": "pnpm --filter @kitgrid/hub dev",
+    "dev:project-stub": "pnpm --filter @kitgrid/project-stub dev"
+  },
+  "engines": {
+    "node": ">=20.11.1",
+    "pnpm": ">=8.15.4"
+  },
+  "packageManager": "pnpm@8.15.4"
+}
