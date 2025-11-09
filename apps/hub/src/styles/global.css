@@ -1,4 +1,6 @@
 @import './fonts.css';
+@source '../**/*.{astro,md,mdx,ts,tsx}';
+@source '../../../../packages/docs-ui/src/**/*.{astro,md,mdx,ts,tsx}';
 @import 'tailwindcss';
 @plugin "daisyui";
 
@@ -109,7 +111,16 @@
   }
 
   .pill {
-    @apply badge badge-outline badge-lg text-secondary text-xs tracking-[0.3em] uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid rgba(110, 231, 249, 0.35);
+    color: var(--theme-secondary);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
   }
 
   .reveal {
