@@ -16,7 +16,7 @@ locals {
   }
 }
 
-resource "cloudflare_record" "apex" {
+resource "cloudflare_dns_record" "apex" {
   zone_id         = var.cloudflare_zone_id
   name            = local.apex_record.name
   type            = local.apex_record.type
@@ -26,7 +26,7 @@ resource "cloudflare_record" "apex" {
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "wildcard" {
+resource "cloudflare_dns_record" "wildcard" {
   zone_id         = var.cloudflare_zone_id
   name            = local.wildcard_record.name
   type            = local.wildcard_record.type
@@ -36,7 +36,7 @@ resource "cloudflare_record" "wildcard" {
   allow_overwrite = true
 }
 
-resource "cloudflare_record" "acm_validation" {
+resource "cloudflare_dns_record" "acm_validation" {
   for_each = local.validation_records
 
   zone_id         = var.cloudflare_zone_id
