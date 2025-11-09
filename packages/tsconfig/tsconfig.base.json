@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Kitgrid Base",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowJs": false,
+    "checkJs": false,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "useDefineForClassFields": true,
+    "importsNotUsedAsValues": "error",
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  },
+  "include": ["src", "scripts", "env.d.ts"],
+  "exclude": ["dist", "build", "coverage", "node_modules"]
+}

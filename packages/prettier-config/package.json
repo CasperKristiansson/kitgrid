@@ -1,0 +1,29 @@
+{
+  "name": "@kitgrid/prettier-config",
+  "version": "0.0.1",
+  "description": "Shared Prettier configuration for kitgrid projects.",
+  "main": "index.cjs",
+  "license": "MIT",
+  "keywords": [
+    "prettier",
+    "config",
+    "astro",
+    "mdx",
+    "kitgrid"
+  ],
+  "files": [
+    "index.cjs",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "peerDependencies": {
+    "prettier": "^3.3.3"
+  },
+  "dependencies": {
+    "prettier": "^3.3.3",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.6.8"
+  }
+}

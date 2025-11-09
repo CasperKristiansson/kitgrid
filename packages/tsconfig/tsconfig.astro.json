@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Kitgrid Astro",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "astro/jsx-runtime",
+    "allowJs": true,
+    "types": ["astro/client"]
+  },
+  "include": [
+    "src",
+    "src/env.d.ts",
+    "astro.config.*",
+    "env.d.ts",
+    "**/*.astro"
+  ],
+  "exclude": ["dist", "node_modules", ".astro"]
+}

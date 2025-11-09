@@ -1,0 +1,29 @@
+{
+  "name": "@kitgrid/tsconfig",
+  "version": "0.0.1",
+  "description": "Shared TypeScript base configs for kitgrid apps and tooling.",
+  "license": "MIT",
+  "keywords": [
+    "tsconfig",
+    "kitgrid",
+    "astro",
+    "node"
+  ],
+  "files": [
+    "tsconfig.base.json",
+    "tsconfig.astro.json",
+    "tsconfig.node.json",
+    "tsconfig.react-mdx.json",
+    "README.md"
+  ],
+  "exports": {
+    "./base": "./tsconfig.base.json",
+    "./astro": "./tsconfig.astro.json",
+    "./node": "./tsconfig.node.json",
+    "./react-mdx": "./tsconfig.react-mdx.json",
+    ".": "./tsconfig.base.json"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  }
+}

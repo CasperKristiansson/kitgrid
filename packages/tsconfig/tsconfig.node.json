@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Kitgrid Node",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "types": ["node"],
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["scripts", "*.config.ts", "*.config.mts", "*.config.cjs", "*.config.mjs"],
+  "exclude": ["dist", "node_modules"]
+}
