@@ -171,39 +171,14 @@
 
 ---
 
-## 6) Search and analytics
+## 6) Security, QA, and governance
 
-- [x] **Per-subdomain search**
-
-  - Summary: Generate a static search index for each project site.
-  - Deliverables: Build step producing a JSON index per subdomain; search UI wired in `DocsLayout`.
-  - Acceptance: Querying finds headings and paragraphs; index ≤ a reasonable size for fast load.
-  - Dependencies: 3.2, 4.3, 5.2.
-
-- [ ] **Hub federated search**
-
-  - Summary: Optional aggregation endpoint that queries each subdomain’s index.
-  - Deliverables: Lightweight aggregator with rate-limit handling and timeouts.
-  - Acceptance: Cross-project queries return results with source labels; timeouts degrade gracefully.
-  - Dependencies: 6.1.
-
-- [ ] **Analytics**
-
-  - Summary: Integrate privacy-friendly analytics per subdomain, key configurable in manifest.
-  - Deliverables: Analytics provider abstraction; opt-out respected; DNT respected.
-  - Acceptance: Events arrive for both hub and a project; no PII logged.
-  - Dependencies: 3.\*, 4.2.
-
----
-
-## 7) Security, QA, and governance
-
-- [ ] **Content Security Policy**
+- [x] **Content Security Policy**
 
   - Summary: Strict CSP suitable for static docs; disallow inline scripts/styles except hashed where needed.
   - Deliverables: Documented CSP and test cases.
   - Acceptance: CSP enabled; site functional; violations observable in reports.
-  - Dependencies: 3.\*, 4.4.
+  - Dependencies: 3.*, 4.4.
 
 - [ ] **Link checker and broken anchors**
 
@@ -217,7 +192,7 @@
   - Summary: Define budgets for performance, a11y, JS/CSS weight; enforce in CI for hub and one project.
   - Deliverables: Budget file; CI job.
   - Acceptance: Over-budget build fails; regressions prevented.
-  - Dependencies: 3.\*, 5.2.
+  - Dependencies: 3.*, 5.2.
 
 - [ ] **Docs: contribution and exception policy**
 
@@ -226,7 +201,6 @@
   - Acceptance: A new maintainer can onboard a project without external help.
   - Dependencies: 3.1, 4.1–4.2.
 
----
 
 ## 8) Onboard first external project: `pydantic-fixturegen`
 

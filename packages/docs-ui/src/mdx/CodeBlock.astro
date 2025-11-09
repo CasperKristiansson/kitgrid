@@ -1,4 +1,6 @@
 ---
+import codeBlockScript from '../scripts/code-block.ts?url';
+
 interface Props {
   code?: string;
   language?: string;
@@ -24,18 +26,19 @@ const derivedLanguage =
 const codeTargetId = `code-${Math.random().toString(36).slice(2, 8)}`;
 ---
 
-<div class="code-block">
+<div class="code-block" data-code-block>
   <div class="code-block__header">
     <span class="text-base-content/60 text-xs tracking-[0.3em] uppercase">
       {derivedLanguage}
     </span>
-    <button class="btn btn-ghost btn-xs" type="button" data-code-target={codeTargetId}>
+    <button class="btn btn-ghost btn-xs" type="button" data-code-copy>
       Copy
     </button>
   </div>
   <pre
     id={codeTargetId}
-    tabindex="0">
+    tabindex="0"
+    data-code-target>
     {
       slotMarkup?.trim() ? (
         <Fragment set:html={slotMarkup} />
@@ -46,26 +49,7 @@ const codeTargetId = `code-${Math.random().toString(36).slice(2, 8)}`;
   </pre>
 </div>
 
-<script is:inline>
-  document.addEventListener('click', (event) => {
-    const button = event.target.closest('[data-code-target]');
-    if (!button) return;
-    const targetId = button.getAttribute('data-code-target');
-    if (!targetId) return;
-    const block = document.getElementById(targetId);
-    if (!block) return;
-    const text = block.innerText.trim();
-    navigator.clipboard.writeText(text).then(() => {
-      const original = button.textContent;
-      button.textContent = 'Copied';
-      button.setAttribute('aria-live', 'polite');
-      setTimeout(() => {
-        button.textContent = 'Copy';
-        button.removeAttribute('aria-live');
-      }, 1400);
-    });
-  });
-</script>
+<script type="module" src={codeBlockScript} />
 
 <style>
   .code-block {

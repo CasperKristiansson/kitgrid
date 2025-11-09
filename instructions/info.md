@@ -131,6 +131,7 @@ See `docs/manifest-spec.md` for the formal field reference. The JSON Schema live
 
 - Treat MDX as untrusted. `@kitgrid/mdx-pipeline` (documented in `docs/sanitization.md`) blocks raw HTML, limits MDX components to the approved list, and errors on remote embeds.
 - Validate manifest against a JSON Schema before build.
+- Base layouts enforce the CSP described in `docs/csp.md`. Avoid adding inline scripts; ship new assets via `/public` and update the CSP string when expanding the allowlist.
 
 **Versioning**
 

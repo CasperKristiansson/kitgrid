@@ -14,6 +14,19 @@ const {
   description = SITE.description,
   ogImage = '/og-default.png',
 } = Astro.props;
+
+const csp = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:",
+  "font-src 'self' data:",
+  "connect-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self'",
+].join('; ');
 ---
 
 <!doctype html>
@@ -32,6 +45,7 @@ const {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(ogImage, SITE.url).toString()} />
+    <meta http-equiv="Content-Security-Policy" content={csp} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body data-theme="kitgrid">
