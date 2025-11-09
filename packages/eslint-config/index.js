@@ -1,6 +1,12 @@
+const defaultProjects = [
+  "./tsconfig.json",
+  "./apps/*/tsconfig.json",
+  "./packages/*/tsconfig.json"
+];
+
 const projectEntries = process.env.KITGRID_TSCONFIG
   ? process.env.KITGRID_TSCONFIG.split(",").map((entry) => entry.trim()).filter(Boolean)
-  : ["./tsconfig.json"];
+  : defaultProjects;
 
 const tsParserOptions = {
   project: projectEntries,
