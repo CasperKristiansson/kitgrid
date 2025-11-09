@@ -5,6 +5,7 @@ import {
   existsSync,
   mkdirSync,
   readFileSync,
+  readdirSync,
   rmSync,
   statSync,
   writeFileSync,
@@ -148,6 +149,50 @@ function copySource(sourceDir: string, destDir: string) {
   cpSync(sourceDir, destDir, { recursive: true, errorOnExist: false });
 }
 
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function wrapCodeBlocks(markdown: string) {
+  const fence = /```([\w-]+)?\n([\s\S]*?)```/g;
+  return markdown.replace(fence, (_, __, body = '') => {
+    const content = escapeHtml(body.replace(/\s+$/, ''));
+    return (
+      '<div class="mockup-code w-full">\n' +
+      '  <pre data-prefix="$"><code>' +
+      content +
+      '</code></pre>\n' +
+      '</div>'
+    );
+  });
+}
+
+function transformDocs(dir: string) {
+  const stack = [dir];
+  while (stack.length) {
+    const current = stack.pop();
+    if (!current) continue;
+    const entries = readdirSync(current, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = join(current, entry.name);
+      if (entry.isDirectory()) {
+        stack.push(fullPath);
+        continue;
+      }
+      if (!/\.(md|mdx)$/i.test(entry.name)) continue;
+      const original = readFileSync(fullPath, 'utf8');
+      if (!original.includes('```')) continue;
+      const transformed = wrapCodeBlocks(original);
+      if (transformed !== original) {
+        writeFileSync(fullPath, transformed);
+      }
+    }
+  }
+}
+
 function recordMetadata(destDir: string, metadata: CacheMetadata) {
   writeFileSync(join(destDir, '.kitgrid-docs.json'), JSON.stringify(metadata, null, 2));
 }
@@ -252,6 +297,7 @@ async function main() {
         throw new Error('Source path must point to a directory with docs.');
       }
       copySource(resolvedSource, targetDir);
+      transformDocs(targetDir);
       recordMetadata(targetDir, {
         project: args.project,
         ref,
@@ -277,6 +323,7 @@ async function main() {
       token
     );
     copySource(docsDir, targetDir);
+    transformDocs(targetDir);
     recordMetadata(targetDir, {
       project: args.project,
       ref,

@@ -14,8 +14,12 @@
     "src",
     "README.md"
   ],
+  "dependencies": {
+    "unist-util-visit": "^5.0.0"
+  },
   "exports": {
     ".": "./src/index.ts",
+    "./rehype/rehypeWrapCodeBlocks": "./src/rehype/rehypeWrapCodeBlocks.js",
     "./*": "./src/*"
   },
   "types": "./src/index.ts",

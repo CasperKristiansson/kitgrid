@@ -2,6 +2,7 @@
 import DocsSidebarNav from './DocsSidebarNav.astro';
 import DocsToc from './DocsToc.astro';
 import type { DocsNavItem } from '../types';
+import codeBlockScript from '../scripts/code-block.ts?url';
 
 interface Heading {
   depth: number;
@@ -167,6 +168,12 @@ const {
       width: 100%;
       justify-content: flex-start;
       flex-wrap: wrap;
-    }
   }
+
+:global(.mockup-code) {
+  width: 100%;
+}
+}
 </style>
+
+<script type="module" src={codeBlockScript} />
