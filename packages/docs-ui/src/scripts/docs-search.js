@@ -130,7 +130,23 @@ async function initSearch(block) {
 
     try {
       const search = await pagefind.search(query);
-      const items = await Promise.all(search.results.slice(0, 15).map((result) => result.data()));
+      const enriched = await Promise.all(
+        search.results.slice(0, 25).map(async (result) => {
+          const data = await result.data();
+          const metaTitle = data?.meta?.title ?? '';
+          const rawUrl = data?.raw_url ?? data?.url ?? '';
+          const normalizedQuery = query.toLowerCase();
+          const titleMatch =
+            metaTitle.toLowerCase() === normalizedQuery ? 2 : metaTitle.toLowerCase().includes(normalizedQuery) ? 1 : 0;
+          const slugMatch = rawUrl.toLowerCase().includes(normalizedQuery) ? 1 : 0;
+          const score = (titleMatch + slugMatch) * 100 + (data?.meta?.score ?? 0);
+          return { score, data };
+        }),
+      );
+      const items = enriched
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 15)
+        .map(({ data }) => data);
       if (!items.length) {
         clearResults();
         setStatus('');

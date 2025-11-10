@@ -7,13 +7,54 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  canonical?: string;
+  keywords?: string;
+  structuredData?: Record<string, any>;
 }
 
 const {
   title = SITE.title,
   description = SITE.description,
   ogImage = '/og-default.png',
+  canonical,
+  keywords = 'docs hosting, astro docs, kitgrid, documentation platform, static site deploys',
+  structuredData,
 } = Astro.props;
+
+const currentUrl =
+  canonical ??
+  new URL(Astro.url?.pathname ? Astro.url.pathname : '/', SITE.url).toString();
+const resolvedOgImage = new URL(ogImage, SITE.url).toString();
+const defaultStructuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      name: SITE.title,
+      url: SITE.url,
+      description: SITE.description,
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${SITE.url}/?q={search_term_string}`,
+        'query-input': 'required name=search_term_string',
+      },
+    },
+    {
+      '@type': 'Organization',
+      name: 'Kitgrid',
+      url: SITE.url,
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          email: SITE.contactEmail,
+          contactType: 'customer support',
+        },
+      ],
+      logo: new URL('/og-default.png', SITE.url).toString(),
+    },
+  ],
+};
+const structuredPayload = structuredData ?? defaultStructuredData;
 
 const csp = [
   "default-src 'self'",
@@ -36,17 +77,24 @@ const csp = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <link rel="canonical" href={currentUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(ogImage, SITE.url).toString()} />
-    <meta property="og:url" content={SITE.url} />
+    <meta property="og:image" content={resolvedOgImage} />
+    <meta property="og:url" content={currentUrl} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Kitgrid" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(ogImage, SITE.url).toString()} />
+    <meta name="twitter:image" content={resolvedOgImage} />
     <meta http-equiv="Content-Security-Policy" content={csp} />
+    <script type="application/ld+json">
+      {JSON.stringify(structuredPayload)}
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <slot name="head" />
   </head>
   <body data-theme="kitgrid">
     <main>

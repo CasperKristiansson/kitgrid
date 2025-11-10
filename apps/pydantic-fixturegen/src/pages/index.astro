@@ -44,6 +44,30 @@ const homepageSchema = {
   >
     <section id="overview" class="space-y-4">
       <p class="pill">Deterministic fixtures</p>
+      <div class="border-base-200 bg-base-100/80 flex flex-wrap items-center justify-between gap-4 rounded-2xl border p-4 shadow-sm">
+        <div class="space-y-1">
+          <p class="text-base-content/60 text-xs tracking-[0.4em] uppercase">
+            GitHub repository
+          </p>
+          <a
+            class="text-lg font-semibold text-primary flex items-center gap-2"
+            href="https://github.com/CasperKristiansson/pydantic-fixturegen"
+            target="_blank"
+            rel="noreferrer"
+          >
+            CasperKristiansson/pydantic-fixturegen
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+        <a
+          class="btn btn-outline btn-sm"
+          href="https://github.com/CasperKristiansson/pydantic-fixturegen"
+          target="_blank"
+          rel="noreferrer"
+        >
+          View on GitHub
+        </a>
+      </div>
       <h2 class="text-3xl font-semibold">Pydantic Fixturegen: deterministic test data, emitters, and diagnostics</h2>
       <p class="text-base-content/80 leading-relaxed">
         Pydantic Fixturegen exists to remove the guesswork from building test data for Pydantic v2 models.
@@ -52,6 +76,33 @@ const homepageSchema = {
         to the deep dives on discovery internals, command guides, providers, seed policies, and integrations with FastAPI,
         pytest, and Pluggy-based workflows.
       </p>
+      <div class="flex flex-wrap items-center gap-3">
+        <a
+          href="https://pypi.org/project/pydantic-fixturegen/"
+          target="_blank"
+          rel="noreferrer"
+          class="hover:opacity-90"
+        >
+          <img
+            src="https://img.shields.io/pypi/v/pydantic-fixturegen.svg"
+            alt="PyPI version"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+        <img
+          src="https://img.shields.io/pypi/pyversions/pydantic-fixturegen.svg"
+          alt="Supported Python versions"
+          loading="lazy"
+          decoding="async"
+        />
+        <img
+          src="https://img.shields.io/badge/License-MIT-blue.svg"
+          alt="License: MIT"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
       <div class="flex flex-wrap gap-3">
         <a class="btn btn-primary" href="/docs/quickstart">Run the quickstart</a>
         <a class="btn btn-outline" href="/docs/commands/">Explore command guides</a>

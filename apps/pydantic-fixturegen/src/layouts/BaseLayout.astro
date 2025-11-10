@@ -6,6 +6,8 @@ interface Props {
   title?: string;
   description?: string;
   canonical?: string;
+  ogImage?: string;
+  keywords?: string;
   structuredData?: Record<string, any>;
 }
 
@@ -13,15 +15,36 @@ const {
   title = 'Project docs',
   description = 'Docs preview for kitgrid.',
   canonical,
+  ogImage = '/assets/pydantic-fixturegen-logo.png',
+  keywords = 'pydantic fixturegen, deterministic test data, python fixtures, JSON emitters, pytest',
   structuredData,
 } = Astro.props;
 const isProd = import.meta.env.PROD;
+const siteOrigin = Astro.site?.origin ?? 'https://pydantic-fixturegen.kitgrid.dev';
+const derivedCanonical =
+  canonical ?? new URL(Astro.url?.pathname ? Astro.url.pathname : '/', siteOrigin).href;
+const resolvedOgImage = new URL(ogImage, siteOrigin).toString();
+const defaultStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Pydantic Fixturegen',
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'Python 3.11+',
+  url: derivedCanonical,
+  description,
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+};
+const schemaToRender = structuredData ?? defaultStructuredData;
 
 const csp = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' data:",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data:",
+  "img-src 'self' data: https://img.shields.io",
   "font-src 'self' data:",
   "connect-src 'self'",
   "object-src 'none'",
@@ -38,22 +61,22 @@ const csp = [
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0A0F14" />
-    {canonical && <link rel="canonical" href={canonical} />}
+    <meta name="keywords" content={keywords} />
+    <link rel="canonical" href={derivedCanonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:url" content={derivedCanonical} />
+    <meta property="og:image" content={resolvedOgImage} />
     <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Pydantic Fixturegen Docs" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta
-      name="keywords"
-      content="pydantic fixturegen, deterministic test data, python fixtures, JSON emitters, pytest"
-    />
+    <meta name="twitter:image" content={resolvedOgImage} />
     {isProd && <meta http-equiv="Content-Security-Policy" content={csp} />}
-    {structuredData && (
+    {schemaToRender && (
       <script type="application/ld+json">
-        {JSON.stringify(structuredData)}
+        {JSON.stringify(schemaToRender)}
       </script>
     )}
     <slot name="head" />
