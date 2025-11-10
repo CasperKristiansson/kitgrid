@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import DocsNavbar from '@kitgrid/docs-ui/components/DocsNavbar.astro';
+import { project } from '../data/project';
 
 interface Props {
   title?: string;
@@ -39,6 +40,21 @@ const defaultStructuredData = {
   },
 };
 const schemaToRender = structuredData ?? defaultStructuredData;
+const theme = project.theme ?? {};
+const themeCss = `
+:root {
+  --theme-primary: ${theme.primary ?? '#1D4ED8'};
+  --theme-secondary: ${theme.secondary ?? '#1D4ED8'};
+  --theme-bg: ${theme.bg ?? '#FFFFFF'};
+  --theme-surface: ${theme.surface ?? '#F5F7FB'};
+  --theme-text: ${theme.text ?? '#0B0F14'};
+  --theme-muted: ${theme.muted ?? '#6B7280'};
+  --theme-link: ${theme.link ?? '#1D4ED8'};
+  --theme-code: ${theme.code_theme === 'kitgrid-light' ? '#0F172A' : '#0F172A'};
+  --motion-scale: ${theme.motion === 'subtle' ? '0.85' : '1'};
+  --anim-duration: calc(220ms * var(--motion-scale));
+}
+`;
 
 const csp = [
   "default-src 'self'",
@@ -79,6 +95,7 @@ const csp = [
         {JSON.stringify(schemaToRender)}
       </script>
     )}
+    <style is:inline set:html={themeCss}></style>
     <slot name="head" />
     <link rel="icon" type="image/png" sizes="128x128" href="/favicon.png" />
   </head>

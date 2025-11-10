@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "@kitgrid/docs-ui": "workspace:*",
-    "astro": "^5.15.4"
+    "astro": "^5.15.4",
+    "yaml": "^2.5.1"
   },
   "devDependencies": {
     "@astrojs/mdx": "^4.3.10",
