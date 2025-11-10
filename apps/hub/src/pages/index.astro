@@ -189,41 +189,6 @@ const flowSteps = [
       </div>
     </section>
 
-    <section id="docs" class="reveal-delay space-y-6">
-      <div class="flex flex-col gap-3">
-        <p class="pill">Docs shortcuts</p>
-        <h2 class="text-3xl font-semibold">Start with the essentials.</h2>
-        <p class="text-base-content/70 max-w-2xl">
-          These internal docs walk you through manifests, shared lint kits, and go-live
-          requests.
-        </p>
-      </div>
-      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {
-          docsLinks.map((doc) => (
-            <article class="card border-base-300 bg-base-200/30 border shadow-inner">
-              <div class="card-body gap-4">
-                <h3 class="text-xl font-semibold">{doc.title}</h3>
-                <p class="text-base-content/70 text-sm leading-relaxed">
-                  {doc.description}
-                </p>
-                <div class="card-actions">
-                  <a
-                    class="btn btn-link text-primary link-underline px-0"
-                    href={doc.href}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    View guide ↗
-                  </a>
-                </div>
-              </div>
-            </article>
-          ))
-        }
-      </div>
-    </section>
-
     <section class="reveal border-base-200 bg-base-200/20 rounded-[24px] border p-8">
       <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div class="space-y-3">
