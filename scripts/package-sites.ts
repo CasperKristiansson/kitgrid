@@ -32,10 +32,25 @@ function copyDir(src: string, dest: string) {
   if (!existsSync(resolvedSrc)) {
     throw new Error(`Missing build output: ${resolvedSrc}`);
   }
+  ensureSitemap(resolvedSrc);
   const resolvedDest = resolve(dest);
   rmSync(resolvedDest, { recursive: true, force: true });
   mkdirSync(dirname(resolvedDest), { recursive: true });
   cpSync(resolvedSrc, resolvedDest, { recursive: true });
+}
+
+function ensureSitemap(root: string) {
+  const sitemapXml = join(root, 'sitemap.xml');
+  if (existsSync(sitemapXml)) {
+    return;
+  }
+  const sitemapChunk = join(root, 'sitemap-0.xml');
+  const sitemapIndex = join(root, 'sitemap-index.xml');
+  if (existsSync(sitemapChunk)) {
+    cpSync(sitemapChunk, sitemapXml);
+  } else if (existsSync(sitemapIndex)) {
+    cpSync(sitemapIndex, sitemapXml);
+  }
 }
 
 function stageHub() {

@@ -39,9 +39,12 @@ export default defineConfig({
   hooks: {
     'astro:build:done'({ dir }) {
       const outDir = fileURLToPath(dir);
+      const sitemapChunk = join(outDir, 'sitemap-0.xml');
       const sitemapIndex = join(outDir, 'sitemap-index.xml');
       const sitemapXml = join(outDir, 'sitemap.xml');
-      if (existsSync(sitemapIndex)) {
+      if (existsSync(sitemapChunk)) {
+        copyFileSync(sitemapChunk, sitemapXml);
+      } else if (existsSync(sitemapIndex)) {
         copyFileSync(sitemapIndex, sitemapXml);
       }
     },
