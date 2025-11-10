@@ -54,6 +54,11 @@
     color: inherit;
   }
 
+  .code-block ::selection,
+  :not(pre) > code::selection {
+    background-color: rgba(198, 198, 198, 0.25);
+  }
+
   [data-theme='pydantic-fixturegen'] {
     --p: var(--theme-primary);
     --pc: #f0fdfa;
@@ -76,7 +81,7 @@
 
   .docs-nav {
     background: #ffffff;
-    border: 1px solid rgba(15, 23, 42, 0.08);
+    padding-top: 1rem;
   }
 
   .docs-nav ul ul {
