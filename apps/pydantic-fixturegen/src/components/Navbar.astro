@@ -15,7 +15,15 @@ const pagefindRemoteSrc = import.meta.env.DEV ? 'https://pydantic-fixturegen.kit
 <header class="pf-nav" role="banner">
   <div class="pf-nav__inner">
     <a class="pf-nav__brand" href="/">
-      <span class="pf-nav__logo" aria-hidden="true"></span>
+      <img
+        class="pf-nav__logo"
+        src="/assets/pydantic-fixturegen-logo.png"
+        width="40"
+        height="40"
+        alt="Pydantic Fixturegen logo"
+        loading="lazy"
+        decoding="async"
+      />
       <span class="pf-nav__title">pydantic-fixturegen</span>
     </a>
 
@@ -76,11 +84,15 @@ const pagefindRemoteSrc = import.meta.env.DEV ? 'https://pydantic-fixturegen.kit
   }
 
   .pf-nav__logo {
-    width: 36px;
-    height: 36px;
+    display: block;
+    width: 40px;
+    height: 40px;
     border-radius: 12px;
-    border: 1px dashed rgba(15, 23, 42, 0.25);
-    background: rgba(15, 23, 42, 0.04);
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    background: #fff;
+    padding: 4px;
+    object-fit: contain;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
   }
 
   .pf-nav__title {
