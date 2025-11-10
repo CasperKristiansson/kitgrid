@@ -124,11 +124,16 @@ const pagefindRemoteSrc = import.meta.env.DEV ? 'https://pydantic-fixturegen.kit
   }
 
   .pf-nav__search {
-    flex: 0 0 320px;
+    flex: 1 1 320px;
+    max-width: 380px;
+    transition:
+      flex-basis 200ms ease,
+      max-width 200ms ease;
   }
 
-  .pf-nav__search :global(.docs-search) {
-    width: 100%;
+  .pf-nav__search:focus-within {
+    flex-basis: 720px;
+    max-width: min(720px, 100%);
   }
 
   .pf-nav__menu-button {

@@ -21,6 +21,7 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+apps/*/public/pagefind/
 
 # Tooling
 .vercel/

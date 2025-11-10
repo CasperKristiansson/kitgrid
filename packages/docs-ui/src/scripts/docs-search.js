@@ -1,3 +1,22 @@
+const escapeHtml = (value = '') =>
+  value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
+const formatDocLabel = (url = '') => {
+  if (!url) return 'Docs';
+  try {
+    const parsed = new URL(url, window.location.origin);
+    const pathname = parsed.pathname.replace(/\/+$/, '');
+    return pathname || '/';
+  } catch {
+    return url;
+  }
+};
+
 /**
  * @param {HTMLElement} block
  */
@@ -15,7 +34,6 @@ async function initSearch(block) {
     shortcut.textContent = isMac ? '⌘ K' : 'Ctrl K';
   }
 
-  const scriptId = 'kitgrid-pagefind-script';
   let pagefindPromise = null;
   let pagefindInstance;
 
@@ -33,61 +51,63 @@ async function initSearch(block) {
     if (pagefindInstance) return pagefindInstance;
     if (pagefindPromise) return pagefindPromise;
 
-    pagefindPromise = new Promise((resolve) => {
-      const finalize = async () => {
-        if (window.pagefindInit) {
-          try {
-            pagefindInstance = await window.pagefindInit();
-            resolve(pagefindInstance);
-          } catch (error) {
-            console.warn('pagefind init failed', error);
-            resolve(null);
-          }
-        } else {
-          resolve(null);
-        }
-      };
-
-      if (window.pagefindInit) {
-        void finalize();
-        return;
-      }
-
+    pagefindPromise = (async () => {
       const sources = ['/pagefind/pagefind.js'];
       if (remoteSrc && !sources.includes(remoteSrc)) {
         sources.push(remoteSrc);
       }
 
-      const loadFromSource = (index) => {
-        const src = sources[index];
-        if (!src) {
-          resolve(null);
-          return;
+      const computeBasePath = (src) => {
+        try {
+          const url = new URL(src, window.location.origin);
+          const path = url.pathname.replace(/pagefind\.js.*$/, '');
+          const base = `${url.origin}${path}`;
+          return base.endsWith('/') ? base : `${base}/`;
+        } catch {
+          return '/pagefind/';
         }
-
-        const existing = document.getElementById(scriptId);
-        if (existing) {
-          existing.remove();
-        }
-
-        const script = document.createElement('script');
-        script.id = scriptId;
-        script.src = src;
-        script.defer = true;
-        script.addEventListener('load', finalize, { once: true });
-        script.addEventListener(
-          'error',
-          () => {
-            script.remove();
-            loadFromSource(index + 1);
-          },
-          { once: true },
-        );
-        document.head.appendChild(script);
       };
 
-      loadFromSource(0);
-    });
+      const importFromSource = async (src) => {
+        try {
+          const response = await fetch(src, { credentials: 'omit' });
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          const code = await response.text();
+          const blob = new Blob([code], { type: 'text/javascript' });
+          const blobUrl = URL.createObjectURL(blob);
+          const basePath = computeBasePath(src);
+          try {
+            const module = await import(/* @vite-ignore */ blobUrl);
+            return { module, basePath };
+          } finally {
+            URL.revokeObjectURL(blobUrl);
+          }
+        } catch (error) {
+          throw new Error(`Failed to load Pagefind script from ${src}: ${error instanceof Error ? error.message : error}`);
+        }
+      };
+
+      for (const src of sources) {
+        try {
+          const imported = await importFromSource(src);
+          if (imported?.module) {
+            try {
+              await imported.module.options?.({ basePath: imported.basePath });
+            } catch (error) {
+              console.warn('Failed to configure Pagefind basePath', error);
+            }
+            pagefindInstance = imported.module;
+            return imported.module;
+          }
+        } catch (error) {
+          console.warn(error);
+        }
+      }
+
+      return null;
+    })();
 
     return pagefindPromise;
   }
@@ -110,18 +130,24 @@ async function initSearch(block) {
 
     try {
       const search = await pagefind.search(query);
-      const items = await Promise.all(search.results.slice(0, 5).map((result) => result.data()));
+      const items = await Promise.all(search.results.slice(0, 15).map((result) => result.data()));
       if (!items.length) {
         clearResults();
-        setStatus('No matches yet.');
+        setStatus('');
         return;
       }
 
       resultsList.innerHTML = items
         .map((item) => {
-          const title = item?.meta?.title ?? item?.url ?? 'Untitled';
-          const url = item?.url ?? '#';
-          return `<li><a href="${url}">${title}</a></li>`;
+          const title = escapeHtml(item?.meta?.title ?? item?.url ?? 'Untitled');
+          const url = escapeHtml(item?.url ?? '#');
+          const label = escapeHtml(formatDocLabel(item?.raw_url ?? item?.url));
+          const rawFallback = (item?.content ?? '').slice(0, 200);
+          const excerpt = item?.excerpt ?? (rawFallback ? escapeHtml(rawFallback) : '');
+          const excerptMarkup = excerpt
+            ? `<span class="docs-search__result-excerpt">${excerpt}</span>`
+            : '';
+          return `<li><a href="${url}"><span class="docs-search__result-title">${title}</span><span class="docs-search__result-label">${label}</span>${excerptMarkup}</a></li>`;
         })
         .join('');
 
@@ -144,7 +170,17 @@ async function initSearch(block) {
 
   input.addEventListener('focus', () => void ensurePagefind(), { once: true });
   input.addEventListener('input', handleSearch);
+  function handleEscape(event) {
+    if (event.key === 'Escape') {
+      input.blur();
+      resultsContainer.hidden = true;
+      clearResults();
+      setStatus('');
+    }
+  }
+
   window.addEventListener('keydown', handleShortcut);
+  window.addEventListener('keydown', handleEscape);
 }
 
 function bootstrapSearch() {
