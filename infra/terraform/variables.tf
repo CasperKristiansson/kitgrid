@@ -68,30 +68,3 @@ variable "healthcheck_key" {
   type        = string
   default     = "healthcheck.txt"
 }
-
-variable "deploy_role_name" {
-  description = "Name of the IAM role GitHub Actions will assume via OIDC."
-  type        = string
-  default     = "kitgrid-ci-deploy"
-}
-
-variable "github_trusted_subjects" {
-  description = "List of GitHub OIDC subjects allowed to assume the deploy role."
-  type        = list(string)
-  default = [
-    "repo:CasperKristiansson/kitgrid:ref:refs/heads/main",
-    "repo:CasperKristiansson/kitgrid:pull_request",
-  ]
-}
-
-variable "github_oidc_audiences" {
-  description = "Audiences accepted from GitHub's OIDC tokens."
-  type        = list(string)
-  default     = ["sts.amazonaws.com"]
-}
-
-variable "github_oidc_thumbprints" {
-  description = "Thumbprints for the GitHub OIDC root certificate."
-  type        = list(string)
-  default     = ["6938fd4d98bab03faadb97b34396831e3780aea1"]
-}

@@ -382,7 +382,7 @@ function wrapCodeBlocks(markdown: string) {
     const prefix = CLI_LANGUAGES.has(language) ? '$' : '';
     const langClass = language ? ` class="language-${language}"` : '';
     const preBlocks = lines
-      .map((line) => {
+      .map((line: string) => {
         const linePrefix = prefix ? ` data-prefix="${prefix}"` : '';
         return `${indent}  <pre${linePrefix}><code${langClass}>${escapeHtml(line)}</code></pre>`;
       })
