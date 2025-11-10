@@ -1,0 +1,103 @@
+---
+interface Card {
+  title: string;
+  description?: string;
+  href?: string;
+  linkLabel?: string;
+}
+
+interface Props {
+  cards: Card[];
+  columns?: number;
+  tone?: 'neutral' | 'muted' | 'subtle';
+}
+
+const { cards = [], columns = 3, tone = 'neutral' } = Astro.props;
+const columnValue = Math.min(Math.max(columns, 1), 4);
+---
+
+<div class={`link-card-grid link-card-grid--${tone}`} style={`--cols:${columnValue}`}>
+  {cards.map((card) => (
+    <article class="link-card">
+      <div class="link-card__body">
+        <h3 class="link-card__title">{card.title}</h3>
+        {card.description && (
+          <p class="link-card__description">
+            {card.description}
+          </p>
+        )}
+        {card.href && (
+          <a class="link-card__link" href={card.href}>
+            {card.linkLabel ?? 'Open ↗'}
+          </a>
+        )}
+      </div>
+    </article>
+  ))}
+</div>
+
+<style>
+  .link-card-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  }
+
+  @media (max-width: 960px) {
+    .link-card-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .link-card-grid {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+  }
+
+  .link-card {
+    border-radius: 1.25rem;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    background: rgba(255, 255, 255, 0.85);
+  }
+
+  .link-card-grid--muted .link-card {
+    background: rgba(226, 232, 240, 0.35);
+  }
+
+  .link-card-grid--subtle .link-card {
+    background: rgba(248, 250, 252, 0.6);
+  }
+
+  .link-card__body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .link-card__title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: rgba(15, 23, 42, 0.95);
+  }
+
+  .link-card__description {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(71, 85, 105, 0.9);
+  }
+
+  .link-card__link {
+    margin-top: 0.2rem;
+    font-size: 0.9rem;
+    color: #1d4ed8;
+    text-decoration: none;
+  }
+
+  .link-card__link:hover,
+  .link-card__link:focus-visible {
+    text-decoration: underline;
+  }
+</style>

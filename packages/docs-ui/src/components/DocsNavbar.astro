@@ -1,45 +1,65 @@
 ---
-import DocsSearch from '@kitgrid/docs-ui/components/DocsSearch.astro';
-import sidebarToggleScript from '../scripts/sidebar-toggle.js?url';
+import DocsSearch from './DocsSearch.astro';
 
-const links = [
-  { label: 'Quickstart', href: '/docs/quickstart/' },
-  { label: 'CLI', href: '/docs/cli/' },
-  { label: 'API', href: '/docs/api/' },
-  { label: 'Install', href: '/docs/install/' },
-];
-const pagefindRemoteSrc = import.meta.env.DEV ? 'https://pydantic-fixturegen.kitgrid.dev/pagefind/pagefind.js' : undefined;
----
+interface NavLink {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  logoSrc: string;
+  logoAlt?: string;
+  title: string;
+  links: NavLink[];
+  repoUrl?: string;
+  homeHref?: string;
+  searchRemoteSrc?: string;
+}
+
+const {
+  logoSrc,
+  logoAlt = 'Project logo',
+  title,
+  links = [],
+  repoUrl,
+  homeHref = '/',
+  searchRemoteSrc,
+} = Astro.props;
 ---
 
-<header class="pf-nav" role="banner">
-  <div class="pf-nav__inner">
-    <a class="pf-nav__brand" href="/">
+<header class="docs-nav" role="banner">
+  <div class="docs-nav__inner">
+    <a class="docs-nav__brand" href={homeHref}>
       <img
-        class="pf-nav__logo"
-        src="/assets/pydantic-fixturegen-logo.png"
+        class="docs-nav__logo"
+        src={logoSrc}
         width="40"
         height="40"
-        alt="Pydantic Fixturegen logo"
+        alt={logoAlt}
         loading="lazy"
         decoding="async"
       />
-      <span class="pf-nav__title">pydantic-fixturegen</span>
+      <span class="docs-nav__title">{title}</span>
     </a>
 
-    <nav aria-label="Primary" class="pf-nav__links">
+    <nav aria-label="Primary" class="docs-nav__links">
       {links.map((link) => (
-        <a class="pf-nav__link" href={link.href}>
+        <a class="docs-nav__link" href={link.href}>
           {link.label}
         </a>
       ))}
+      {repoUrl && (
+        <a class="docs-nav__link docs-nav__link--repo" href={repoUrl} target="_blank" rel="noreferrer">
+          GitHub ↗
+        </a>
+      )}
     </nav>
 
-    <div class="pf-nav__search">
-      <DocsSearch remoteSrc={pagefindRemoteSrc} />
+    <div class="docs-nav__search">
+      <DocsSearch remoteSrc={searchRemoteSrc} />
     </div>
 
-    <button class="pf-nav__menu-button" type="button" data-sidebar-toggle aria-label="Toggle navigation">
+    <button class="docs-nav__menu-button" type="button" data-sidebar-toggle aria-label="Toggle navigation">
       <span></span>
       <span></span>
       <span></span>
@@ -48,7 +68,7 @@ const pagefindRemoteSrc = import.meta.env.DEV ? 'https://pydantic-fixturegen.kit
 </header>
 
 <style>
-  .pf-nav {
+  .docs-nav {
     position: fixed;
     top: 0;
     z-index: 30;
@@ -58,7 +78,7 @@ const pagefindRemoteSrc = import.meta.env.DEV ? 'https://pydantic-fixturegen.kit
     width: 100%;
   }
 
-  .pf-nav__inner {
+  .docs-nav__inner {
     margin: 0 auto;
     padding: 1rem clamp(1rem, 4vw, 2.5rem);
     display: flex;
@@ -66,7 +86,7 @@ const pagefindRemoteSrc = import.meta.env.DEV ? 'https://pydantic-fixturegen.kit
     gap: 1.25rem;
   }
 
-  .pf-nav__brand {
+  .docs-nav__brand {
     display: inline-flex;
     align-items: center;
     gap: 0.65rem;
@@ -78,12 +98,12 @@ const pagefindRemoteSrc = import.meta.env.DEV ? 'https://pydantic-fixturegen.kit
   }
 
   @media (max-width: 1024px) {
-    .pf-nav__brand {
+    .docs-nav__brand {
       width: auto;
     }
   }
 
-  .pf-nav__logo {
+  .docs-nav__logo {
     display: block;
     width: 40px;
     height: 40px;
@@ -95,11 +115,11 @@ const pagefindRemoteSrc = import.meta.env.DEV ? 'https://pydantic-fixturegen.kit
     box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
   }
 
-  .pf-nav__title {
+  .docs-nav__title {
     font-size: 1rem;
   }
 
-  .pf-nav__links {
+  .docs-nav__links {
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -108,7 +128,7 @@ const pagefindRemoteSrc = import.meta.env.DEV ? 'https://pydantic-fixturegen.kit
     justify-content: center;
   }
 
-  .pf-nav__link {
+  .docs-nav__link {
     font-size: 0.9rem;
     color: rgba(15, 23, 42, 0.8);
     text-decoration: none;
@@ -117,13 +137,17 @@ const pagefindRemoteSrc = import.meta.env.DEV ? 'https://pydantic-fixturegen.kit
     transition: color 150ms ease, background 150ms ease;
   }
 
-  .pf-nav__link:hover,
-  .pf-nav__link:focus-visible {
+  .docs-nav__link:hover,
+  .docs-nav__link:focus-visible {
     color: #1d4ed8;
     background: rgba(29, 78, 216, 0.08);
   }
 
-  .pf-nav__search {
+  .docs-nav__link--repo {
+    font-weight: 600;
+  }
+
+  .docs-nav__search {
     flex: 1 1 320px;
     max-width: 380px;
     transition:
@@ -131,12 +155,12 @@ const pagefindRemoteSrc = import.meta.env.DEV ? 'https://pydantic-fixturegen.kit
       max-width 200ms ease;
   }
 
-  .pf-nav__search:focus-within {
+  .docs-nav__search:focus-within {
     flex-basis: 720px;
     max-width: min(720px, 100%);
   }
 
-  .pf-nav__menu-button {
+  .docs-nav__menu-button {
     display: none;
     width: 44px;
     height: 44px;
@@ -150,7 +174,7 @@ const pagefindRemoteSrc = import.meta.env.DEV ? 'https://pydantic-fixturegen.kit
     cursor: pointer;
   }
 
-  .pf-nav__menu-button span {
+  .docs-nav__menu-button span {
     display: block;
     width: 18px;
     height: 2px;
@@ -158,24 +182,22 @@ const pagefindRemoteSrc = import.meta.env.DEV ? 'https://pydantic-fixturegen.kit
   }
 
   @media (max-width: 1024px) {
-    .pf-nav__inner {
+    .docs-nav__inner {
       flex-wrap: wrap;
       gap: 0.75rem 1rem;
     }
 
-    .pf-nav__links {
+    .docs-nav__links {
       display: none;
     }
 
-    .pf-nav__search {
+    .docs-nav__search {
       display: none;
     }
 
-    .pf-nav__menu-button {
+    .docs-nav__menu-button {
       display: inline-flex;
       margin-left: auto;
     }
   }
 </style>
-
-<script type="module" src={sidebarToggleScript}></script>

@@ -1,0 +1,92 @@
+---
+interface Props {
+  repoUrl: string;
+  repoLabel?: string;
+  ctaLabel?: string;
+  badge?: string;
+}
+
+const {
+  repoUrl,
+  repoLabel = repoUrl.replace('https://', ''),
+  ctaLabel = 'View repository',
+  badge = 'GitHub repository',
+} = Astro.props;
+---
+
+<div class="repo-banner">
+  <div class="repo-banner__copy">
+    <p class="repo-banner__badge">{badge}</p>
+    <a class="repo-banner__link" href={repoUrl} target="_blank" rel="noreferrer">
+      {repoLabel}
+      <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+  <a class="repo-banner__cta" href={repoUrl} target="_blank" rel="noreferrer">
+    {ctaLabel}
+  </a>
+</div>
+
+<style>
+  .repo-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-radius: 1.25rem;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow:
+      0 10px 30px rgba(15, 23, 42, 0.08),
+      0 1px 3px rgba(15, 23, 42, 0.08);
+  }
+
+  .repo-banner__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .repo-banner__badge {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    color: rgba(15, 23, 42, 0.45);
+    margin: 0;
+  }
+
+  .repo-banner__link {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1d4ed8;
+    text-decoration: none;
+    display: inline-flex;
+    gap: 0.35rem;
+    align-items: center;
+  }
+
+  .repo-banner__link span {
+    font-size: 0.9em;
+  }
+
+  .repo-banner__cta {
+    border: 1px solid rgba(15, 23, 42, 0.2);
+    padding: 0.55rem 1.1rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(15, 23, 42, 0.85);
+    text-decoration: none;
+    transition:
+      background 150ms ease,
+      color 150ms ease;
+  }
+
+  .repo-banner__cta:hover,
+  .repo-banner__cta:focus-visible {
+    background: rgba(29, 78, 216, 0.08);
+    color: #1d4ed8;
+  }
+</style>

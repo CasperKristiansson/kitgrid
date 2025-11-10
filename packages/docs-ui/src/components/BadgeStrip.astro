@@ -1,0 +1,60 @@
+---
+interface Badge {
+  src: string;
+  alt: string;
+  href?: string;
+}
+
+interface Props {
+  badges: Badge[];
+}
+
+const { badges = [] } = Astro.props;
+---
+
+<div class="badge-strip">
+  {
+    badges.map((badge) => {
+      const image = (
+        <img
+          src={badge.src}
+          alt={badge.alt}
+          loading="lazy"
+          decoding="async"
+          class="badge-strip__image"
+        />
+      );
+      return badge.href ? (
+        <a class="badge-strip__link" href={badge.href} target="_blank" rel="noreferrer">
+          {image}
+        </a>
+      ) : (
+        <span class="badge-strip__link">{image}</span>
+      );
+    })
+  }
+</div>
+
+<style>
+  .badge-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  .badge-strip__link {
+    display: inline-flex;
+    align-items: center;
+    transition: opacity 120ms ease;
+  }
+
+  .badge-strip__link:hover,
+  .badge-strip__link:focus-visible {
+    opacity: 0.85;
+  }
+
+  .badge-strip__image {
+    height: 28px;
+  }
+</style>

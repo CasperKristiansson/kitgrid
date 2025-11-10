@@ -1,6 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import DocsLayout from '@kitgrid/docs-ui/components/DocsLayout.astro';
+import RepoBanner from '@kitgrid/docs-ui/components/RepoBanner.astro';
+import BadgeStrip from '@kitgrid/docs-ui/components/BadgeStrip.astro';
+import LinkCardGrid from '@kitgrid/docs-ui/components/LinkCardGrid.astro';
+import LinkList from '@kitgrid/docs-ui/components/LinkList.astro';
 import { docsNav } from '../data/docsNav';
 import { project } from '../data/project';
 
@@ -44,30 +48,12 @@ const homepageSchema = {
   >
     <section id="overview" class="space-y-4">
       <p class="pill">Deterministic fixtures</p>
-      <div class="border-base-200 bg-base-100/80 flex flex-wrap items-center justify-between gap-4 rounded-2xl border p-4 shadow-sm">
-        <div class="space-y-1">
-          <p class="text-base-content/60 text-xs tracking-[0.4em] uppercase">
-            GitHub repository
-          </p>
-          <a
-            class="text-lg font-semibold text-primary flex items-center gap-2"
-            href="https://github.com/CasperKristiansson/pydantic-fixturegen"
-            target="_blank"
-            rel="noreferrer"
-          >
-            CasperKristiansson/pydantic-fixturegen
-            <span aria-hidden="true">↗</span>
-          </a>
-        </div>
-        <a
-          class="btn btn-outline btn-sm"
-          href="https://github.com/CasperKristiansson/pydantic-fixturegen"
-          target="_blank"
-          rel="noreferrer"
-        >
-          View on GitHub
-        </a>
-      </div>
+      <RepoBanner
+        repoUrl="https://github.com/CasperKristiansson/pydantic-fixturegen"
+        repoLabel="CasperKristiansson/pydantic-fixturegen"
+        badge="GitHub repository"
+        ctaLabel="View on GitHub"
+      />
       <h2 class="text-3xl font-semibold">Pydantic Fixturegen: deterministic test data, emitters, and diagnostics</h2>
       <p class="text-base-content/80 leading-relaxed">
         Pydantic Fixturegen exists to remove the guesswork from building test data for Pydantic v2 models.
@@ -76,67 +62,48 @@ const homepageSchema = {
         to the deep dives on discovery internals, command guides, providers, seed policies, and integrations with FastAPI,
         pytest, and Pluggy-based workflows.
       </p>
-      <div class="flex flex-wrap items-center gap-3">
-        <a
-          href="https://pypi.org/project/pydantic-fixturegen/"
-          target="_blank"
-          rel="noreferrer"
-          class="hover:opacity-90"
-        >
-          <img
-            src="https://img.shields.io/pypi/v/pydantic-fixturegen.svg"
-            alt="PyPI version"
-            loading="lazy"
-            decoding="async"
-          />
-        </a>
-        <img
-          src="https://img.shields.io/pypi/pyversions/pydantic-fixturegen.svg"
-          alt="Supported Python versions"
-          loading="lazy"
-          decoding="async"
-        />
-        <img
-          src="https://img.shields.io/badge/License-MIT-blue.svg"
-          alt="License: MIT"
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
+      <BadgeStrip
+        badges={[
+          {
+            href: 'https://pypi.org/project/pydantic-fixturegen/',
+            src: 'https://img.shields.io/pypi/v/pydantic-fixturegen.svg',
+            alt: 'PyPI version',
+          },
+          {
+            src: 'https://img.shields.io/pypi/pyversions/pydantic-fixturegen.svg',
+            alt: 'Supported Python versions',
+          },
+          {
+            src: 'https://img.shields.io/badge/License-MIT-blue.svg',
+            alt: 'License: MIT',
+          },
+        ]}
+      />
       <div class="flex flex-wrap gap-3">
         <a class="btn btn-primary" href="/docs/quickstart">Run the quickstart</a>
         <a class="btn btn-outline" href="/docs/commands/">Explore command guides</a>
         <a class="btn btn-outline" href="/docs/features">See the feature tour</a>
       </div>
-      <div class="grid gap-4 md:grid-cols-3">
-        <article class="card bg-base-200/40 border border-base-200">
-          <div class="card-body space-y-2">
-            <h3 class="card-title text-lg">Why Fixturegen exists</h3>
-            <p class="text-sm text-base-content/70">
-              Teams shipping Pydantic APIs need deterministic fixtures for regression tests, data contracts, and CI diffs.
-              Fixturegen automates discovery, checks for missing providers, and writes emitters that match production schemas.
-            </p>
-          </div>
-        </article>
-        <article class="card bg-base-200/40 border border-base-200">
-          <div class="card-body space-y-2">
-            <h3 class="card-title text-lg">Who should use it</h3>
-            <p class="text-sm text-base-content/70">
-              Python engineers maintaining FastAPI, Django, or microservices built on Pydantic v2.
-              If you need reproducible JSON, pytest fixtures, schema exports, or seed locks, Fixturegen provides the CLI plumbing.
-            </p>
-          </div>
-        </article>
-        <article class="card bg-base-200/40 border border-base-200">
-          <div class="card-body space-y-2">
-            <h3 class="card-title text-lg">What you’ll learn here</h3>
-            <p class="text-sm text-base-content/70">
-              Navigate command references, configuration guides, cookbook recipes, provider internals, and quality guardrails.
-              Every page in this documentation explains how to extend Fixturegen, wire emitters into CI, and debug discovery gaps.
-            </p>
-          </div>
-        </article>
-      </div>
+      <LinkCardGrid
+        tone="muted"
+        cards={[
+          {
+            title: 'Why Fixturegen exists',
+            description:
+              'Deterministic fixtures for regression tests, data contracts, and CI diffs without hand-rolled scripts.',
+          },
+          {
+            title: 'Who should use it',
+            description:
+              'Python teams building FastAPI, Django, or microservices that need reproducible JSON, pytest fixtures, schema exports.',
+          },
+          {
+            title: 'What you’ll learn',
+            description:
+              'Command guides, configuration, cookbook recipes, provider internals, quality guardrails, and CI integrations.',
+          },
+        ]}
+      />
     </section>
 
     <section id="first-pass" class="space-y-4">
@@ -145,29 +112,29 @@ const homepageSchema = {
         Jump into the CLI, pick your install strategy, and skim the feature tour before
         automating discovery or emitters. These guides explain how Fixturegen plugs into real-world CI and observability stacks.
       </p>
-      <div class="grid gap-4 md:grid-cols-3">
-        <article class="card bg-base-200/40 border border-base-200">
-          <div class="card-body">
-            <h3 class="card-title text-lg">Quickstart</h3>
-            <p class="text-base-content/70 text-sm">Generate JSON + fixtures end to end.</p>
-            <a class="link link-primary" href="/docs/quickstart">Open guide ↗</a>
-          </div>
-        </article>
-        <article class="card bg-base-200/40 border border-base-200">
-          <div class="card-body">
-            <h3 class="card-title text-lg">Install</h3>
-            <p class="text-base-content/70 text-sm">pip, Poetry, Hatch, extras, watch mode.</p>
-            <a class="link link-primary" href="/docs/install">Install instructions ↗</a>
-          </div>
-        </article>
-        <article class="card bg-base-200/40 border border-base-200">
-          <div class="card-body">
-            <h3 class="card-title text-lg">Feature tour</h3>
-            <p class="text-base-content/70 text-sm">Discovery, emitters, diagnostics overview.</p>
-            <a class="link link-primary" href="/docs/features">See tour ↗</a>
-          </div>
-        </article>
-      </div>
+      <LinkCardGrid
+        tone="neutral"
+        cards={[
+          {
+            title: 'Quickstart',
+            description: 'Generate JSON + fixtures end to end.',
+            href: '/docs/quickstart',
+            linkLabel: 'Open guide ↗',
+          },
+          {
+            title: 'Install',
+            description: 'pip, Poetry, Hatch, extras, watch mode.',
+            href: '/docs/install',
+            linkLabel: 'Install instructions ↗',
+          },
+          {
+            title: 'Feature tour',
+            description: 'Discovery, emitters, diagnostics overview.',
+            href: '/docs/features',
+            linkLabel: 'See tour ↗',
+          },
+        ]}
+      />
     </section>
 
     <section id="daily-workflows" class="space-y-4">
@@ -176,12 +143,18 @@ const homepageSchema = {
         Reference the CLI, centralized configuration, and cookbook recipes whenever you
         extend discovery or add emitters. Each link below takes you directly into the workflow-focused docs so new contributors can onboard fast.
       </p>
-      <ul class="space-y-2 text-base-content/80">
-        <li><a class="link" href="/docs/cli">CLI reference</a> — commands, flags, and watch mode.</li>
-        <li><a class="link" href="/docs/configuration">Configuration reference</a> — precedence, defaults, environment overrides.</li>
-        <li><a class="link" href="/docs/cookbook">Cookbook</a> — repeatable recipes for emitters, providers, seeds.</li>
-        <li><a class="link" href="/docs/discovery">Discovery guide</a> — AST vs safe import, sandboxing, policies.</li>
-      </ul>
+      <LinkList
+        items={[
+          { href: '/docs/cli', label: 'CLI reference', description: 'Commands, flags, watch mode.' },
+          {
+            href: '/docs/configuration',
+            label: 'Configuration reference',
+            description: 'Precedence, defaults, environment overrides.',
+          },
+          { href: '/docs/cookbook', label: 'Cookbook', description: 'Repeatable recipes for emitters, providers, seeds.' },
+          { href: '/docs/discovery', label: 'Discovery guide', description: 'AST vs safe import, sandboxing, policies.' },
+        ]}
+      />
     </section>
 
     <section id="quality-systems" class="space-y-4">
@@ -190,29 +163,29 @@ const homepageSchema = {
         Use doctor, testing helpers, and seed/preset policies to keep fixtures deterministic
         and auditable.
       </p>
-      <div class="grid gap-4 md:grid-cols-3">
-        <article class="card bg-base-200/30 border border-base-200">
-          <div class="card-body">
-            <h3 class="card-title text-lg">Doctor & diagnostics</h3>
-            <p class="text-sm text-base-content/70">Coverage diff, CLI guardrails, snapshots.</p>
-            <a class="link link-primary" href="/docs/doctor">Open doctor ↗</a>
-          </div>
-        </article>
-        <article class="card bg-base-200/30 border border-base-200">
-          <div class="card-body">
-            <h3 class="card-title text-lg">Testing helpers</h3>
-            <p class="text-sm text-base-content/70">pytest snapshot plugin + CLI hooks.</p>
-            <a class="link link-primary" href="/docs/testing">See helpers ↗</a>
-          </div>
-        </article>
-        <article class="card bg-base-200/30 border border-base-200">
-          <div class="card-body">
-            <h3 class="card-title text-lg">Seeds & presets</h3>
-            <p class="text-sm text-base-content/70">Freeze seeds, manage probability policies.</p>
-            <a class="link link-primary" href="/docs/seeds">Manage seeds ↗</a>
-          </div>
-        </article>
-      </div>
+      <LinkCardGrid
+        tone="muted"
+        cards={[
+          {
+            title: 'Doctor & diagnostics',
+            description: 'Coverage diff, CLI guardrails, snapshots.',
+            href: '/docs/doctor',
+            linkLabel: 'Open doctor ↗',
+          },
+          {
+            title: 'Testing helpers',
+            description: 'pytest snapshot plugin + CLI hooks.',
+            href: '/docs/testing',
+            linkLabel: 'See helpers ↗',
+          },
+          {
+            title: 'Seeds & presets',
+            description: 'Freeze seeds, manage probability policies.',
+            href: '/docs/seeds',
+            linkLabel: 'Manage seeds ↗',
+          },
+        ]}
+      />
     </section>
 
     <section id="reference" class="space-y-4">
@@ -220,26 +193,30 @@ const homepageSchema = {
       <p class="text-base-content/70">
         Keep these close for API signatures, templated paths, and troubleshooting.
       </p>
-      <div class="grid gap-4 md:grid-cols-2">
-        <article class="card bg-base-200/20 border border-base-200">
-          <div class="card-body">
-            <h3 class="card-title text-lg">API reference</h3>
-            <p class="text-sm text-base-content/70">`generate_json`, `generate_fixtures`, schema emitters.</p>
-            <a class="link link-primary" href="/docs/api">View API ↗</a>
-          </div>
-        </article>
-        <article class="card bg-base-200/20 border border-base-200">
-          <div class="card-body">
-            <h3 class="card-title text-lg">Output paths + security</h3>
-            <p class="text-sm text-base-content/70">Templated destinations, sandbox policies, troubleshooting.</p>
-            <div class="flex gap-4 text-sm">
-              <a class="link link-primary" href="/docs/output-paths">Output paths ↗</a>
-              <a class="link link-primary" href="/docs/security">Security ↗</a>
-              <a class="link link-primary" href="/docs/troubleshooting">Troubleshooting ↗</a>
-            </div>
-          </div>
-        </article>
-      </div>
+      <LinkCardGrid
+        columns={2}
+        tone="subtle"
+        cards={[
+          {
+            title: 'API reference',
+            description: '`generate_json`, `generate_fixtures`, schema emitters.',
+            href: '/docs/api',
+            linkLabel: 'View API ↗',
+          },
+          {
+            title: 'Output paths + security',
+            description: 'Templated destinations, sandbox policies, troubleshooting.',
+            href: '/docs/output-paths',
+            linkLabel: 'Output paths ↗',
+          },
+          {
+            title: 'Security & troubleshooting',
+            description: 'Runbooks for sandbox policies, doctor failures, CLI diagnostics.',
+            href: '/docs/security',
+            linkLabel: 'Security guides ↗',
+          },
+        ]}
+      />
     </section>
   </DocsLayout>
 </BaseLayout>

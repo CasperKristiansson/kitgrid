@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import Navbar from '../components/Navbar.astro';
+import DocsNavbar from '@kitgrid/docs-ui/components/DocsNavbar.astro';
 
 interface Props {
   title?: string;
@@ -83,9 +83,21 @@ const csp = [
     <link rel="icon" type="image/png" sizes="128x128" href="/favicon.png" />
   </head>
   <body data-theme="pydantic-fixturegen">
-    <Navbar />
+    <DocsNavbar
+      title="pydantic-fixturegen"
+      logoSrc="/assets/pydantic-fixturegen-logo.png"
+      logoAlt="Pydantic Fixturegen logo"
+      repoUrl="https://github.com/CasperKristiansson/pydantic-fixturegen"
+      links={[
+        { label: 'Quickstart', href: '/docs/quickstart/' },
+        { label: 'CLI', href: '/docs/cli/' },
+        { label: 'API', href: '/docs/api/' },
+        { label: 'Install', href: '/docs/install/' },
+      ]}
+      searchRemoteSrc={import.meta.env.DEV ? 'https://pydantic-fixturegen.kitgrid.dev/pagefind/pagefind.js' : undefined}
+    />
     <main>
-      <slot />
+    <slot />
     </main>
   </body>
 </html>

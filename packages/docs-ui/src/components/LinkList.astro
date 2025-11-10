@@ -1,0 +1,46 @@
+---
+interface LinkItem {
+  href: string;
+  label: string;
+  description?: string;
+}
+
+interface Props {
+  items: LinkItem[];
+}
+
+const { items = [] } = Astro.props;
+---
+
+<ul class="link-list">
+  {items.map((item) => (
+    <li>
+      <a class="link" href={item.href}>
+        {item.label}
+      </a>
+      {item.description && (
+        <span class="link-list__description"> — {item.description}</span>
+      )}
+    </li>
+  ))}
+</ul>
+
+<style>
+  .link-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: rgba(51, 65, 85, 0.92);
+  }
+
+  .link-list li {
+    font-size: 0.95rem;
+  }
+
+  .link-list__description {
+    color: rgba(71, 85, 105, 0.9);
+  }
+</style>
