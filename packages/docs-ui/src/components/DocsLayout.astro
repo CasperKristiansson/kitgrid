@@ -27,11 +27,16 @@ const {
   editHref,
   versionLabel = 'latest',
 } = Astro.props;
+const currentPath = Astro.url?.pathname ?? '/';
 ---
 
 <section class="docs-layout">
-  <aside class="docs-layout__sidebar">
-    <DocsSidebarNav items={navItems} />
+  <div class="docs-layout__overlay" data-sidebar-dismiss></div>
+  <aside class="docs-layout__sidebar" data-sidebar-panel>
+    <button class="docs-sidebar__close" type="button" data-sidebar-dismiss aria-label="Close navigation">
+      ✕
+    </button>
+    <DocsSidebarNav items={navItems} currentPath={currentPath} />
   </aside>
   <article class="docs-layout__content">
     <header class="docs-layout__header">
@@ -71,6 +76,10 @@ const {
     padding: clamp(1rem, 3vw, 2.5rem) 0 4rem;
   }
 
+  .docs-layout__overlay {
+    display: none;
+  }
+
   .docs-layout__sidebar {
     position: fixed;
     top: 0;
@@ -81,6 +90,10 @@ const {
     border-right: 1px solid rgba(15, 23, 42, 0.12);
     background: var(--theme-bg);
     overflow-y: auto;
+  }
+
+  .docs-sidebar__close {
+    display: none;
   }
 
   .docs-layout__header {
@@ -119,13 +132,14 @@ const {
     color: var(--theme-link);
   }
 
+  .docs-layout__content :global(hr) {
+    margin: 3rem 0;
+    border: none;
+    border-top: 1px solid rgba(15, 23, 42, 0.12);
+  }
+
   .docs-layout__toc {
-    position: sticky;
-    top: 37px;
-    height: calc(100vh - 6rem);
-    padding-left: 1.5rem;
-    border-left: 1px solid rgba(15, 23, 42, 0.12);
-    overflow-y: auto;
+    display: none;
   }
 
   .docs-layout__edit {
@@ -151,17 +165,52 @@ const {
     }
 
     .docs-layout__sidebar {
-      position: static;
-      width: 100%;
-      height: auto;
-      border-right: none;
-      border-bottom: 1px solid rgba(15, 23, 42, 0.12);
-      padding-bottom: 1rem;
-      margin-bottom: 1rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: min(80vw, 360px);
+      height: 100vh;
+      border-right: 1px solid rgba(15, 23, 42, 0.12);
+      border-bottom: none;
+      padding: 4.5rem 1rem 2rem;
+      margin: 0;
+      transform: translateX(-100%);
+      transition: transform 200ms ease;
+      z-index: 50;
+      background: var(--theme-bg);
     }
 
-    .docs-layout__toc {
+    .docs-sidebar__close {
+      display: inline-flex;
+      position: absolute;
+      top: 1.25rem;
+      right: 1rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      border: 1px solid rgba(15, 23, 42, 0.15);
+      background: rgba(255, 255, 255, 0.85);
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .pf-sidebar-open .docs-layout__sidebar {
+      transform: translateX(0);
+    }
+
+    .docs-layout__overlay {
       display: none;
+    }
+
+    .pf-sidebar-open .docs-layout__overlay {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 15, 0.45);
+      backdrop-filter: blur(2px);
+      z-index: 45;
     }
 
     .docs-layout__meta {
@@ -228,6 +277,42 @@ const {
 
   :global(.docs-list li + li) {
     margin-top: 0.35rem;
+  }
+
+  :global(.docs-table) {
+    width: 100%;
+    margin: 1.5rem 0;
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    border-radius: 1rem;
+    overflow-x: auto;
+    background: rgba(255, 255, 255, 0.65);
+  }
+
+  :global(.docs-table table) {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 500px;
+  }
+
+  :global(.docs-table th),
+  :global(.docs-table td) {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    font-size: 0.95rem;
+  }
+
+  :global(.docs-table th) {
+    font-weight: 600;
+    color: var(--theme-text);
+    background: rgba(15, 23, 42, 0.04);
+  }
+
+  :global(.docs-table tr:last-child td) {
+    border-bottom: none;
+  }
+
+  :global(.docs-table code) {
+    font-size: 0.9em;
   }
 </style>
 

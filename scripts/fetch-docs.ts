@@ -167,7 +167,11 @@ function normalizeLanguage(info?: string) {
 function formatInlineMarkdown(text: string) {
   const escaped = escapeHtml(text.trim());
   const withLinks = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-  return withLinks.replace(/`([^`]+)`/g, '<code>$1</code>');
+  const withCode = withLinks.replace(/`([^`]+)`/g, '<code>$1</code>');
+  const withStrong = withCode
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/__([^_]+)__/g, '<strong>$1</strong>');
+  return withStrong;
 }
 
 function renderCustomList(items: string[], indent: string) {
@@ -203,6 +207,92 @@ function wrapCustomLists(markdown: string) {
     result.push(line);
   }
   flush();
+
+  return result.join('\n');
+}
+
+function isTableRow(line: string) {
+  return /^\s*\|.*\|\s*$/.test(line.trim());
+}
+
+function isTableSeparator(line: string) {
+  const trimmed = line.trim();
+  if (!trimmed.startsWith('|') || !trimmed.endsWith('|')) return false;
+  return trimmed
+    .slice(1, -1)
+    .split('|')
+    .every((cell) => /^:?[-]{3,}:?$/.test(cell.trim()));
+}
+
+function parseTableRow(line: string) {
+  return line
+    .trim()
+    .replace(/^\|/, '')
+    .replace(/\|$/, '')
+    .split('|')
+    .map((cell) => cell.trim());
+}
+
+function parseAlignments(line: string, count: number) {
+  const raw = parseTableRow(line);
+  return raw.slice(0, count).map((cell) => {
+    const starts = cell.startsWith(':');
+    const ends = cell.endsWith(':');
+    if (starts && ends) return 'center';
+    if (ends) return 'right';
+    if (starts) return 'left';
+    return undefined;
+  });
+}
+
+function renderTable(headers: string[], rows: string[][], alignments: (string | undefined)[], indent: string) {
+  const mapCells = (cells: string[], tag: 'th' | 'td') =>
+    cells
+      .map((cell, idx) => {
+        const align = alignments[idx];
+        const style = align ? ` style="text-align:${align}"` : '';
+        return `${indent}      <${tag}${style}>${formatInlineMarkdown(cell)}</${tag}>`;
+      })
+      .join('\n');
+
+  const thead = `${indent}    <thead>\n${indent}    <tr>\n${mapCells(headers, 'th')}\n${indent}    </tr>\n${indent}    </thead>`;
+  const tbodyRows = rows
+    .map((row) => `${indent}    <tr>\n${mapCells(row, 'td')}\n${indent}    </tr>`)
+    .join('\n');
+  const tbody = `${indent}    <tbody>\n${tbodyRows}\n${indent}    </tbody>`;
+
+  return (
+    `${indent}<div class="docs-table" tabindex="0">\n` +
+    `${indent}  <table>\n` +
+    `${thead}\n` +
+    `${tbody}\n` +
+    `${indent}  </table>\n` +
+    `${indent}</div>`
+  );
+}
+
+function wrapTables(markdown: string) {
+  const lines = markdown.split('\n');
+  const result: string[] = [];
+
+  for (let i = 0; i < lines.length; ) {
+    const line = lines[i];
+    if (isTableRow(line) && i + 1 < lines.length && isTableSeparator(lines[i + 1])) {
+      const indent = line.match(/^\s*/)?.[0] ?? '';
+      const headers = parseTableRow(line);
+      const alignments = parseAlignments(lines[i + 1], headers.length);
+      i += 2;
+      const rows: string[][] = [];
+      while (i < lines.length && isTableRow(lines[i])) {
+        rows.push(parseTableRow(lines[i]));
+        i += 1;
+      }
+      result.push(renderTable(headers, rows, alignments, indent));
+      continue;
+    }
+    result.push(line);
+    i += 1;
+  }
 
   return result.join('\n');
 }
@@ -251,8 +341,7 @@ function transformDocs(dir: string) {
       }
       if (!/\.(md|mdx)$/i.test(entry.name)) continue;
       const original = readFileSync(fullPath, 'utf8');
-      if (!original.includes('```')) continue;
-      const transformed = wrapCustomLists(wrapCodeBlocks(original));
+      const transformed = wrapTables(wrapCustomLists(wrapCodeBlocks(original)));
       if (transformed !== original) {
         writeFileSync(fullPath, transformed);
       }

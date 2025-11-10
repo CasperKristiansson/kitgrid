@@ -3,19 +3,40 @@ import type { DocsNavItem } from '../types';
 
 interface Props {
   items: DocsNavItem[];
+  currentPath?: string;
 }
 
-const { items = [] } = Astro.props;
+const normalizePath = (value?: string) => {
+  if (!value) return '/';
+  try {
+    const [path] = value.split(/[?#]/);
+    const trimmed = path.replace(/\/+$/, '');
+    return trimmed || '/';
+  } catch {
+    return '/';
+  }
+};
+
+const { items = [], currentPath = '' } = Astro.props;
+const activePath = normalizePath(currentPath);
+const isActive = (href: string) => normalizePath(href) === activePath;
 ---
 
 <nav class="docs-nav" aria-label="Docs sections">
   <div class="nav-groups">
     {
-      items.map((item) => (
-        item.children?.length ? (
+      items.map((item) => {
+        const parentPath = normalizePath(item.href);
+        const hasChildSamePath =
+          item.children?.some((child) => normalizePath(child.href) === parentPath) ?? false;
+        return item.children?.length ? (
           <details class="nav-group" open>
             <summary>
-              <a href={item.href} class="nav-link">
+              <a
+                href={item.href}
+                class="nav-link"
+                aria-current={isActive(item.href) && !hasChildSamePath ? 'page' : undefined}
+              >
                 {item.title}
               </a>
               <svg
@@ -35,7 +56,11 @@ const { items = [] } = Astro.props;
             </summary>
             <div class="nav-children">
               {item.children.map((child) => (
-                <a href={child.href} class="nav-link nav-link-child">
+                <a
+                  href={child.href}
+                  class="nav-link nav-link-child"
+                  aria-current={isActive(child.href) ? 'page' : undefined}
+                >
                   {child.title}
                 </a>
               ))}
@@ -43,12 +68,16 @@ const { items = [] } = Astro.props;
           </details>
         ) : (
           <div class="nav-group nav-group--single">
-            <a href={item.href} class="nav-link">
+            <a
+              href={item.href}
+              class="nav-link"
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
               {item.title}
             </a>
           </div>
-        )
-      ))
+        );
+      })
     }
   </div>
 </nav>
@@ -57,6 +86,7 @@ const { items = [] } = Astro.props;
   .docs-nav {
     position: sticky;
     overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .nav-groups {
@@ -82,6 +112,8 @@ const { items = [] } = Astro.props;
     cursor: pointer;
     list-style: none;
     padding-right: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .nav-group > summary::-webkit-details-marker {
@@ -112,7 +144,7 @@ const { items = [] } = Astro.props;
   }
 
   .nav-link {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 0.5rem;
     color: var(--theme-text);
@@ -120,23 +152,25 @@ const { items = [] } = Astro.props;
     font-weight: 600;
     letter-spacing: 0.01em;
     text-decoration: none;
-    padding: 0.2rem 0.3rem;
-    border-radius: 0.75rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 0.85rem;
     transition:
-      color 140ms ease,
-      transform 140ms ease,
-      background 140ms ease;
-    position: relative;
+      color 150ms ease,
+      background 150ms ease,
+      transform 150ms ease;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .nav-link:hover,
   .nav-link:focus-visible {
     color: var(--theme-link);
+    background: rgba(29, 78, 216, 0.08);
     transform: translateX(2px);
   }
 
   .nav-link[aria-current='page'] {
-    background: rgba(29, 78, 216, 0.12);
+    background: rgba(29, 78, 216, 0.16);
     color: var(--theme-link);
   }
 
@@ -145,23 +179,6 @@ const { items = [] } = Astro.props;
     font-size: 0.85rem;
     font-weight: 500;
     letter-spacing: 0;
-  }
-
-  .nav-link::before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    border-radius: 999px;
-    background: var(--theme-link);
-    opacity: 0;
-    transform: scale(0.5);
-    transition: opacity 140ms ease, transform 140ms ease;
-  }
-
-  .nav-link:hover::before,
-  .nav-link:focus-visible::before {
-    opacity: 1;
-    transform: scale(1);
   }
 
   @media (max-width: 1024px) {

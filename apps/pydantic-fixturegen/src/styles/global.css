@@ -133,11 +133,10 @@
     content: '';
     position: absolute;
     top: 1.1rem;
-    left: 1.5rem;
+    left: 0rem;
     right: 1.5rem;
     height: 2.1rem;
     border-radius: 1rem;
-    background: #e3e7ef;
     z-index: 0;
   }
 
