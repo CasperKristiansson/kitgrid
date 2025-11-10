@@ -25,6 +25,7 @@ interface CliArgs {
   docsPath?: string;
   repo?: string;
   registryPath?: string;
+  docsBaseUrl?: string;
 }
 
 type RegistryEntry = (typeof registry)[number];
@@ -42,6 +43,12 @@ interface CacheMetadata {
 const CACHE_ROOT = resolve('.kitgrid-cache/docs');
 const TAR_ROOT = resolve('.kitgrid-cache/tarballs');
 const EXTRACT_ROOT = resolve('.kitgrid-cache/tmp');
+
+const normalizeDocsBaseUrl = (value?: string) => {
+  if (!value) return '';
+  const trimmed = value.replace(/\/+$/, '');
+  return `${trimmed}/`;
+};
 
 function workspaceDirFromEntry(entry?: RegistryEntry) {
   if (!entry?.workspace || !entry.sync_docs) return null;
@@ -96,6 +103,10 @@ function parseArgs(argv: string[]): CliArgs {
         args.repo = argv[i + 1];
         i += 1;
         break;
+      case '--docs-base-url':
+        args.docsBaseUrl = argv[i + 1];
+        i += 1;
+        break;
       case '--registry':
         args.registryPath = argv[i + 1];
         i += 1;
@@ -124,7 +135,7 @@ function parseArgs(argv: string[]): CliArgs {
 
 function printUsage() {
   console.log(`Usage: pnpm docs:fetch -- --project <id> [--ref <ref>] [--source <path>]
-               [--docs-path <dir>] [--repo org/name]
+               [--docs-path <dir>] [--repo org/name] [--docs-base-url <url>]
 
 Examples:
   pnpm docs:fetch -- --project pydantic-fixturegen --ref main
@@ -271,6 +282,18 @@ function renderTable(headers: string[], rows: string[][], alignments: (string | 
   );
 }
 
+function rewriteGitHubLinks(markdown: string, baseDocsUrl?: string) {
+  if (!baseDocsUrl) return markdown;
+  const normalizedBase = baseDocsUrl.endsWith('/') ? baseDocsUrl : `${baseDocsUrl}/`;
+  const githubBlobPattern =
+    /https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[^/]+\/docs\/([^\s)"'#?]+)(#[^\s)"']+)?/g;
+  return markdown.replace(githubBlobPattern, (_, docPath, fragment = '') => {
+    const cleaned = docPath.replace(/\.mdx?$/, '').replace(/\/+$/, '');
+    const normalizedFragment = fragment || '';
+    return `${normalizedBase}${cleaned}/${normalizedFragment}`;
+  });
+}
+
 function wrapTables(markdown: string) {
   const lines = markdown.split('\n');
   const result: string[] = [];
@@ -327,7 +350,7 @@ function wrapCodeBlocks(markdown: string) {
   });
 }
 
-function transformDocs(dir: string) {
+function transformDocs(dir: string, options?: { docsBaseUrl?: string }) {
   const stack = [dir];
   while (stack.length) {
     const current = stack.pop();
@@ -341,7 +364,8 @@ function transformDocs(dir: string) {
       }
       if (!/\.(md|mdx)$/i.test(entry.name)) continue;
       const original = readFileSync(fullPath, 'utf8');
-      const transformed = wrapTables(wrapCustomLists(wrapCodeBlocks(original)));
+      const linked = rewriteGitHubLinks(original, options?.docsBaseUrl);
+      const transformed = wrapTables(wrapCustomLists(wrapCodeBlocks(linked)));
       if (transformed !== original) {
         writeFileSync(fullPath, transformed);
       }
@@ -440,6 +464,9 @@ async function main() {
     const registryEntries = loadRegistryEntries(args.registryPath);
     const entry = registryEntries.find((item) => item.id === args.project);
 
+    const fallbackDocsUrl = entry?.docs_url ? `${entry.docs_url.replace(/\/+$/, '')}/docs` : '';
+    const docsBaseForTransforms = normalizeDocsBaseUrl(args.docsBaseUrl ?? fallbackDocsUrl);
+
     if (args.source) {
       const ref = args.ref ?? entry?.last_built_ref ?? entry?.default_ref ?? 'local';
       const targetDir = resolve(CACHE_ROOT, args.project, ref);
@@ -453,7 +480,7 @@ async function main() {
         throw new Error('Source path must point to a directory with docs.');
       }
       copySource(resolvedSource, targetDir);
-      transformDocs(targetDir);
+      transformDocs(targetDir, { docsBaseUrl: docsBaseForTransforms });
       recordMetadata(targetDir, {
         project: args.project,
         ref,
@@ -479,7 +506,7 @@ async function main() {
       token
     );
     copySource(docsDir, targetDir);
-    transformDocs(targetDir);
+    transformDocs(targetDir, { docsBaseUrl: docsBaseForTransforms });
     recordMetadata(targetDir, {
       project: args.project,
       ref,

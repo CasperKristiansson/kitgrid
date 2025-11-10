@@ -204,7 +204,12 @@ function stripNodes(nodes: InternalNode[]): DocsNavItem[] {
 
 function cleanManifestPath(path: string) {
   if (!path) return '';
-  return path.replace(/^\/+/, '').replace(/\.(md|mdx)$/i, '');
+  const noLeading = path.replace(/^\/+/, '');
+  const noExt = noLeading.replace(/\.(md|mdx)$/i, '');
+  if (noExt === 'index' || noExt.endsWith('/index')) {
+    return noExt === 'index' ? '' : noExt.slice(0, -'/index'.length);
+  }
+  return noExt;
 }
 
 function buildFromManifest(items: ManifestNavItem[], basePath: string): DocsNavItem[] {

@@ -27,10 +27,19 @@ const linkClasses = ['nav-link'];
 if (depth > 0) linkClasses.push('nav-link-child');
 const groupClass = depth > 0 ? 'nav-group nav-group--nested' : 'nav-group';
 const isActive = (href?: string) => normalizePath(href) === activePath;
+
+const hasActiveDescendant = (items: DocsNavItem[] = []): boolean =>
+  items.some(
+    (child) =>
+      isActive(child.href) ||
+      (child.children && child.children.length > 0 && hasActiveDescendant(child.children))
+  );
+
+const shouldBeOpen = depth === 0 || hasActiveDescendant(children) || isActive(item.href);
 ---
 
 {children.length ? (
-  <details class={groupClass} open>
+  <details class={groupClass} open={shouldBeOpen}>
     <summary>
       <a
         href={item.href}
