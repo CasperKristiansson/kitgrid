@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { firstDocsHref } from '../../data/docsNav';
+
+const normalized = firstDocsHref?.replace(/^\/docs/, '').replace(/\/+$/, '') ?? '';
+const redirectTarget = normalized ? `/docs/${normalized}` : '/docs/index/';
+const siteOrigin = Astro.site?.origin ?? 'https://python-version-patch-pr.kitgrid.dev';
+const canonicalUrl = new URL(redirectTarget, siteOrigin).href;
+Astro.response.headers.set('Refresh', `0; url=${redirectTarget}`);
+---
+
+<BaseLayout
+  title="Redirecting to docs"
+  description="Forwarding to the CPython Patch PR Action documentation."
+  canonical={canonicalUrl}
+>
+  <Fragment slot="head">
+    <meta http-equiv="refresh" content={`0; url=${redirectTarget}`} />
+  </Fragment>
+  <section class="sr-only">
+    <p>Redirecting to the documentation...</p>
+    <p>
+      <a href={redirectTarget}>Continue to the docs</a>
+    </p>
+  </section>
+</BaseLayout>

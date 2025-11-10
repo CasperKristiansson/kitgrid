@@ -1,0 +1,238 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DocsLayout from '@kitgrid/docs-ui/components/DocsLayout.astro';
+import RepoBanner from '@kitgrid/docs-ui/components/RepoBanner.astro';
+import BadgeStrip from '@kitgrid/docs-ui/components/BadgeStrip.astro';
+import LinkCardGrid from '@kitgrid/docs-ui/components/LinkCardGrid.astro';
+import LinkList from '@kitgrid/docs-ui/components/LinkList.astro';
+import { docsNav } from '../data/docsNav';
+import { project } from '../data/project';
+
+const headings = [
+  { depth: 2, slug: 'overview', text: 'Overview' },
+  { depth: 2, slug: 'patch-scenarios', text: 'Patch scenarios' },
+  { depth: 2, slug: 'rollout', text: 'Rollout playbooks' },
+  { depth: 2, slug: 'governance', text: 'Governance & safety' },
+  { depth: 2, slug: 'reference', text: 'Reference library' },
+];
+
+const siteOrigin = Astro.site?.origin ?? 'https://python-version-patch-pr.kitgrid.dev';
+const canonicalUrl = new URL('/', siteOrigin).href;
+const searchTarget = `${siteOrigin}?q={search_term_string}`;
+const homepageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'CPython Patch PR Action Docs',
+  url: canonicalUrl,
+  description:
+    'Documentation for the GitHub Action that opens CPython patch upgrade pull requests across every repo you maintain.',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: searchTarget,
+    'query-input': 'required name=search_term_string',
+  },
+};
+---
+
+<BaseLayout
+  title="CPython Patch PR Action docs"
+  description="Automation playbooks, workflow recipes, and governance guidance for the CPython Patch PR Action."
+  canonical={canonicalUrl}
+  structuredData={homepageSchema}
+>
+  <DocsLayout
+    title="CPython Patch PR Action"
+    description="Keep every pinned CPython runtime patched. This action scans repos, drafts pull requests, and surfaces logs for platform teams."
+    navItems={docsNav}
+    headings={headings}
+    editHref={`https://github.com/${project.repo}/blob/${project.buildRef}/${project.docsPath}/README.md`}
+  >
+    <section id="overview" class="space-y-4">
+      <p class="pill">CPython patch automation</p>
+      <RepoBanner
+        repoUrl="https://github.com/CasperKristiansson/python-version-patch-pr"
+        repoLabel="CasperKristiansson/python-version-patch-pr"
+        badge="GitHub repository"
+        ctaLabel="View on GitHub"
+      />
+      <h2 class="text-3xl font-semibold">Eliminate manual CPython patch rollouts</h2>
+      <p class="text-base-content/80 leading-relaxed">
+        The CPython Patch PR Action hunts down every pinned runtime in your repository, compares it with the upstream
+        patch list, and opens ready-to-merge pull requests with changelog context. These docs explain how the action
+        reads files, how to scope tracks per product, and how to keep security + governance teams informed about each bump.
+      </p>
+      <BadgeStrip
+        badges={[
+          {
+            href: 'https://github.com/CasperKristiansson/python-version-patch-pr/releases',
+            src: 'https://img.shields.io/github/v/release/CasperKristiansson/python-version-patch-pr.svg?display_name=tag',
+            alt: 'Latest GitHub release',
+          },
+          {
+            src: 'https://img.shields.io/github/actions/workflow/status/CasperKristiansson/python-version-patch-pr/ci.yml?label=CI',
+            alt: 'CI status badge',
+          },
+          {
+            src: 'https://img.shields.io/badge/License-MIT-blue.svg',
+            alt: 'License: MIT',
+          },
+        ]}
+      />
+      <div class="flex flex-wrap gap-3">
+        <a class="btn btn-primary" href="/docs/workflows">Copy a workflow</a>
+        <a class="btn btn-outline" href="/docs/configuration">Review configuration</a>
+        <a class="btn btn-outline" href="/docs/examples">Inspect example outputs</a>
+      </div>
+      <LinkCardGrid
+        tone="muted"
+        cards={[
+          {
+            title: 'Why this action exists',
+            description:
+              'Security and platform teams no longer need spreadsheets for CPython patches—the action tracks every release channel.',
+          },
+          {
+            title: 'Who it serves',
+            description:
+              'Platform, DevOps, and security engineers responsible for pinned runtimes across APIs, CLIs, and infrastructure code.',
+          },
+          {
+            title: 'What the docs cover',
+            description:
+              'Architecture, workflow recipes, configuration reference, troubleshooting playbooks, tests, and contribution guides.',
+          },
+        ]}
+      />
+    </section>
+
+    <section id="patch-scenarios" class="space-y-4">
+      <h2 class="text-2xl font-semibold">Patch scenarios on autopilot</h2>
+      <p class="text-base-content/70">
+        Decide how aggressive your rollout should be: scheduled weekly bumps, gated dry runs, or patch-only
+        notifications. Every scenario has a walkthrough with copy-paste YAML and permission requirements.
+      </p>
+      <LinkCardGrid
+        tone="neutral"
+        cards={[
+          {
+            title: 'Architecture tour',
+            description: 'Understand how the scanner walks repos, detects pins, and drafts PRs.',
+            href: '/docs/architecture',
+            linkLabel: 'Open architecture ↗',
+          },
+          {
+            title: 'Workflow recipes',
+            description: 'Scheduled, on-demand, and dry-run flows with approvals.',
+            href: '/docs/workflows',
+            linkLabel: 'Browse recipes ↗',
+          },
+          {
+            title: 'Examples & outputs',
+            description: 'See the PR body, logs, and JSON outputs before shipping.',
+            href: '/docs/examples',
+            linkLabel: 'View examples ↗',
+          },
+        ]}
+      />
+    </section>
+
+    <section id="rollout" class="space-y-4">
+      <h2 class="text-2xl font-semibold">Rollout playbooks</h2>
+      <p class="text-base-content/70">
+        Mix and match recipes to fit each repository. These quick links highlight the most referenced guides.
+      </p>
+      <LinkList
+        items={[
+          {
+            href: '/docs/workflows',
+            label: 'Workflow recipes',
+            description: 'Scheduled, nightly, and approval-gated jobs.',
+          },
+          {
+            href: '/docs/configuration',
+            label: 'Configuration reference',
+            description: 'Every input, env var, permission, and output.',
+          },
+          {
+            href: '/docs/examples',
+            label: 'Examples & outputs',
+            description: 'Before/after diffs, log excerpts, and files_changed payloads.',
+          },
+          {
+            href: '/docs/development',
+            label: 'Development handbook',
+            description: 'Local dev server, scripts, and release hygiene.',
+          },
+        ]}
+      />
+    </section>
+
+    <section id="governance" class="space-y-4">
+      <h2 class="text-2xl font-semibold">Governance & safety rails</h2>
+      <p class="text-base-content/70">
+        Keep SRE and compliance stakeholders confident with predictable testing, troubleshooting runbooks, and
+        coordination guidelines.
+      </p>
+      <LinkCardGrid
+        tone="muted"
+        cards={[
+          {
+            title: 'Testing strategy',
+            description: 'Unit, integration, fixture snapshots, and how to extend coverage.',
+            href: '/docs/testing',
+            linkLabel: 'See testing guide ↗',
+          },
+          {
+            title: 'Troubleshooting',
+            description: 'Decode skip reasons, permission errors, and GitHub API limits.',
+            href: '/docs/troubleshooting',
+            linkLabel: 'Open troubleshooting ↗',
+          },
+          {
+            title: 'Contributor guide',
+            description: 'Development workflow, release coordination, and security disclosures.',
+            href: '/docs/development',
+            linkLabel: 'Read contributor guide ↗',
+          },
+        ]}
+      />
+    </section>
+
+    <section id="reference" class="space-y-4">
+      <h2 class="text-2xl font-semibold">Reference library</h2>
+      <p class="text-base-content/70">
+        Bookmark these articles for deep dives into inputs, outputs, and maintenance rituals.
+      </p>
+      <LinkCardGrid
+        columns={2}
+        tone="subtle"
+        cards={[
+          {
+            title: 'Architecture',
+            description: 'Data flow, modules, and decision points inside the action.',
+            href: '/docs/architecture',
+            linkLabel: 'Architecture ↗',
+          },
+          {
+            title: 'Configuration',
+            description: 'Inputs, env vars, permissions, and outputs.',
+            href: '/docs/configuration',
+            linkLabel: 'Configuration ↗',
+          },
+          {
+            title: 'Workflow recipes',
+            description: 'Ready-made YAML for any rollout cadence.',
+            href: '/docs/workflows',
+            linkLabel: 'Workflows ↗',
+          },
+          {
+            title: 'Troubleshooting',
+            description: 'Runbooks for every skip reason or failure signal.',
+            href: '/docs/troubleshooting',
+            linkLabel: 'Troubleshooting ↗',
+          },
+        ]}
+      />
+    </section>
+  </DocsLayout>
+</BaseLayout>

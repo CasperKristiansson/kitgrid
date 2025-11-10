@@ -15,6 +15,21 @@
     "sync_docs": true
   },
   {
+    "id": "python-version-patch-pr",
+    "name": "python-version-patch-pr",
+    "description": "Keep every pinned CPython runtime patched automatically with a turnkey GitHub Action.",
+    "repo": "CasperKristiansson/python-version-patch-pr",
+    "status": "live",
+    "tag": "python",
+    "subdomain": "python-version-patch-pr",
+    "default_ref": "main",
+    "last_built_ref": "main",
+    "docs_path": "docs",
+    "docs_url": "https://python-version-patch-pr.kitgrid.dev",
+    "workspace": "@kitgrid/python-version-patch-pr",
+    "sync_docs": true
+  },
+  {
     "id": "kitgrid-hub",
     "name": "Kitgrid Hub",
     "description": "Marketing site + control plane that orchestrates every docs deployment.",
@@ -27,19 +42,5 @@
     "docs_path": "apps/hub",
     "docs_url": "https://kitgrid.dev",
     "workspace": "@kitgrid/hub"
-  },
-  {
-    "id": "docs-playground",
-    "name": "Docs Playground",
-    "description": "Reference implementation used to validate theming, ingestion, and navigation.",
-    "repo": "CasperKristiansson/kitgrid",
-    "status": "in-progress",
-    "tag": "playground",
-    "subdomain": "project-stub",
-    "default_ref": "main",
-    "last_built_ref": "main",
-    "docs_path": "apps/project-stub",
-    "docs_url": "https://project-stub.kitgrid.dev",
-    "workspace": "@kitgrid/project-stub"
   }
 ]

@@ -1,0 +1,77 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { DocsLayout, mdxComponents } from '@kitgrid/docs-ui';
+import { docsNav } from '../../data/docsNav';
+import { project } from '../../data/project';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('docs');
+  return entries.map((entry: CollectionEntry<'docs'>) => ({
+    params: { slug: entry.slug },
+  }));
+}
+
+const entries = await getCollection('docs');
+if (!entries.length) {
+  throw new Error('Add entries under src/content/docs');
+}
+
+type DocsEntry = CollectionEntry<'docs'>;
+
+const routeParams = Astro.params as { slug?: string | string[] };
+const slugParam = routeParams.slug;
+const slug = Array.isArray(slugParam) ? slugParam.join('/') : (slugParam ?? '');
+function titleFromSlug(slugValue: string) {
+  if (!slugValue) return 'Overview';
+  const segment = slugValue.split('/').pop() ?? slugValue;
+  return segment
+    .replace(/[-_]/g, ' ')
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+const entry = entries.find((doc: DocsEntry) => doc.slug === slug) ?? entries[0];
+const { Content, headings } = await entry.render();
+const docSlug = slug && slug.length > 0 ? slug : 'index';
+const docFile = `${docSlug}.md`;
+const editHref =
+  entry.data.editUrl ??
+  `https://github.com/${project.repo}/blob/${project.buildRef}/${project.docsPath}/${docFile}`;
+const versionLabel = entry.data.versionLabel ?? project.buildRef;
+const pageTitle = entry.data.title ?? titleFromSlug(entry.slug);
+const pageDescription = entry.data.description ?? 'Reference docs for the CPython Patch PR Action.';
+const siteOrigin = Astro.site?.origin ?? 'https://python-version-patch-pr.kitgrid.dev';
+const pagePath = entry.slug ? `/docs/${entry.slug}/` : '/docs/';
+const canonicalUrl = new URL(pagePath, siteOrigin).href;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: pageTitle,
+  description: pageDescription,
+  url: canonicalUrl,
+  dateModified: entry.data.updated ?? new Date().toISOString(),
+  author: {
+    '@type': 'Organization',
+    name: 'Kitgrid',
+  },
+};
+---
+
+<BaseLayout
+  title={`${pageTitle} — CPython Patch PR Action docs`}
+  description={pageDescription}
+  canonical={canonicalUrl}
+  structuredData={structuredData}
+>
+  <DocsLayout
+    title={pageTitle}
+    description={pageDescription}
+    navItems={docsNav}
+    headings={headings}
+    editHref={editHref}
+    versionLabel={versionLabel}
+  >
+    <Content components={mdxComponents} />
+  </DocsLayout>
+</BaseLayout>

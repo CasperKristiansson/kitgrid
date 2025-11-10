@@ -1,0 +1,192 @@
+@import './fonts.css';
+@source '../**/*.{astro,md,mdx,ts,tsx}';
+@source '../../../../packages/docs-ui/src/**/*.{astro,md,mdx,ts,tsx}';
+@import 'tailwindcss';
+@plugin 'daisyui';
+
+@theme {
+  --font-sans:
+    'Instrument Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', sans-serif;
+  --font-mono:
+    'JetBrains Mono', 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono',
+    monospace;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --theme-primary: #0b5fff;
+    --theme-secondary: #1f2937;
+    --theme-bg: #ffffff;
+    --theme-surface: #f3f4f6;
+    --theme-text: #0f172a;
+    --theme-muted: #6b7280;
+    --theme-link: #0b5fff;
+    --theme-code: #0f172a;
+    --motion-scale: 0.85;
+    --anim-duration: calc(220ms * var(--motion-scale));
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: var(--theme-bg);
+    color: var(--theme-text);
+    font-family: var(--font-sans);
+    letter-spacing: -0.01em;
+    transition:
+      background-color var(--anim-duration) ease,
+      color var(--anim-duration) ease;
+  }
+
+  main {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  main > * {
+    width: 100%;
+  }
+
+  ::selection {
+    background-color: rgba(11, 95, 255, 0.16);
+    color: inherit;
+  }
+
+  .code-block ::selection,
+  :not(pre) > code::selection {
+    background-color: rgba(198, 198, 198, 0.25);
+  }
+
+  [data-theme='python-version-patch-pr'] {
+    --p: var(--theme-primary);
+    --pc: #e6efff;
+    --s: var(--theme-secondary);
+    --sc: #f8fafc;
+    --b1: var(--theme-bg);
+    --b2: var(--theme-surface);
+    --bc: var(--theme-text);
+  }
+
+  .pill {
+    border: 1px solid rgba(11, 95, 255, 0.4);
+    color: var(--theme-primary);
+    padding: 0.25rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .docs-nav {
+    background: #ffffff;
+  }
+
+  .docs-nav ul ul {
+    border-left-color: rgba(15, 23, 42, 0.1);
+  }
+
+  .docs-nav .nav-link::before {
+    background: var(--theme-primary);
+  }
+
+  .docs-layout__sidebar {
+    border-right: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  .docs-layout__content {
+    background: transparent;
+    border-radius: 0;
+    padding: 1.5rem 1rem 3rem 1rem;
+    box-shadow: none;
+    margin-top: 50px;
+  }
+
+  .docs-layout__header {
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  .docs-search__field {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+  }
+
+  .docs-search__results {
+    background: #ffffff;
+    border-color: rgba(15, 23, 42, 0.08);
+    box-shadow: 0 30px 70px rgba(15, 23, 42, 0.12);
+  }
+
+  .docs-search__shortcut {
+    border-color: rgba(15, 23, 42, 0.12);
+    color: rgba(15, 23, 42, 0.8);
+  }
+
+  .code-block {
+    background: #f5f6f8;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 22px 45px rgba(15, 23, 42, 0.08);
+    color: #0b0f14;
+    margin: 2.5rem 0;
+  }
+
+  .code-block::before {
+    content: '';
+    position: absolute;
+    top: 1.1rem;
+    left: 0rem;
+    right: 1.5rem;
+    height: 2.1rem;
+    border-radius: 1rem;
+    z-index: 0;
+  }
+
+  .code-block pre {
+    background: transparent;
+    color: inherit;
+    position: relative;
+    z-index: 1;
+  }
+
+  .code-block [data-code-copy] {
+    background: #ffffff;
+    border-color: rgba(15, 23, 42, 0.15);
+    color: rgba(15, 23, 42, 0.6);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  }
+
+  .code-block [data-code-copy][data-copy-state='copied'] {
+    background: #e0e7ff;
+    color: var(--theme-primary);
+    border-color: rgba(29, 78, 216, 0.45);
+  }
+
+  .docs-list {
+    margin: 1.25rem 0;
+    padding-left: 1.75rem;
+  }
+
+  .docs-list li::marker {
+    color: var(--theme-primary);
+  }
+
+  :not(pre) > code {
+    background: #f3f5f9;
+    color: var(--theme-text);
+    padding: 0.01rem 0.4rem;
+    border-radius: 0.45rem;
+    font-size: 0.9em;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    line-height: 1.55;
+    display: inline-flex;
+    align-items: center;
+    margin: 0.2rem 0;
+  }
+
+  pre {
+    color: #0f172a;
+  }
+}

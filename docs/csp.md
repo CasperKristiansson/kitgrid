@@ -23,7 +23,8 @@ Notes:
   `style-src 'self' 'unsafe-inline'`.
 - Pagefind assets load from `/pagefind/**`, which falls under `'self'`.
 - When adding new third-party assets, update the CSP string in
-  `apps/hub/src/layouts/BaseLayout.astro` and `apps/project-stub/src/layouts/BaseLayout.astro`.
+  `apps/hub/src/layouts/BaseLayout.astro` and
+  `apps/pydantic-fixturegen/src/layouts/BaseLayout.astro`.
 
 Test: run the deployments locally (`pnpm build:sites && pnpm package:sites`) and load via
 `pnpm --filter @kitgrid/hub preview` to confirm no CSP violations in the browser console.

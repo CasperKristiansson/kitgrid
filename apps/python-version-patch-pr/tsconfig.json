@@ -1,0 +1,11 @@
+{
+  "extends": "@kitgrid/tsconfig/astro",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "types": ["astro/client", "node"],
+    "paths": {
+      "~/*": ["src/*"]
+    }
+  },
+  "include": ["src", "astro.config.mjs"]
+}

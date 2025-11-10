@@ -7,7 +7,6 @@
   "scripts": {
     "build": "pnpm -r build",
     "dev:hub": "pnpm --filter @kitgrid/hub dev",
-    "dev:project-stub": "pnpm --filter @kitgrid/project-stub dev",
     "docs:fetch": "tsx scripts/fetch-docs.ts",
     "sidebar:demo": "tsx scripts/build-sidebar.ts",
     "build:sites": "tsx scripts/build-sites.ts",

@@ -52,4 +52,17 @@ export const themes: ThemeTokens[] = [
     code: '#1C1330',
     motion: '1.1',
   },
+  {
+    id: 'python-version-patch-pr',
+    label: 'python-version-patch-pr',
+    primary: '#0B5FFF',
+    secondary: '#1F2937',
+    bg: '#FFFFFF',
+    surface: '#F3F4F6',
+    text: '#0F172A',
+    muted: '#6B7280',
+    link: '#0B5FFF',
+    code: '#0F172A',
+    motion: '0.9',
+  },
 ];

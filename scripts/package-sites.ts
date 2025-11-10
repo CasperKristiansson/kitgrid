@@ -13,8 +13,8 @@ type RegistryEntry = {
 
 const DIST_MAP: Record<string, string> = {
   '@kitgrid/hub': 'apps/hub/dist',
-  '@kitgrid/project-stub': 'apps/project-stub/dist',
   '@kitgrid/pydantic-fixturegen': 'apps/pydantic-fixturegen/dist',
+  '@kitgrid/python-version-patch-pr': 'apps/python-version-patch-pr/dist',
 };
 
 const DISPATCH_PROJECT = process.env.PROJECT_ID;

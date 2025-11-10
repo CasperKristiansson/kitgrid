@@ -101,6 +101,25 @@
     --bc: var(--theme-text);
   }
 
+  [data-theme='python-version-patch-pr'] {
+    --theme-primary: #0b5fff;
+    --theme-secondary: #1f2937;
+    --theme-bg: #ffffff;
+    --theme-surface: #f3f4f6;
+    --theme-text: #0f172a;
+    --theme-muted: #6b7280;
+    --theme-link: #0b5fff;
+    --theme-code: #0f172a;
+    --motion-scale: 0.9;
+    --p: var(--theme-primary);
+    --pc: #041137;
+    --s: var(--theme-secondary);
+    --sc: #f1f5f9;
+    --b1: var(--theme-bg);
+    --b2: var(--theme-surface);
+    --bc: var(--theme-text);
+  }
+
   pre,
   code {
     background-color: var(--theme-code);
