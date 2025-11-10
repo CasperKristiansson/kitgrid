@@ -95,7 +95,7 @@ const csp = [
         {JSON.stringify(schemaToRender)}
       </script>
     )}
-    <style is:inline set:html={themeCss}></style>
+    <style is:inline>{themeCss}</style>
     <slot name="head" />
     <link rel="icon" type="image/png" sizes="128x128" href="/favicon.png" />
   </head>
