@@ -1,9 +1,14 @@
+-include .env
+
 AWS_PROFILE ?= Personal
 S3_BUCKET ?= kitgrid-sites
-CF_DISTRIBUTION_ID ?= EKCCE2L84JCR7
 REGISTRY_JSON ?= registry.json
 DEPLOY_ROOT ?= .kitgrid-cache/deploy
 SYNC_PROJECTS := $(shell node -e "const fs=require('fs');const data=JSON.parse(fs.readFileSync('$(REGISTRY_JSON)','utf8'));const ids=data.filter(item => item.sync_docs).map(item => item.id);process.stdout.write(ids.join(' '));")
+
+ifndef CF_DISTRIBUTION_ID
+$(error CF_DISTRIBUTION_ID is not set. Add it to .env)
+endif
 
 .PHONY: fetch-docs build-sites package-sites clean-s3 sync-s3 invalidate deploy
 
