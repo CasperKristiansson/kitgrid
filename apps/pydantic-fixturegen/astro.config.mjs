@@ -1,9 +1,13 @@
 // @ts-check
 import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
 import { remarkKitgridGuard, remarkRewriteDocLinks } from '@kitgrid/mdx-pipeline';
 import rehypeWrapCodeBlocks from '@kitgrid/docs-ui/rehype/rehypeWrapCodeBlocks.js';
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
+import { copyFileSync, existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 // https://astro.build/config
 const docRemarkPlugins = [
@@ -23,10 +27,23 @@ export default defineConfig({
       rehypePlugins: /** @type {any} */ (docRehypePlugins),
       syntaxHighlight: false,
     }),
+    sitemap({
+      filter: (page) => !page.includes('/drafts'),
+    }),
   ],
   markdown: {
     syntaxHighlight: false,
     remarkPlugins: /** @type {any} */ (docRemarkPlugins),
     rehypePlugins: /** @type {any} */ (docRehypePlugins),
+  },
+  hooks: {
+    'astro:build:done'({ dir }) {
+      const outDir = fileURLToPath(dir);
+      const sitemapIndex = join(outDir, 'sitemap-index.xml');
+      const sitemapXml = join(outDir, 'sitemap.xml');
+      if (existsSync(sitemapIndex)) {
+        copyFileSync(sitemapIndex, sitemapXml);
+      }
+    },
   },
 });

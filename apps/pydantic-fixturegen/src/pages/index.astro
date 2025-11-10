@@ -11,9 +11,30 @@ const headings = [
   { depth: 2, slug: 'quality-systems', text: 'Quality systems' },
   { depth: 2, slug: 'reference', text: 'Reference + appendix' },
 ];
+
+const siteOrigin = Astro.site?.origin ?? 'https://pydantic-fixturegen.kitgrid.dev';
+const canonicalUrl = new URL('/', siteOrigin).href;
+const searchTarget = `${siteOrigin}?q={search_term_string}`;
+const homepageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Pydantic Fixturegen Docs',
+  url: canonicalUrl,
+  description: 'Documentation hub for deterministic Pydantic fixtures, emitters, CLI guides, and diagnostics.',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: searchTarget,
+    'query-input': 'required name=search_term_string',
+  },
+};
 ---
 
-<BaseLayout title="Pydantic Fixturegen docs" description="Deterministic test data factories for Pydantic v2">
+<BaseLayout
+  title="Pydantic Fixturegen docs"
+  description="Deterministic test data factories for Pydantic v2"
+  canonical={canonicalUrl}
+  structuredData={homepageSchema}
+>
   <DocsLayout
     title="Pydantic Fixturegen"
     description="Deterministic fixture generation, emitters, and diagnostics for Pydantic v2."

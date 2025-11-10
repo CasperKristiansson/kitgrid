@@ -41,11 +41,28 @@ const editHref =
 const versionLabel = entry.data.versionLabel ?? project.buildRef;
 const pageTitle = entry.data.title ?? titleFromSlug(entry.slug);
 const pageDescription = entry.data.description ?? 'Reference docs for pydantic-fixturegen.';
+const siteOrigin = Astro.site?.origin ?? 'https://pydantic-fixturegen.kitgrid.dev';
+const pagePath = entry.slug ? `/docs/${entry.slug}/` : '/docs/';
+const canonicalUrl = new URL(pagePath, siteOrigin).href;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: pageTitle,
+  description: pageDescription,
+  url: canonicalUrl,
+  dateModified: entry.data.updated ?? new Date().toISOString(),
+  author: {
+    '@type': 'Organization',
+    name: 'Kitgrid',
+  },
+};
 ---
 
 <BaseLayout
   title={`${pageTitle} — Pydantic Fixturegen docs`}
   description={pageDescription}
+  canonical={canonicalUrl}
+  structuredData={structuredData}
 >
   <DocsLayout
     title={pageTitle}

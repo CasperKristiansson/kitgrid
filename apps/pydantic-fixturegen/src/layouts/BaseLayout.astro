@@ -5,9 +5,16 @@ import Navbar from '../components/Navbar.astro';
 interface Props {
   title?: string;
   description?: string;
+  canonical?: string;
+  structuredData?: Record<string, any>;
 }
 
-const { title = 'Project docs', description = 'Docs preview for kitgrid.' } = Astro.props;
+const {
+  title = 'Project docs',
+  description = 'Docs preview for kitgrid.',
+  canonical,
+  structuredData,
+} = Astro.props;
 const isProd = import.meta.env.PROD;
 
 const csp = [
@@ -32,7 +39,25 @@ const csp = [
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0A0F14" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta
+      name="keywords"
+      content="pydantic fixturegen, deterministic test data, python fixtures, JSON emitters, pytest"
+    />
     {isProd && <meta http-equiv="Content-Security-Policy" content={csp} />}
+    {structuredData && (
+      <script type="application/ld+json">
+        {JSON.stringify(structuredData)}
+      </script>
+    )}
+    <slot name="head" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body data-theme="pydantic-fixturegen">
