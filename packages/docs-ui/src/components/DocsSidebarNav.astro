@@ -1,5 +1,6 @@
 ---
 import type { DocsNavItem } from '../types';
+import DocsSidebarTree from './DocsSidebarTree.astro';
 
 interface Props {
   items: DocsNavItem[];
@@ -19,92 +20,37 @@ const normalizePath = (value?: string) => {
 
 const { items = [], currentPath = '' } = Astro.props;
 const activePath = normalizePath(currentPath);
-const isActive = (href: string) => normalizePath(href) === activePath;
 ---
 
 <nav class="docs-nav" aria-label="Docs sections">
   <div class="nav-groups">
-    {
-      items.map((item) => {
-        const parentPath = normalizePath(item.href);
-        const hasChildSamePath =
-          item.children?.some((child) => normalizePath(child.href) === parentPath) ?? false;
-        return item.children?.length ? (
-          <details class="nav-group" open>
-            <summary>
-              <a
-                href={item.href}
-                class="nav-link"
-                aria-current={isActive(item.href) && !hasChildSamePath ? 'page' : undefined}
-              >
-                {item.title}
-              </a>
-              <svg
-                class="nav-group__chevron"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
-            </summary>
-            <div class="nav-children">
-              {item.children.map((child) => (
-                <a
-                  href={child.href}
-                  class="nav-link nav-link-child"
-                  aria-current={isActive(child.href) ? 'page' : undefined}
-                >
-                  {child.title}
-                </a>
-              ))}
-            </div>
-          </details>
-        ) : (
-          <div class="nav-group nav-group--single">
-            <a
-              href={item.href}
-              class="nav-link"
-              aria-current={isActive(item.href) ? 'page' : undefined}
-            >
-              {item.title}
-            </a>
-          </div>
-        );
-      })
-    }
+    <DocsSidebarTree items={items} activePath={activePath} />
   </div>
 </nav>
 
 <style>
-  .docs-nav {
+  :global(.docs-nav) {
     position: sticky;
     overflow-y: auto;
     overflow-x: hidden;
   }
 
-  .nav-groups {
+  :global(.nav-groups) {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
 
-  .nav-group {
+  :global(.nav-group) {
     border-bottom: 1px solid rgba(15, 23, 42, 0.08);
     padding-bottom: 0.6rem;
   }
 
-  .nav-group:last-child {
+  :global(.nav-group:last-child) {
     border-bottom: none;
   }
 
-  .nav-group > summary {
+  :global(.nav-group > summary) {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -116,25 +62,30 @@ const isActive = (href: string) => normalizePath(href) === activePath;
     box-sizing: border-box;
   }
 
-  .nav-group > summary::-webkit-details-marker {
+  :global(.nav-group > summary::-webkit-details-marker) {
     display: none;
   }
 
-  .nav-group__chevron {
+  :global(.nav-group__chevron) {
     font-size: 0.65rem;
     color: rgba(15, 23, 42, 0.4);
     transition: transform 150ms ease;
   }
 
-  .nav-group[open] .nav-group__chevron {
+  :global(.nav-group[open] .nav-group__chevron) {
     transform: rotate(180deg);
   }
 
-  .nav-group--single {
+  :global(.nav-group--single) {
     border-bottom: none;
   }
 
-  .nav-children {
+  :global(.nav-group--nested) {
+    border-bottom: none;
+    padding-bottom: 0.4rem;
+  }
+
+  :global(.nav-children) {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
@@ -143,7 +94,7 @@ const isActive = (href: string) => normalizePath(href) === activePath;
     padding-left: 0.85rem;
   }
 
-  .nav-link {
+  :global(.nav-link) {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -162,19 +113,19 @@ const isActive = (href: string) => normalizePath(href) === activePath;
     box-sizing: border-box;
   }
 
-  .nav-link:hover,
-  .nav-link:focus-visible {
+  :global(.nav-link:hover),
+  :global(.nav-link:focus-visible) {
     color: var(--theme-link);
     background: rgba(29, 78, 216, 0.08);
     transform: translateX(2px);
   }
 
-  .nav-link[aria-current='page'] {
+  :global(.nav-link[aria-current='page']) {
     background: rgba(29, 78, 216, 0.16);
     color: var(--theme-link);
   }
 
-  .nav-link-child {
+  :global(.nav-link-child) {
     color: var(--theme-muted);
     font-size: 0.85rem;
     font-weight: 500;
@@ -182,7 +133,7 @@ const isActive = (href: string) => normalizePath(href) === activePath;
   }
 
   @media (max-width: 1024px) {
-    .docs-nav {
+    :global(.docs-nav) {
       position: static;
       max-height: none;
       padding: 0.5rem 0;

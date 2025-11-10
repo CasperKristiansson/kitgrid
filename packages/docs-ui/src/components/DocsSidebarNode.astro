@@ -1,0 +1,71 @@
+---
+import type { DocsNavItem } from '../types';
+import DocsSidebarTree from './DocsSidebarTree.astro';
+
+interface Props {
+  item: DocsNavItem;
+  activePath: string;
+  depth?: number;
+}
+
+const normalizePath = (value?: string) => {
+  if (!value) return '/';
+  try {
+    const [path] = value.split(/[?#]/);
+    const trimmed = path.replace(/\/+$/, '');
+    return trimmed || '/';
+  } catch {
+    return '/';
+  }
+};
+
+const { item, activePath, depth = 0 } = Astro.props;
+const children = item.children ?? [];
+const parentPath = normalizePath(item.href);
+const hasChildSamePath = children.some((child) => normalizePath(child.href) === parentPath);
+const linkClasses = ['nav-link'];
+if (depth > 0) linkClasses.push('nav-link-child');
+const groupClass = depth > 0 ? 'nav-group nav-group--nested' : 'nav-group';
+const isActive = (href?: string) => normalizePath(href) === activePath;
+---
+
+{children.length ? (
+  <details class={groupClass} open>
+    <summary>
+      <a
+        href={item.href}
+        class={linkClasses.join(' ')}
+        aria-current={isActive(item.href) && !hasChildSamePath ? 'page' : undefined}
+      >
+        {item.title}
+      </a>
+      <svg
+        class="nav-group__chevron"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+    </summary>
+    <div class="nav-children">
+      <DocsSidebarTree items={children} activePath={activePath} depth={depth + 1} />
+    </div>
+  </details>
+) : (
+  <div class="nav-group nav-group--single">
+    <a
+      href={item.href}
+      class={linkClasses.join(' ')}
+      aria-current={isActive(item.href) ? 'page' : undefined}
+    >
+      {item.title}
+    </a>
+  </div>
+)}

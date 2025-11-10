@@ -1,0 +1,16 @@
+---
+import type { DocsNavItem } from '../types';
+import DocsSidebarNode from './DocsSidebarNode.astro';
+
+interface Props {
+  items: DocsNavItem[];
+  activePath: string;
+  depth?: number;
+}
+
+const { items = [], activePath, depth = 0 } = Astro.props;
+---
+
+{items.map((item) => (
+  <DocsSidebarNode item={item} activePath={activePath} depth={depth} />
+))}

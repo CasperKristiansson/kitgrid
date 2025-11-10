@@ -1,9 +1,14 @@
+---
+import DocsSearch from '@kitgrid/docs-ui/components/DocsSearch.astro';
+import sidebarToggleScript from '../scripts/sidebar-toggle.ts?url';
+
 const links = [
   { label: 'Quickstart', href: '/docs/quickstart/' },
   { label: 'CLI', href: '/docs/cli/' },
   { label: 'API', href: '/docs/api/' },
   { label: 'Install', href: '/docs/install/' },
 ];
+---
 ---
 
 <header class="pf-nav" role="banner">
@@ -20,6 +25,10 @@ const links = [
         </a>
       ))}
     </nav>
+
+    <div class="pf-nav__search">
+      <DocsSearch />
+    </div>
 
     <button class="pf-nav__menu-button" type="button" data-sidebar-toggle aria-label="Toggle navigation">
       <span></span>
@@ -95,6 +104,14 @@ const links = [
     background: rgba(29, 78, 216, 0.08);
   }
 
+  .pf-nav__search {
+    flex: 0 0 320px;
+  }
+
+  .pf-nav__search :global(.docs-search) {
+    width: 100%;
+  }
+
   .pf-nav__menu-button {
     display: none;
     width: 44px;
@@ -126,6 +143,10 @@ const links = [
       display: none;
     }
 
+    .pf-nav__search {
+      display: none;
+    }
+
     .pf-nav__menu-button {
       display: inline-flex;
       margin-left: auto;
@@ -133,33 +154,4 @@ const links = [
   }
 </style>
 
-<script is:inline>
-  (function () {
-    if (typeof window === 'undefined') return;
-    var root = document.documentElement;
-    var toggleSidebar = function () {
-      root.classList.toggle('pf-sidebar-open');
-    };
-    var closeSidebar = function () {
-      root.classList.remove('pf-sidebar-open');
-    };
-    document.addEventListener('click', function (event) {
-      var target = event.target;
-      if (!(target instanceof Element)) return;
-      if (target.closest('[data-sidebar-toggle]')) {
-        event.preventDefault();
-        toggleSidebar();
-        return;
-      }
-      if (target.closest('[data-sidebar-dismiss]')) {
-        event.preventDefault();
-        closeSidebar();
-      }
-    });
-    window.addEventListener('resize', function () {
-      if (window.innerWidth > 1024) {
-        closeSidebar();
-      }
-    });
-  })();
-</script>
+<script type="module" src={sidebarToggleScript}></script>

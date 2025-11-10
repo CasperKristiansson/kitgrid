@@ -139,7 +139,12 @@ const currentPath = Astro.url?.pathname ?? '/';
   }
 
   .docs-layout__toc {
-    display: none;
+    position: sticky;
+    top: 37px;
+    height: calc(100vh - 6rem);
+    padding-left: 1.5rem;
+    border-left: 1px solid rgba(15, 23, 42, 0.12);
+    overflow-y: auto;
   }
 
   .docs-layout__edit {
@@ -217,6 +222,10 @@ const currentPath = Astro.url?.pathname ?? '/';
       width: 100%;
       justify-content: flex-start;
       flex-wrap: wrap;
+    }
+
+    .docs-layout__toc {
+      display: none;
     }
   }
 
