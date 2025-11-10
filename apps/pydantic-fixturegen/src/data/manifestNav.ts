@@ -1,11 +1,11 @@
 import type { ManifestNavItem } from '../../../../scripts/lib/sidebar-builder';
 
 export const manifestNav: ManifestNavItem[] = [
-  { title: 'Overview', path: 'index.md' },
   {
     title: 'Getting started',
     path: 'quickstart.md',
     children: [
+      { title: 'Quickstart', path: 'quickstart.md' },
       { title: 'Install', path: 'install.md' },
       { title: 'Features', path: 'features.md' },
     ],

@@ -15,6 +15,7 @@ import { randomUUID } from 'node:crypto';
 import { request as httpsRequest } from 'node:https';
 
 import tar from 'tar';
+import YAML from 'yaml';
 
 import registry from '../registry.json' with { type: 'json' };
 
@@ -71,6 +72,58 @@ function syncWorkspaceDocs(entry: RegistryEntry | undefined, cacheDir: string, r
   copySource(cacheDir, docsTarget);
   touchGitkeep(docsTarget);
   console.log(`Synced docs for ${entry.id}@${ref} into ${docsTarget}`);
+}
+
+function normalizeDocsPath(pathValue: string) {
+  if (!pathValue) return '';
+  const trimmed = pathValue.replace(/^\.\//, '').replace(/^docs\//i, '').replace(/^\//, '');
+  return trimmed;
+}
+
+function sanitizeTitle(title: string) {
+  return title.replace(/'/g, "\\'");
+}
+
+function serializeManifestItems(items: any[], indent = 2): string {
+  const indentStr = ' '.repeat(indent);
+  return items
+    .map((item) => {
+      const lines: string[] = [];
+      const title = sanitizeTitle(item.title ?? '');
+      const path = normalizeDocsPath(item.path ?? '');
+      const hasChildren = Array.isArray(item.children) && item.children.length > 0;
+      if (hasChildren) {
+        lines.push(`${indentStr}{ title: '${title}', path: '${path}',`);
+        lines.push(`${indentStr}  children: [`);
+        lines.push(serializeManifestItems(item.children, indent + 4));
+        lines.push(`${indentStr}  ]`);
+        lines.push(`${indentStr}}`);
+      } else {
+        lines.push(`${indentStr}{ title: '${title}', path: '${path}' }`);
+      }
+      return lines.join('\n');
+    })
+    .join(',\n');
+}
+
+function updateManifestNav(entry: RegistryEntry | undefined, cacheDir: string) {
+  if (!entry?.workspace) return;
+  const workspaceDir = workspaceDirFromEntry(entry);
+  if (!workspaceDir) return;
+  const kitgridPath = join(cacheDir, 'kitgrid.yaml');
+  if (!existsSync(kitgridPath)) return;
+  const manifestFile = join(workspaceDir, 'src', 'data', 'manifestNav.ts');
+  try {
+    const yamlContent = readFileSync(kitgridPath, 'utf8');
+    const parsed = YAML.parse(yamlContent);
+    const navItems = parsed?.nav ?? [];
+    const header = "import type { ManifestNavItem } from '../../../../scripts/lib/sidebar-builder';\n\n";
+    const body = `export const manifestNav: ManifestNavItem[] = [\n${serializeManifestItems(navItems)}\n];\n`;
+    writeFileSync(manifestFile, `${header}${body}`);
+    console.log(`Updated manifestNav for ${entry.id} using ${kitgridPath}`);
+  } catch (error) {
+    console.warn('Failed to update manifestNav:', error instanceof Error ? error.message : error);
+  }
 }
 
 function parseArgs(argv: string[]): CliArgs {
@@ -481,6 +534,7 @@ async function main() {
       }
       copySource(resolvedSource, targetDir);
       transformDocs(targetDir, { docsBaseUrl: docsBaseForTransforms });
+      updateManifestNav(entry, targetDir);
       recordMetadata(targetDir, {
         project: args.project,
         ref,
@@ -507,6 +561,7 @@ async function main() {
     );
     copySource(docsDir, targetDir);
     transformDocs(targetDir, { docsBaseUrl: docsBaseForTransforms });
+    updateManifestNav(entry, targetDir);
     recordMetadata(targetDir, {
       project: args.project,
       ref,
