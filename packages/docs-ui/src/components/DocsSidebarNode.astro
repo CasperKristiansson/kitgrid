@@ -41,13 +41,15 @@ const shouldBeOpen = depth === 0 || hasActiveDescendant(children) || isActive(it
 {children.length ? (
   <details class={groupClass} open={shouldBeOpen}>
     <summary>
-      <a
-        href={item.href}
-        class={linkClasses.join(' ')}
-        aria-current={isActive(item.href) && !hasChildSamePath ? 'page' : undefined}
-      >
-        {item.title}
-      </a>
+      <span class="nav-link__summary">
+        <a
+          href={item.href}
+          class={linkClasses.join(' ')}
+          aria-current={isActive(item.href) && !hasChildSamePath ? 'page' : undefined}
+        >
+          {item.title}
+        </a>
+      </span>
       <svg
         class="nav-group__chevron"
         width="16"

@@ -9,7 +9,7 @@ const docsRoot = resolve(process.cwd(), 'src/content/docs');
 function getDocsNav(): DocsNavItem[] {
   try {
     const { nav } = buildSidebar({ docsRoot, basePath: '/docs', manifestNav });
-    return nav;
+    return [{ title: 'Overview', href: '/' }, ...nav];
   } catch (error) {
     console.warn(
       'docsNav fallback for pydantic-fixturegen:',

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import DocsLayout from '@kitgrid/docs-ui/components/DocsLayout.astro';
-import { landingNav } from '../data/landingNav';
+import { docsNav } from '../data/docsNav';
 import { project } from '../data/project';
 
 const headings = [
@@ -17,7 +17,7 @@ const headings = [
   <DocsLayout
     title="Pydantic Fixturegen"
     description="Deterministic fixture generation, emitters, and diagnostics for Pydantic v2."
-    navItems={landingNav}
+    navItems={docsNav}
     headings={headings}
     editHref={`https://github.com/${project.repo}/blob/${project.buildRef}/${project.docsPath}/index.md`}
   >

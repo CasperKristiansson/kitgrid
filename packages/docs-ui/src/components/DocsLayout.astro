@@ -130,6 +130,15 @@ const currentPath = Astro.url?.pathname ?? '/';
 
   .docs-layout__content :global(a:not(.btn)) {
     color: var(--theme-link);
+    text-decoration: underline transparent;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
+    transition: text-decoration-color 150ms ease;
+  }
+
+  .docs-layout__content :global(a:not(.btn):hover),
+  .docs-layout__content :global(a:not(.btn):focus-visible) {
+    text-decoration-color: currentColor;
   }
 
   .docs-layout__content :global(hr) {

@@ -8,6 +8,7 @@ interface Props {
 }
 
 const { title = 'Project docs', description = 'Docs preview for kitgrid.' } = Astro.props;
+const isProd = import.meta.env.PROD;
 
 const csp = [
   "default-src 'self'",
@@ -31,7 +32,7 @@ const csp = [
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0A0F14" />
-    <meta http-equiv="Content-Security-Policy" content={csp} />
+    {isProd && <meta http-equiv="Content-Security-Policy" content={csp} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body data-theme="pydantic-fixturegen">
