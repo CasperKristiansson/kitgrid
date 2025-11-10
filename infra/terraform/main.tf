@@ -14,7 +14,7 @@ module "site_storage" {
 module "cdn" {
   source                  = "./modules/cdn"
   domain_name             = var.domain_name
-  additional_aliases      = var.additional_aliases
+  additional_aliases      = local.cdn_aliases
   site_bucket_domain_name = module.site_storage.bucket_regional_domain_name
   site_bucket_arn         = module.site_storage.bucket_arn
   site_bucket_id          = module.site_storage.bucket_id

@@ -10,10 +10,6 @@ locals {
     type  = "CNAME"
     value = module.cdn.domain_name
   }
-
-  validation_records = {
-    for record in module.cdn.validation_records : record.domain => record
-  }
 }
 
 resource "cloudflare_dns_record" "apex" {
@@ -34,8 +30,19 @@ resource "cloudflare_dns_record" "wildcard" {
   proxied = var.cloudflare_proxy
 }
 
+resource "cloudflare_dns_record" "www" {
+  for_each = local.www_dns_records
+
+  zone_id = var.cloudflare_zone_id
+  name    = each.value
+  type    = "CNAME"
+  content = module.cdn.domain_name
+  ttl     = 1
+  proxied = var.cloudflare_proxy
+}
+
 resource "cloudflare_dns_record" "acm_validation" {
-  for_each = local.validation_records
+  for_each = module.cdn.validation_records_by_apex
 
   zone_id = var.cloudflare_zone_id
   name    = trimsuffix(each.value.name, ".")
