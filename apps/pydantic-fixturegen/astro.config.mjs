@@ -16,6 +16,29 @@ const docRemarkPlugins = [
 ];
 const docRehypePlugins = [rehypeWrapCodeBlocks];
 
+function copySitemapIntegration() {
+  return {
+    name: 'kitgrid-copy-sitemap',
+    hooks: {
+      /**
+       * @param {{ dir: URL }} options
+       */
+      'astro:build:done'(options) {
+        const { dir } = options;
+        const outDir = fileURLToPath(dir);
+        const sitemapChunk = join(outDir, 'sitemap-0.xml');
+        const sitemapIndex = join(outDir, 'sitemap-index.xml');
+        const sitemapXml = join(outDir, 'sitemap.xml');
+        if (existsSync(sitemapChunk)) {
+          copyFileSync(sitemapChunk, sitemapXml);
+        } else if (existsSync(sitemapIndex)) {
+          copyFileSync(sitemapIndex, sitemapXml);
+        }
+      },
+    },
+  };
+}
+
 export default defineConfig({
   site: 'https://pydantic-fixturegen.kitgrid.dev',
   vite: {
@@ -30,23 +53,11 @@ export default defineConfig({
     sitemap({
       filter: (page) => !page.includes('/drafts'),
     }),
+    copySitemapIntegration(),
   ],
   markdown: {
     syntaxHighlight: false,
     remarkPlugins: /** @type {any} */ (docRemarkPlugins),
     rehypePlugins: /** @type {any} */ (docRehypePlugins),
-  },
-  hooks: {
-    'astro:build:done'({ dir }) {
-      const outDir = fileURLToPath(dir);
-      const sitemapChunk = join(outDir, 'sitemap-0.xml');
-      const sitemapIndex = join(outDir, 'sitemap-index.xml');
-      const sitemapXml = join(outDir, 'sitemap.xml');
-      if (existsSync(sitemapChunk)) {
-        copyFileSync(sitemapChunk, sitemapXml);
-      } else if (existsSync(sitemapIndex)) {
-        copyFileSync(sitemapIndex, sitemapXml);
-      }
-    },
   },
 });

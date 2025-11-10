@@ -1,11 +1,14 @@
 const COPY_RESET_DELAY = 1500;
 
-function getBlockText(block: HTMLElement) {
+/**
+ * @param {Element} block
+ */
+function getBlockText(block) {
   const nodes = Array.from(block.querySelectorAll('pre code'));
   return nodes.map((node) => node.textContent ?? '').join('\n').trimEnd();
 }
 
-function fallbackCopy(text: string) {
+function fallbackCopy(text) {
   const textarea = document.createElement('textarea');
   textarea.value = text;
   textarea.setAttribute('readonly', '');
@@ -19,7 +22,7 @@ function fallbackCopy(text: string) {
   document.body.removeChild(textarea);
 }
 
-async function copyText(text: string) {
+async function copyText(text) {
   if (!text) return;
   if (navigator.clipboard?.writeText) {
     await navigator.clipboard.writeText(text);
@@ -29,9 +32,9 @@ async function copyText(text: string) {
 }
 
 function bindCopyHandlers() {
-  const blocks = document.querySelectorAll<HTMLElement>('[data-code-block]');
+  const blocks = document.querySelectorAll('[data-code-block]');
   blocks.forEach((block) => {
-    const button = block.querySelector<HTMLButtonElement>('[data-code-copy]');
+    const button = block.querySelector('[data-code-copy]');
     if (!button) return;
     button.addEventListener('click', async () => {
       const code = getBlockText(block);

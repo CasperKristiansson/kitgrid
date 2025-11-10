@@ -4,7 +4,10 @@ const closeSidebar = () => {
   root.classList.remove('pf-sidebar-open');
 };
 
-const handleClick = (event: Event) => {
+/**
+ * @param {Event} event
+ */
+const handleClick = (event) => {
   const target = event.target instanceof Element ? event.target : null;
   if (!target) return;
   if (target.closest('[data-sidebar-toggle]')) {

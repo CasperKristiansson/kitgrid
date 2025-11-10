@@ -1,8 +1,8 @@
 function setupTabs() {
-  const containers = document.querySelectorAll<HTMLElement>('[data-tabs]');
+  const containers = document.querySelectorAll('[data-tabs]');
   containers.forEach((container) => {
-    const buttons = Array.from(container.querySelectorAll<HTMLButtonElement>('[data-tabs-trigger]'));
-    const panels = Array.from(container.querySelectorAll<HTMLElement>('[data-tabs-panel]'));
+    const buttons = Array.from(container.querySelectorAll('[data-tabs-trigger]'));
+    const panels = Array.from(container.querySelectorAll('[data-tabs-panel]'));
     buttons.forEach((button) => {
       button.addEventListener('click', () => {
         const targetIndex = button.dataset.tabsIndex;

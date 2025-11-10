@@ -1,6 +1,6 @@
 ---
 import DocsSearch from '@kitgrid/docs-ui/components/DocsSearch.astro';
-import sidebarToggleScript from '../scripts/sidebar-toggle.ts?url';
+import sidebarToggleScript from '../scripts/sidebar-toggle.js?url';
 
 const links = [
   { label: 'Quickstart', href: '/docs/quickstart/' },
@@ -8,6 +8,7 @@ const links = [
   { label: 'API', href: '/docs/api/' },
   { label: 'Install', href: '/docs/install/' },
 ];
+const pagefindRemoteSrc = import.meta.env.DEV ? 'https://pydantic-fixturegen.kitgrid.dev/pagefind/pagefind.js' : undefined;
 ---
 ---
 
@@ -27,7 +28,7 @@ const links = [
     </nav>
 
     <div class="pf-nav__search">
-      <DocsSearch />
+      <DocsSearch remoteSrc={pagefindRemoteSrc} />
     </div>
 
     <button class="pf-nav__menu-button" type="button" data-sidebar-toggle aria-label="Toggle navigation">

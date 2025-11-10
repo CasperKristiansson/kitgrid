@@ -1,8 +1,14 @@
 ---
-import docsSearchScript from '../scripts/docs-search.ts?url';
+import docsSearchScript from '../scripts/docs-search.js?url';
+
+interface Props {
+  remoteSrc?: string;
+}
+
+const { remoteSrc } = Astro.props as Props;
 ---
 
-<div class="docs-search" data-docs-search>
+<div class="docs-search" data-docs-search data-docs-search-remote={remoteSrc ?? undefined}>
   <label class="docs-search__field">
     <span class="sr-only">Search docs</span>
     <svg
