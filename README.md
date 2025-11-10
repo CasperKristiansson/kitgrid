@@ -1,3 +1,7 @@
+<p align="center">
+    <img src="docs/assets/readme-hero.jpg" alt="Kitgrid hero" />
+</p>
+
 # Kitgrid
 
 Personal docs network for my own projects. Everything runs through pnpm workspaces; no public onboarding or long explanations needed.
