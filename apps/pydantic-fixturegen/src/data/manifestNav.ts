@@ -4,8 +4,15 @@ export const manifestNav: ManifestNavItem[] = [
   { title: 'Getting started', path: 'quickstart.md',
     children: [
       { title: 'Quickstart', path: 'quickstart.md' },
+      { title: 'Examples', path: 'examples.md' },
       { title: 'Install', path: 'install.md' },
       { title: 'Features', path: 'features.md' }
+    ]
+  },
+  { title: 'Example projects', path: 'example-projects/README.md',
+    children: [
+      { title: 'FastAPI marketplace', path: 'example-projects/fastapi-marketplace/README.md' },
+      { title: 'Customer analytics', path: 'example-projects/customer-analytics/README.md' }
     ]
   },
   { title: 'Workflow', path: 'cli.md',
